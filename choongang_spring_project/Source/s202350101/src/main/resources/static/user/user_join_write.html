@@ -42,38 +42,49 @@ select {
 <body>
 	<div class="login-wrapper">
         <h2>ChoongAng</h2>
-        <form method="post" action="url" id="login-form">
-            아이디 : <input type="text" name="userId" placeholder="Id"> <input type="button" value="중복확인"> <p>
-            비밀번호 : <input type="password" name="userPw" placeholder="Password"><p>
-            비밀번호 확인 : <input type="password" name="userPw" placeholder="Password"><p>
-            이름 : <input type="text" name="userName"><p>
-            소속 : <select>
+        
+        <form action="url" method="post" name="frm" id="login-form">
+        	<table>
+			<tr><th>아이디 : </th><td><input type="text" name="user_id" 
+				required="required" >
+				<input type="button" value="중복확인:미구현" onclick="chk()"> </td></tr>
+			<tr><th>비밀번호 : </th><td><input type="password" name="user_pw1" 
+				required="required"> </td></tr>
+			<tr><th>비밀번호 확인 : </th><td><input type="password" name="user_pw2" 
+				required="required"> </td></tr>	
+			<tr><th>소속</th>
+			<td><select>
 				    <option>이대점</option>
 				    <option>강남점</option>
-			</select><p>
-			<select>
+				</select><p>
+				<select>
 				    <option>501</option>
 				    <option>502</option>
 			  		<option>601</option>
 			  		<option>602</option>
-			</select><p>
-            성별 : <input type="checkbox"> 남 <input type="checkbox"> 여<p>
-            전화번호 : <input type="text" name="cellphone" placeholder="010-xxxx-xxxx"><p>
-            이메일 : <input type="text" name="user_email" placeholder="ID@Email.com"><p>       
-            주소 : <input type="text" name="address"><p>           
-            생년월일 : <div class="info" id="info__birth">
-					  <select class="box" id="birth-year">
+				</select><p>
+			</td></tr>   
+           	<tr><th>성별 : </th><td><input type="checkbox">남 <input type="checkbox"> 여</td></tr>
+          	<tr><th>전화번호 : </th><td><input type="tel" name="user_number" placeholder="010-xxxx-xxxx"></td></tr>
+            <tr><th>이메일 : </th><td><input type="email" name="user_email" placeholder="ID@Email.com"></td></tr>
+          	<tr><th>주소 : </th><td><input type="text" name="user_address"><p> </td></tr>
+          	<tr><th>생년월일 : </th>
+          	<td>
+          		<div class="info" id="info__birth">
+				    <select class="box" id="birth-year">
 					    <option disabled selected>출생 연도</option>
-					  </select>
-					  <select class="box" id="birth-month">
+					</select>
+					    <select class="box" id="birth-month">
 					    <option disabled selected>월</option>
-					  </select>
-					  <select class="box" id="birth-day">
+				    </select>
+					    <select class="box" id="birth-day">
 					    <option disabled selected>일</option>
-					  </select>
-					</div> 
-        <a href="메인.html"><input type="button" value="가입하기" style="float: right"></a>
-  			
+				    </select>
+				</div><p> </td></tr>
+          	      
+        	<td><input type="submit" value="가입하기" style="float: right"></td>
+  			<!-- 가입을 축하합니다 페이지 -->
+  			</table>
   		</form>
         
     </div>

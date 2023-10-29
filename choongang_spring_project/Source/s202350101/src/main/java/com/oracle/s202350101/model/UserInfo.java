@@ -2,6 +2,8 @@ package com.oracle.s202350101.model;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -18,6 +20,7 @@ public class UserInfo {
 	private String 	user_name;
 	private String 	user_gender;
 	private String 	user_number;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date 	user_birth;
 	private String 	user_address;
 	private String 	user_email;

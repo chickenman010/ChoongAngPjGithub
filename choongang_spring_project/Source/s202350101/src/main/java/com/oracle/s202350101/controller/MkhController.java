@@ -1,8 +1,14 @@
 package com.oracle.s202350101.controller;
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.oracle.s202350101.model.ClassRoom;
+import com.oracle.s202350101.model.UserInfo;
 import com.oracle.s202350101.service.mkhser.MkhService;
 
 import lombok.RequiredArgsConstructor;
@@ -10,12 +16,18 @@ import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @Slf4j
-// @RequiredArgsConstructor
+@RequiredArgsConstructor
 public class MkhController {
 	
-//	private final MkhService mkhService;
+	private final MkhService mkhService;
 	
 	/* 회원가입 */
+	
+	@RequestMapping(value = "user_login")
+	public String userLogin() {
+		System.out.println("MkhController userLogin Start..");
+		return "user/user_login";
+	}
 	
 	// 회원가입 동의 페이지로 이동
 	@RequestMapping(value = "user_join_agree")
@@ -26,9 +38,24 @@ public class MkhController {
 	
 	// 회원가입 페이지로 이동
 	@RequestMapping(value = "user_join_write")
-	public String userJoinWrite() {
+	public String userJoinWrite(Model model) {
 		System.out.println("MkhController userJoinWrite Start..");
+		// class_id GET
+		List<ClassRoom> classList = mkhService.createdClass();
+		System.out.println("MkhController user_join_write classList.size->"+classList.size());
+		model.addAttribute("classList", classList);
+		
 		return "user/user_join_write";
+	}
+	
+//	 회원가입 정보 insert
+	@PostMapping(value = "writeUserInfo")
+	public String writeUserInfo(UserInfo userInfo, Model model) {
+		System.out.println("MkhController writeUserInfo Start...");
+	
+		int result = mkhService.insertUserInfo(userInfo);
+		if(result > 0) return "user/user_login";
+		else return "redirect:user_join_write";
 	}
 	
 	
@@ -36,9 +63,9 @@ public class MkhController {
 	
 	// 마이페이지 수정으로 이동
 	@RequestMapping(value = "mypage_main")
-	public String mypageRead() {
-		System.out.println("MkhController mypageRead Start..");
-		return "mypage/mypage_read";
+	public String mypageMain() {
+		System.out.println("MkhController mypageMain Start..");
+		return "mypage/mypage_main";
 	}
 	
 	// 개인정보 수정용 비밀번호 확인 페이지

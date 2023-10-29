@@ -14,7 +14,7 @@ spring:
     show-sql: true
 # Operation --> create / update / none(배포할때는 반드시 none으로 배포)
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
 
   
   # view Resolver
