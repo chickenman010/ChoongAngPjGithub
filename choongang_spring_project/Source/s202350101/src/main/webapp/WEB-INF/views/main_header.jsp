@@ -20,7 +20,7 @@
 	        </ul>
 			<ul class="nav nav-pills">
 				<li class="nav-item">
-					<a class="nav-link px-2 link-light" aria-current="page" href="#">${user_id }</a>
+					<a class="nav-link px-2 link-light" aria-current="page" href="#">${userInfo.user_name }</a>
 				</li>
 			</ul>
 			<div class="dropdown text-end">

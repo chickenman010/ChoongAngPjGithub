@@ -66,11 +66,11 @@ public class MkhServiceImpl implements MkhService {
 	}
 
 	@Override
-	public UserInfo userLogin(UserInfo userInfo) {
-		System.out.println("MkhServiceImpl userLogin Start..");
-		UserInfo userConfirm = mkhdao.userLogin(userInfo);
+	public UserInfo userLoginCheck(UserInfo userInfoDTO) {
+		System.out.println("MkhServiceImpl userLoginCheck Start..");
+		UserInfo userInfo = mkhdao.userLoginCheck(userInfoDTO);
 
-		return userConfirm;
+		return userInfo;
 	}
 
 }

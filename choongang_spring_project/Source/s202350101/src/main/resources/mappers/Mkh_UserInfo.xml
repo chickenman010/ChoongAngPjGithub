@@ -40,11 +40,11 @@
 		Select Count(*) from user_info where user_pw = #{user_pw}
 	</select>
 	
-	<select id="userLoginConfirm" parameterType="UserInfo">
+	<select id="userLoginConfirm" parameterType="UserInfo" resultType="userInfo">
 		Select *
 		From  user_info 
 		Where user_id = #{user_id}
-		And   user_pw = ${user_pw}
+		And   user_pw = #{user_pw}
 	</select>
 	
 

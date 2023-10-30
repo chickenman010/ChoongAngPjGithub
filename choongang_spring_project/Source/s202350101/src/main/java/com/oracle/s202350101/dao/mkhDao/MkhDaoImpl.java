@@ -93,8 +93,9 @@ public class MkhDaoImpl implements MkhDao {
 	}
 
 	@Override
-	public UserInfo userLogin(UserInfo userInfo) {
+	public UserInfo userLoginCheck(UserInfo userInfo) {
 		UserInfo userConfirm = null;
+		System.out.println("MkhDaoImpl userLoginCheck start...");
 		try {
 			userConfirm = session.selectOne("userLoginConfirm", userInfo);
 		} catch (Exception e) {

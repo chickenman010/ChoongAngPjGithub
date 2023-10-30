@@ -14,7 +14,7 @@ public interface MkhService {
 	int                totalQna();
 	int                userIdCount(String user_id);
 	int                userPwCount(String user_pw);
-	UserInfo           userLogin(UserInfo userInfo);
+	UserInfo           userLoginCheck(UserInfo userInfo);
 	
 
 }

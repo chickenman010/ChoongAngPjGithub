@@ -14,20 +14,6 @@ public class LoginInterceptor implements HandlerInterceptor {
 		// TODO Auto-generated constructor stub
 	}
 	
-	// 1번째 실행
-	@Override
-	public boolean preHandle(HttpServletRequest request, 
-							 HttpServletResponse response, 
-							 Object handler) throws Exception {
-		System.out.println("pre handle....................................");
-		HandlerMethod method = (HandlerMethod) handler;
-		Method methodObj = method.getMethod();
-		System.out.println("Bean: " + method.getBean());
-		System.out.println("Method: " + methodObj);
-		
-		return true;
-	}
-	
 	// 3번째 실행
 	@Override
 	public void postHandle(HttpServletRequest request, 
@@ -57,5 +43,18 @@ public class LoginInterceptor implements HandlerInterceptor {
 
 	}
 	
-
+	// 1번째 실행
+	@Override
+	public boolean preHandle(HttpServletRequest request, 
+							 HttpServletResponse response, 
+							 Object handler) throws Exception {
+		System.out.println("pre handle....................................");
+		HandlerMethod method = (HandlerMethod) handler;
+		Method methodObj = method.getMethod();
+		System.out.println("Bean: " + method.getBean());
+		System.out.println("Method: " + methodObj);
+		
+		return true;
+	}
+	
 }

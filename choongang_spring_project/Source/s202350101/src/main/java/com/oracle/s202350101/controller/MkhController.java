@@ -2,11 +2,15 @@ package com.oracle.s202350101.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.oracle.s202350101.model.BdQna;
 import com.oracle.s202350101.model.ClassRoom;
@@ -24,49 +28,42 @@ public class MkhController {
 	
 	private final MkhService mkhService;
 	
-	
-//	public String userLoginComfirm() {
-//		System.out.println("MkhController userLoginComfirm Start..");
-//		
-//		
-//		return "main";
-//	}
-	
 	/* 로그인 (interCeptor) */
+	// 로그인 화면
 	@RequestMapping(value = "user_login")
-	public String userLogin(UserInfo userInfo, Model model) {
+	public String userLogin() {
 		System.out.println("MkhController userLogin Start..");
-		System.out.println("userInfo.getUser_id()->"+userInfo.getUser_id());
-		System.out.println("userInfo.getUser_pw()->"+userInfo.getUser_pw());
-		
-		UserInfo userConfirm = mkhService.userLogin(userInfo);
-		
-		if(userConfirm != null) {
-			model.addAttribute("userConfirm", userConfirm);
-			return "main";
-		} else {
-			return "user_login";
-		}
-		
+	
+		return "user/user_login";
 	}
+	
+	// 로그인 체크
+	//@RequestMapping(value = "user_login_check")
+	public String userLoginCheck(UserInfo userInfoDTO, HttpSession session) {
+		System.out.println("MkhController userLoginCheck Start..");
+		System.out.println("userInfo.getUser_id()->"+userInfoDTO.getUser_id());
+		System.out.println("userInfo.getUser_pw()->"+userInfoDTO.getUser_pw());
+		
+		UserInfo userInfo = mkhService.userLoginCheck(userInfoDTO);
+		if(userInfo != null) {
+			session.setAttribute("userInfo", userInfo);
+			return "main";	// 로그인 성공시 메인화면
+		} else {
+			return "redirect:/user_login"; // 로그인 실패시 로그인 화면
+		}
+	}
+		
 	// 로그인 인터셉터
 	// 2번째 실행
-	@PostMapping(value = "interCeptor")
-	public String interCeptor(String user_id, String user_pw, Model model) {
+	@RequestMapping(value = "interCeptor")
+	public String interCeptor(UserInfo userInfoDTO, Model model) {
 		System.out.println("MkhController interCeptor Start..");
-		System.out.println("MkhController userLogin id->"+user_id);
-		System.out.println("MkhController userLogin id->"+user_pw);
+		System.out.println("userInfo.getUser_id()->"+userInfoDTO.getUser_id());
+		System.out.println("userInfo.getUser_pw()->"+userInfoDTO.getUser_pw());
 		
-		// 존재 : 1, 비존재  : 0
-		int userIdCnt = mkhService.userIdCount(user_id);
-		int userPwCnt = mkhService.userPwCount(user_pw);
-				
-		System.out.println("EmpController userLogin userIdCnt->" + userIdCnt);
-		System.out.println("EmpController userLogin userPwCnt->" + userPwCnt);
+		UserInfo userInfo = mkhService.userLoginCheck(userInfoDTO);
 		
-		model.addAttribute("user_id", user_id);
-		model.addAttribute("userIdCnt", userIdCnt);
-		model.addAttribute("userPwCnt", userPwCnt);
+		model.addAttribute("userInfo", userInfo);
 
 		System.out.println("interCeptor End");
 		
