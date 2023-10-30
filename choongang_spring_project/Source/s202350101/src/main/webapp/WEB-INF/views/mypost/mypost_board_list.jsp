@@ -60,7 +60,7 @@
 			<!------------------------------ //개발자 소스 입력 START ------------------------------->
 	  		<div class="container-fluid">
 					<p>
-					<h3>내가 쓴 게시글</h3>
+					<h3>내가 쓴 게시글 : ${totalBdQna } 개</h3>
 					<p>
 					<table>
 						<tr>
@@ -70,7 +70,7 @@
 					<table class="table table-hover">
 						<thead>
 							<tr>
-								<td>번호</td>
+								<td>게시판</td>
 								<td>제목</td>
 								<td>작성자</td>
 								<td>작성일</td>
@@ -79,85 +79,16 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr onclick="goto('project_board_data_read.html')">
-								<td>10</td>
-								<td>[공지] 공지사항입니다.</td>
-								<td>홍길동</td>
-								<td>2023-10-13</td>
-								<td>35</td>
-								<td>5</td>
-							</tr>
-							<tr onclick="goto('project_board_data_read.html')">
-								<td>9</td>
-								<td>[web] 참고용 소스입니다</td>
-								<td>홍길동</td>
-								<td>2023-10-13</td>
-								<td>35</td>
-								<td>5</td>
-							</tr>
-							<tr onclick="goto('project_board_data_read.html')">
-								<td>8</td>
-								<td>[html] 유용한 정보 공유합니다.</td>
-								<td>홍길동</td>
-								<td>2023-10-13</td>
-								<td>35</td>
-								<td>5</td>
-							</tr>
-							<tr onclick="goto('project_board_data_read.html')">
-								<td>7</td>
-								<td>[Java] 자바소스 공유</td>
-								<td>홍길동</td>
-								<td>2023-10-13</td>
-								<td>35</td>
-								<td>5</td>
-							</tr>
-							<tr onclick="goto('project_board_data_read.html')">
-								<td>6</td>
-								<td>[css] 유용한 정보 공유합니다.</td>
-								<td>홍길동</td>
-								<td>2023-10-13</td>
-								<td>35</td>
-								<td>5</td>
-							</tr>
-							<tr onclick="goto('project_board_data_read.html')">
-								<td>5</td>
-								<td>[Java] 자바소스 공유</td>
-								<td>홍길동</td>
-								<td>2023-10-13</td>
-								<td>35</td>
-								<td>5</td>
-							</tr>
-							<tr onclick="goto('project_board_data_read.html')">
-								<td>4</td>
-								<td>[css] 유용한 정보 공유합니다.</td>
-								<td>홍길동</td>
-								<td>2023-10-13</td>
-								<td>35</td>
-								<td>5</td>
-							</tr>
-							<tr onclick="goto('project_board_data_read.html')">
-								<td>3</td>
-								<td>[Java] 자바소스 공유</td>
-								<td>홍길동</td>
-								<td>2023-10-13</td>
-								<td>35</td>
-								<td>5</td>
-							</tr>
-							<tr onclick="goto('project_board_data_read.html')">
-								<td>2</td>
-								<td>[javascript] 유용한 정보 공유합니다.</td>
-								<td>홍길동</td>
-								<td>2023-10-13</td>
-								<td>35</td>
-								<td>5</td>
-							</tr>
-							<tr onclick="goto('project_board_data_read.html')">
-								<td>1</td>
-								<td>[ajax] ajax 소스 분석</td>
-								<td>홍길동</td>
-								<td>2023-10-13</td>
-								<td>35</td>
-								<td>5</td>
+							<!-- <tr onclick="goto('project_board_data_read.html')"> -->
+							<tr>	
+								<c:forEach var="bdQna" items="${qnaList }">
+									<tr><td>${bdQna.app_name }</td>
+									<td><a href="bdQnaContent?doc_no=${bdQna.doc_no }">${bdQna.subject }</a></td>
+									<td>${bdQna.user_id }</td>
+									<td>${bdQna.create_date }</td>
+									<td>${bdQna.bd_count }</td>
+									<td>${bdQna.good_count }</td></tr>
+								</c:forEach>
 							</tr>
 						</tbody>
 					</table>

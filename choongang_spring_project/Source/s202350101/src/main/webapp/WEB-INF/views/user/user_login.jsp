@@ -61,9 +61,9 @@
 <body>
     <div class="login-wrapper">
         <h2>ChoongAng</h2>
-        <form method="post" action="url" id="login-form">
-            <input type="text" name="userName" placeholder="ID">
-            <input type="password" name="userPassword" placeholder="Password">
+        <form method="post" action="user_login" id="login-form">
+            <input type="text" name="user_id" placeholder="ID">
+            <input type="password" name="user_pw" placeholder="Password">
             <label for="remember-check">
                 <input type="checkbox" id="remember-check">아이디 저장하기
             </label>

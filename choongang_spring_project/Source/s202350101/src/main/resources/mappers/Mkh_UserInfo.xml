@@ -21,13 +21,31 @@
 </mapper> -->
 
 <mapper namespace="com.oracle.s202350101.UserInfoMapper">
-	 <select id="InsertUserInfo" parameterType="UserInfo">    <!-- #{project_id} -->
-		insert into user_info VALUES ( #{user_id},    	#{class_id}, 	1,  			#{user_pw}, 
-								 	  #{user_name}, 	#{user_gender}, #{user_number}, #{user_birth},
-								 	  #{user_address}, 	#{user_email},  'student',
+	 <insert id="InsertUserInfo" parameterType="UserInfo">    <!-- #{project_id, jdbcType = VARCHAR} -->
+		insert into user_info VALUES ( #{user_id},    	#{class_id}, 1, #{user_pw}, 
+								 	  #{user_name}, 	#{user_gender, jdbcType = VARCHAR}, 
+								 	  #{user_number}, 	#{user_birth},
+								 	  #{user_address}, 	#{user_email},  'student', 
 								 	  #{attach_name, jdbcType = VARCHAR},	
 								 	  #{attach_path, jdbcType = VARCHAR}, 0,  			
 								 	  #{chat_room_ses, jdbcType = VARCHAR}
 								 	  )
+	</insert>
+
+	<select id="userIdCount" parameterType="java.lang.String" resultType="int">
+		Select Count(*) from user_info where user_id = #{user_id}
 	</select>
+	
+	<select id="userPwCount" parameterType="java.lang.String" resultType="int">
+		Select Count(*) from user_info where user_pw = #{user_pw}
+	</select>
+	
+	<select id="userLoginConfirm" parameterType="UserInfo">
+		Select *
+		From  user_info 
+		Where user_id = #{user_id}
+		And   user_pw = ${user_pw}
+	</select>
+	
+
 </mapper>

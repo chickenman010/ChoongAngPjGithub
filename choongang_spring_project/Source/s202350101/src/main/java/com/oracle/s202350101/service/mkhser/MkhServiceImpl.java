@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.oracle.s202350101.dao.mkhDao.MkhDao;
+import com.oracle.s202350101.model.BdQna;
 import com.oracle.s202350101.model.ClassRoom;
 import com.oracle.s202350101.model.UserInfo;
 
@@ -32,6 +33,44 @@ public class MkhServiceImpl implements MkhService {
 		System.out.println("MkhServiceImpl classList.size()->" +classList.size());
 		
 		return classList;
+	}
+
+	@Override
+	public List<BdQna> bdQnaList() {
+		List<BdQna> qnaList = null;
+		System.out.println("MkhServiceImpl bdQnaList Start...");
+		qnaList = mkhdao.bdQnaList();
+		System.out.println("MkhServiceImpl qnaList.size()->" +qnaList.size());
+		
+		return qnaList;
+	}
+
+	@Override
+	public int totalQna() {
+		System.out.println("MkhServiceImpl totalQna Start...");
+		int totalBdQna = mkhdao.totalQna();
+
+		return totalBdQna;
+	}
+
+	@Override
+	public int userIdCount(String user_id) {
+		System.out.println("MkhServiceImpl userIdCount id ->"+user_id);
+		return mkhdao.userIdCount(user_id);
+	}
+
+	@Override
+	public int userPwCount(String user_pw) {
+		System.out.println("MkhServiceImpl userPwCount pw ->"+user_pw);
+		return mkhdao.userPwCount(user_pw);
+	}
+
+	@Override
+	public UserInfo userLogin(UserInfo userInfo) {
+		System.out.println("MkhServiceImpl userLogin Start..");
+		UserInfo userConfirm = mkhdao.userLogin(userInfo);
+
+		return userConfirm;
 	}
 
 }
