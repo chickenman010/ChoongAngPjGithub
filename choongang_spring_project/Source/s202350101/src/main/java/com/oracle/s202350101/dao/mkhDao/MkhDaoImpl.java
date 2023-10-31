@@ -46,18 +46,18 @@ public class MkhDaoImpl implements MkhDao {
 	}
 
 
-//	@Override
-//	public int totalQna() {
-//		int totalBdQna = 0;		
-//		System.out.println("MkhDaoImpl totalQna start...");
-//		try {
-//			totalBdQna = session.selectOne("userIdQnaListCount");
-//		} catch (Exception e) {
-//			System.out.println("MkhDaoImpl totalQna Exception->" +e.getMessage());
-//		}
-//
-//		return totalBdQna;
-//	}
+	@Override
+	public int totalQna(UserInfo userInfo) {
+		int totalBdQna = 0;
+		System.out.println("MkhDaoImpl totalQna start...");
+		try {
+			totalBdQna = session.selectOne("userIdQnaListCount", userInfo);
+		} catch (Exception e) {
+			System.out.println("MkhDaoImpl totalQna Exception->" +e.getMessage());
+		}
+
+		return totalBdQna;
+	}
 	
 	@Override
 	public UserInfo userLoginCheck(UserInfo userInfo) {

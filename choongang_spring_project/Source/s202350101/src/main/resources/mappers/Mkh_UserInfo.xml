@@ -21,8 +21,8 @@
 </mapper> -->
 
 <mapper namespace="com.oracle.s202350101.UserInfoMapper">
-	<insert id="InsertUserInfo" parameterType="UserInfo">    <!-- #{project_id, jdbcType = VARCHAR} -->
-		insert into user_info VALUES ( #{user_id},    	#{class_id}, 1, #{user_pw}, 
+	<!-- <insert id="InsertUserInfo" parameterType="UserInfo">    #{project_id, jdbcType = VARCHAR}
+		insert into user_info VALUES ( #{user_id},    	#{class_id}, #{project_id, jdbcType = VARCHAR}, #{user_pw}, 
 								 	  #{user_name}, 	#{user_gender, jdbcType = VARCHAR}, 
 								 	  #{user_number}, 	#{user_birth},
 								 	  #{user_address}, 	#{user_email},  'student', 
@@ -30,6 +30,12 @@
 								 	  #{attach_path, jdbcType = VARCHAR}, 0,  			
 								 	  #{chat_room_ses, jdbcType = VARCHAR}
 								 	  )
+	</insert> -->
+	
+	<insert id="InsertUserInfo" parameterType="UserInfo">    <!-- #{project_id, jdbcType = VARCHAR} -->
+		insert into user_info (user_id,      class_id,    user_pw,    user_name,    user_number,    user_email,  user_auth) 
+					   VALUES (#{user_id}, #{class_id}, #{user_pw}, #{user_name}, #{user_number}, #{user_email}, 'student')
+					   
 	</insert>
 	
 	<select id="userLoginConfirm" parameterType="UserInfo" resultType="userInfo">

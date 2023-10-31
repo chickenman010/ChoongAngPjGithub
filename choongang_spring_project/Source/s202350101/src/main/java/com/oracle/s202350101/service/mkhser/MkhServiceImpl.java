@@ -38,13 +38,13 @@ public class MkhServiceImpl implements MkhService {
 		return classList;
 	}
 
-//	@Override
-//	public int totalQna() {
-//		System.out.println("MkhServiceImpl totalQna Start...");
-//		int totalBdQna = mkhdao.totalQna();
-//
-//		return totalBdQna;
-//	}
+	@Override
+	public int totalQna(UserInfo userInfo) {
+		System.out.println("MkhServiceImpl totalQna Start...");
+		int totalBdQna = mkhdao.totalQna(userInfo);
+
+		return totalBdQna;
+	}
 
 	@Override
 	public UserInfo userLoginCheck(UserInfo userInfoDTO) {

@@ -13,7 +13,9 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		// 누군가가 URL로  /interCeptor라고 친다면 SampleInterceptor() 처리 해줌
-		registry.addInterceptor(new SampleInterceptor()).addPathPatterns("/interCeptor")
+		registry.addInterceptor(new SampleInterceptor())
+				.addPathPatterns("/interCeptor")
+				.excludePathPatterns("/")
 		;
 	}
 

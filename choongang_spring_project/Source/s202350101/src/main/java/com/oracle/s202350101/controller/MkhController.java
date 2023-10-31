@@ -143,11 +143,11 @@ public class MkhController {
 		System.out.println("MkhController mypostBoardList Start..");
 		System.out.println("userinfo.getUser_id()->"+userInfo.getUser_id());
 		
-		// 나중에 게시판마다 count 다 더해서 보내야 할듯??
 		// 내가 쓴 게시글 Count
 		// Q&A 게시판 Count
-//		int totalBdQna = mkhService.totalQna();
-//		System.out.println("totalBdQnaCount->"+totalBdQna);
+		int totalBdQna = mkhService.totalQna(userInfo);
+		System.out.println("totalBdQnaCount->"+totalBdQna);
+		model.addAttribute("totalBdQna", totalBdQna);
 		
 		// 공용게시판 Count
 //		int totalBdFree = mkhService.totalFree();
@@ -165,7 +165,6 @@ public class MkhController {
 		List<BdQna> qnaList = mkhService.bdQnaList(userInfo);
 		System.out.println("MkhController mypostBoardList qnaList.size->"+qnaList.size());
 		model.addAttribute("qnaList", qnaList);
-//		model.addAttribute("totalBdQna", totalBdQna);
 		// 공용 게시판
 		List<BdFree> freeList = mkhService.bdFreeList(userInfo);
 		System.out.println("MkhController mypostBoardList freeList.size->"+freeList.size());
