@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -55,7 +56,7 @@
     background-color: #FFFFFF;
     margin: 10;
 }
-
+﻿<%-- <%@ taglib prefix="c" uri=http://java.sun.com/jsp/jstl/core %> --%>
 </style>
 </head>
 <body>
@@ -67,12 +68,12 @@
             <label for="remember-check">
                 <input type="checkbox" id="remember-check">아이디 저장하기
             </label>
+            <%-- <c:if test="${msg != null}">${msg}</c:if> --%>
             <input type="submit" value="Login">
-            
-	   	    <a href="member_find_pw.html"><input type="button" value="비밀번호 찾기"></a>
-	   	    <a href="member_find_id.html"><input type="button" value="아이디 찾기"></a>
-	   	    <a href="user_join_agree"><input type="button" value="회원가입"></a>
         </form>
+        <a href="member_find_pw.html"><input type="button" value="비밀번호 찾기"></a>
+   	    <a href="member_find_id.html"><input type="button" value="아이디 찾기"></a>
+   	    <a href="user_join_agree"><input type="button" value="회원가입"></a>
     </div>
 </body>
 </html>

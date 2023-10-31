@@ -21,7 +21,7 @@
 </mapper> -->
 
 <mapper namespace="com.oracle.s202350101.UserInfoMapper">
-	 <insert id="InsertUserInfo" parameterType="UserInfo">    <!-- #{project_id, jdbcType = VARCHAR} -->
+	<insert id="InsertUserInfo" parameterType="UserInfo">    <!-- #{project_id, jdbcType = VARCHAR} -->
 		insert into user_info VALUES ( #{user_id},    	#{class_id}, 1, #{user_pw}, 
 								 	  #{user_name}, 	#{user_gender, jdbcType = VARCHAR}, 
 								 	  #{user_number}, 	#{user_birth},
@@ -31,14 +31,6 @@
 								 	  #{chat_room_ses, jdbcType = VARCHAR}
 								 	  )
 	</insert>
-
-	<select id="userIdCount" parameterType="java.lang.String" resultType="int">
-		Select Count(*) from user_info where user_id = #{user_id}
-	</select>
-	
-	<select id="userPwCount" parameterType="java.lang.String" resultType="int">
-		Select Count(*) from user_info where user_pw = #{user_pw}
-	</select>
 	
 	<select id="userLoginConfirm" parameterType="UserInfo" resultType="userInfo">
 		Select *

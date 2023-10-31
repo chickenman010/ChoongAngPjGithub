@@ -5,8 +5,11 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.oracle.s202350101.dao.mkhDao.MkhDao;
+import com.oracle.s202350101.model.BdFree;
 import com.oracle.s202350101.model.BdQna;
 import com.oracle.s202350101.model.ClassRoom;
+import com.oracle.s202350101.model.PrjBdData;
+import com.oracle.s202350101.model.PrjBdRep;
 import com.oracle.s202350101.model.UserInfo;
 
 import lombok.RequiredArgsConstructor;
@@ -36,19 +39,19 @@ public class MkhServiceImpl implements MkhService {
 	}
 
 	@Override
-	public List<BdQna> bdQnaList() {
+	public List<BdQna> bdQnaList(UserInfo userinfo) {
 		List<BdQna> qnaList = null;
 		System.out.println("MkhServiceImpl bdQnaList Start...");
-		qnaList = mkhdao.bdQnaList();
+		qnaList = mkhdao.bdQnaList(userinfo);
 		System.out.println("MkhServiceImpl qnaList.size()->" +qnaList.size());
 		
 		return qnaList;
 	}
 
 	@Override
-	public int totalQna() {
+	public int totalQna(UserInfo userinfo) {
 		System.out.println("MkhServiceImpl totalQna Start...");
-		int totalBdQna = mkhdao.totalQna();
+		int totalBdQna = mkhdao.totalQna(userinfo);
 
 		return totalBdQna;
 	}
@@ -72,5 +75,23 @@ public class MkhServiceImpl implements MkhService {
 
 		return userInfo;
 	}
+
+//	@Override
+//	public List<BdFree> bdFreeList() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//
+//	@Override
+//	public List<PrjBdData> PrjDataList() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//
+//	@Override
+//	public List<PrjBdRep> PrjRepList() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
 }

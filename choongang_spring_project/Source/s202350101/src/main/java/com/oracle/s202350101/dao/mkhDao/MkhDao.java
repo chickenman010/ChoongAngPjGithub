@@ -10,8 +10,8 @@ public interface MkhDao {
 
 	int             insertUserInfo(UserInfo userInfo);
 	List<ClassRoom> createdClass();
-	List<BdQna>     bdQnaList();
-	int             totalQna();
+	List<BdQna>     bdQnaList(UserInfo userInfo);
+	int             totalQna(UserInfo userinfo);
 	int             userIdCount(String user_id);
 	int             userPwCount(String user_pw);
 	UserInfo        userLoginCheck(UserInfo userInfo);

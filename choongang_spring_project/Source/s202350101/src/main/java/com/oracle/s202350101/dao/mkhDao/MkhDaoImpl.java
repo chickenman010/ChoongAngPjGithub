@@ -43,7 +43,7 @@ public class MkhDaoImpl implements MkhDao {
 	}
 
 	@Override
-	public List<BdQna> bdQnaList() {
+	public List<BdQna> bdQnaList(UserInfo usrInfo) {
 		List<BdQna> qnaList = null;
 		System.out.println("MkhDaoImpl bdQnaList start...");
 		try {
@@ -56,7 +56,7 @@ public class MkhDaoImpl implements MkhDao {
 	}
 
 	@Override
-	public int totalQna() {
+	public int totalQna(UserInfo usrInfo) {
 		int totalBdQna = 0;		
 		System.out.println("MkhDaoImpl totalQna start...");
 		try {
