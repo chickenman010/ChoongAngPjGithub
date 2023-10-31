@@ -31,8 +31,7 @@ public class SampleInterceptor implements HandlerInterceptor {
 		} else {
 			System.out.println("userInfo exists");
 			request.getSession().setAttribute("userInfo", userInfo);
-		//	response.sendRedirect(request.getContextPath()+"/main");
-			response.sendRedirect("/main");
+			response.sendRedirect("main");
 		}
 	}
 	

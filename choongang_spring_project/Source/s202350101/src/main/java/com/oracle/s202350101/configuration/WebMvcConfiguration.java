@@ -14,8 +14,11 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 	public void addInterceptors(InterceptorRegistry registry) {
 		// 누군가가 URL로  /interCeptor라고 친다면 SampleInterceptor() 처리 해줌
 		registry.addInterceptor(new SampleInterceptor())
-				.addPathPatterns("/interCeptor")
-				.excludePathPatterns("/")
+		// 입력 패턴은 interceptor 적용
+				.addPathPatterns("/*")
+//				.addPathPatterns("/mypost_board_list/**")
+		// 입력 패턴은 interceptor 적용하지 않겠다
+				.excludePathPatterns("/user_login")
 		;
 	}
 

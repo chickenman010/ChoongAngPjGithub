@@ -58,7 +58,7 @@ public class MkhController {
 	
 	// 로그인 인터셉터
 	// 2번째 실행
-	@RequestMapping(value = "interCeptor")
+	@RequestMapping(value = "interCeptor", method = RequestMethod.POST)
 	public String interCeptor(UserInfo userInfoDTO, Model model) {
 		System.out.println("MkhController userLoginCheck Start..");
 		System.out.println("userInfo.getUser_id()->"+userInfoDTO.getUser_id());
