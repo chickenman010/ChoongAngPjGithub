@@ -13,14 +13,12 @@ public interface MkhService {
 
 	int                insertUserInfo(UserInfo userInfo);
 	List<ClassRoom>    createdClass();
-	int                totalQna(UserInfo userinfo);
-	int                userIdCount(String user_id);
-	int                userPwCount(String user_pw);
+//	int                totalQna();
 	UserInfo           userLoginCheck(UserInfo userInfo);
-	List<BdQna>        bdQnaList(UserInfo userinfo);
-//	List<BdFree> 	   bdFreeList();
-//	List<PrjBdData>    PrjDataList();
-//	List<PrjBdRep>     PrjRepList();
-//	
+	List<BdQna>        bdQnaList(UserInfo userInfo);
+	List<BdFree> 	   bdFreeList(UserInfo userInfo);
+	List<PrjBdData>    PrjDataList(UserInfo userInfo);
+	List<PrjBdRep>     PrjRepList(UserInfo userInfo);
+	
 
 }

@@ -38,35 +38,13 @@ public class MkhServiceImpl implements MkhService {
 		return classList;
 	}
 
-	@Override
-	public List<BdQna> bdQnaList(UserInfo userinfo) {
-		List<BdQna> qnaList = null;
-		System.out.println("MkhServiceImpl bdQnaList Start...");
-		qnaList = mkhdao.bdQnaList(userinfo);
-		System.out.println("MkhServiceImpl qnaList.size()->" +qnaList.size());
-		
-		return qnaList;
-	}
-
-	@Override
-	public int totalQna(UserInfo userinfo) {
-		System.out.println("MkhServiceImpl totalQna Start...");
-		int totalBdQna = mkhdao.totalQna(userinfo);
-
-		return totalBdQna;
-	}
-
-	@Override
-	public int userIdCount(String user_id) {
-		System.out.println("MkhServiceImpl userIdCount id ->"+user_id);
-		return mkhdao.userIdCount(user_id);
-	}
-
-	@Override
-	public int userPwCount(String user_pw) {
-		System.out.println("MkhServiceImpl userPwCount pw ->"+user_pw);
-		return mkhdao.userPwCount(user_pw);
-	}
+//	@Override
+//	public int totalQna() {
+//		System.out.println("MkhServiceImpl totalQna Start...");
+//		int totalBdQna = mkhdao.totalQna();
+//
+//		return totalBdQna;
+//	}
 
 	@Override
 	public UserInfo userLoginCheck(UserInfo userInfoDTO) {
@@ -75,23 +53,45 @@ public class MkhServiceImpl implements MkhService {
 
 		return userInfo;
 	}
+	
+	@Override
+	public List<BdQna> bdQnaList(UserInfo userInfo) {
+		List<BdQna> qnaList = null;
+		System.out.println("MkhServiceImpl bdQnaList Start...");
+		qnaList = mkhdao.bdQnaList(userInfo);
+		System.out.println("MkhServiceImpl qnaList.size()->" +qnaList.size());
+		
+		return qnaList;
+	}
+	
+	@Override
+	public List<BdFree> bdFreeList(UserInfo userInfo) {
+		List<BdFree> freeList = null;
+		System.out.println("MkhServiceImpl bdFreeList Start...");
+		freeList = mkhdao.bdFreeList(userInfo);
+		System.out.println("MkhServiceImpl freeList.size()->" +freeList.size());
+		
+		return freeList;
+	}
 
-//	@Override
-//	public List<BdFree> bdFreeList() {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-//
-//	@Override
-//	public List<PrjBdData> PrjDataList() {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-//
-//	@Override
-//	public List<PrjBdRep> PrjRepList() {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
+	@Override
+	public List<PrjBdData> PrjDataList(UserInfo userInfo) {
+		List<PrjBdData> dataPrjList = null;
+		System.out.println("MkhServiceImpl PrjDataList Start...");
+		dataPrjList = mkhdao.PrjDataList(userInfo);
+		System.out.println("MkhServiceImpl dataPrjList.size()->" +dataPrjList.size());
+		
+		return dataPrjList;
+	}
+
+	@Override
+	public List<PrjBdRep> PrjRepList(UserInfo userInfo) {
+		List<PrjBdRep> RepPrjList = null;
+		System.out.println("MkhServiceImpl PrjRepList Start...");
+		RepPrjList = mkhdao.PrjRepList(userInfo);
+		System.out.println("MkhServiceImpl RepPrjList.size()->" +RepPrjList.size());
+		
+		return RepPrjList;
+	}
 
 }

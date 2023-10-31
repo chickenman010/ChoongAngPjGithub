@@ -60,7 +60,7 @@
 			<!------------------------------ //개발자 소스 입력 START ------------------------------->
 	  		<div class="container-fluid">
 					<p>
-					<h3>내가 쓴 게시글 : ${totalBdQna } 개</h3>
+					<%-- <h3>내가 쓴 게시글 : ${totalBdQna } 개</h3> --%>
 					<p>
 					<table>
 						<tr>
@@ -88,6 +88,30 @@
 									<td>${bdQna.create_date }</td>
 									<td>${bdQna.bd_count }</td>
 									<td>${bdQna.good_count }</td></tr>
+								</c:forEach>
+								<c:forEach var="bdFree" items="${freeList }">
+									<tr><td>${bdFree.app_name }</td>
+									<td><a href="bdQnaContent?doc_no=${bdFree.doc_no }">${bdFree.subject }</a></td>
+									<td>${bdFree.user_id }</td>
+									<td>${bdFree.create_date }</td>
+									<td>${bdFree.bd_count }</td>
+									<td>${bdFree.good_count }</td></tr>
+								</c:forEach>
+								<c:forEach var="PrjBdData" items="${dataPrjList }">
+									<tr><td>${PrjBdData.app_name }</td>
+									<td><a href="bdQnaContent?doc_no=${PrjBdData.doc_no }">${PrjBdData.subject }</a></td>
+									<td>${PrjBdData.user_id }</td>
+									<td>${PrjBdData.create_date }</td>
+									<td>${PrjBdData.bd_count }</td>
+									<td>${PrjBdData.good_count }</td></tr>
+								</c:forEach>
+								<c:forEach var="PrjBdRep" items="${RepPrjList }">
+									<tr><td>${PrjBdRep.app_name }</td>
+									<td><a href="bdQnaContent?doc_no=${PrjBdRep.doc_no }">${PrjBdRep.subject }</a></td>
+									<td>${PrjBdRep.user_id }</td>
+									<td>${PrjBdRep.create_date }</td>
+									<td>${PrjBdRep.create_date }</td>
+									<td>${PrjBdRep.create_date }</td></tr>
 								</c:forEach>
 							</tr>
 						</tbody>

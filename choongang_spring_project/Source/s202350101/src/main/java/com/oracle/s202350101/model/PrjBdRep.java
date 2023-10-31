@@ -22,4 +22,7 @@ public class PrjBdRep {
 	private String	doc_body;
 	private String	attach_name;
 	private String	attach_path;
+	
+	// AppInfo용
+	private String app_name;
 }

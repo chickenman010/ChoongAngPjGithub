@@ -6,13 +6,13 @@
 	 mapper 여러개 쓰셔도 됩니다. -->
 	 
 	 
-<mapper namespace="com.oracle.s202350101.BdQnaMapper">
+<mapper namespace="com.oracle.s202350101.PrjBdDataMapper">
 	<!-- user_id에 해당하는 게시물 -->
-	<select id="QnaListSelect" parameterType="UserInfo" resultType="BdQna">
-		Select a.app_id, a.app_name, b.subject, b.user_id, 
-			   b.create_date, b.bd_count, b.good_count
-		From   bd_qna b, app_info a
-		Where  a.app_id = b.app_id
+	<select id="DataListSelect" parameterType="UserInfo" resultType="PrjBdData">
+		Select a.app_id, a.app_name, p.subject, p.user_id, 
+			   p.create_date, p.bd_count, p.good_count
+		From   prj_bd_data p, app_info a
+		Where  a.app_id = p.app_id
 		And    user_id = #{user_id}
 	</select>
 	

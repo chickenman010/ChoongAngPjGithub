@@ -23,4 +23,7 @@ public class BdFree {
 	private int 	good_count;
 	private String 	attach_name;
 	private String 	attach_path;
+	
+	// AppInfo용
+	private String app_name;
 }

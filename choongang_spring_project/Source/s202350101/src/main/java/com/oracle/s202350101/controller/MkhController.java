@@ -139,14 +139,15 @@ public class MkhController {
 	
 	// 내가 쓴 게시글
 	@RequestMapping(value = "mypost_board_list")
-	public String mypostBoardList(BdQna bdQna, UserInfo userinfo, Model model) {
+	public String mypostBoardList(BdQna bdQna, UserInfo userInfo, Model model) {
 		System.out.println("MkhController mypostBoardList Start..");
+		System.out.println("userinfo.getUser_id()->"+userInfo.getUser_id());
 		
 		// 나중에 게시판마다 count 다 더해서 보내야 할듯??
 		// 내가 쓴 게시글 Count
-		// 질문게시판
-		int totalBdQna = mkhService.totalQna(userinfo);
-		System.out.println("totalBdQnaCount->"+totalBdQna);
+		// Q&A 게시판 Count
+//		int totalBdQna = mkhService.totalQna();
+//		System.out.println("totalBdQnaCount->"+totalBdQna);
 		
 		// 공용게시판 Count
 //		int totalBdFree = mkhService.totalFree();
@@ -161,22 +162,22 @@ public class MkhController {
 
 		/* 내가 쓴 게시글 출력 */
 		// Q&A 게시판
-		List<BdQna> qnaList = mkhService.bdQnaList(userinfo);
+		List<BdQna> qnaList = mkhService.bdQnaList(userInfo);
 		System.out.println("MkhController mypostBoardList qnaList.size->"+qnaList.size());
 		model.addAttribute("qnaList", qnaList);
-		model.addAttribute("totalBdQna", totalBdQna);
+//		model.addAttribute("totalBdQna", totalBdQna);
 		// 공용 게시판
-//		List<BdFree> freeList = mkhService.bdFreeList();
-//		System.out.println("MkhController mypostBoardList freeList.size->"+freeList.size());
-//		model.addAttribute("freeList", freeList);
-//		// 프로젝트 & 공지자료 게시판
-//		List<PrjBdData> dataPrjList = mkhService.PrjDataList();
-//		System.out.println("MkhController mypostBoardList prjList.size->"+dataPrjList.size());
-//		model.addAttribute("dataPrjList", dataPrjList);
-//		// 업무보고 게시판
-//		List<PrjBdRep> RepPrjList = mkhService.PrjRepList();
-//		System.out.println("MkhController mypostBoardList RepPrjList.size->"+RepPrjList.size());
-//		model.addAttribute("RepPrjList", RepPrjList);
+		List<BdFree> freeList = mkhService.bdFreeList(userInfo);
+		System.out.println("MkhController mypostBoardList freeList.size->"+freeList.size());
+		model.addAttribute("freeList", freeList);
+		// 프로젝트 & 공지자료 게시판
+		List<PrjBdData> dataPrjList = mkhService.PrjDataList(userInfo);
+		System.out.println("MkhController mypostBoardList prjList.size->"+dataPrjList.size());
+		model.addAttribute("dataPrjList", dataPrjList);
+		// 업무보고 게시판
+		List<PrjBdRep> RepPrjList = mkhService.PrjRepList(userInfo);
+		System.out.println("MkhController mypostBoardList RepPrjList.size->"+RepPrjList.size());
+		model.addAttribute("RepPrjList", RepPrjList);
 		
 		/* 내가 추천한 게시글 출력 */
 		
