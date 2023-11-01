@@ -29,7 +29,7 @@
 				</a>
 				<ul class="dropdown-menu text-small" style="">
 					<li><a class="dropdown-item" href="#">채팅창</a></li>
-					<li><a class="dropdown-item" href="mypage_main?user_id=${userInfo.user_id }">내 정보 설정</a></li>
+					<li><a class="dropdown-item" href="mypage_main">내 정보 설정</a></li>
 					<li><hr class="dropdown-divider"></li>
 					<li><a class="dropdown-item" href="user_logout">로그아웃</a></li>
 				</ul>
