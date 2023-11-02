@@ -9,7 +9,7 @@
 <mapper namespace="com.oracle.s202350101.ClassRoomMapper">
 	<!-- ClassRoom의 class_id, class_room_num, class_area select -->
 	<select id="createdClassSelect" resultType="ClassRoom">
-		select class_id, class_room_num, class_area
+		select *
 		from   class_room
 	</select>
 

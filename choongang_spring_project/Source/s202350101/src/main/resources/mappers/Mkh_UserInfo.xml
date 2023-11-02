@@ -7,7 +7,7 @@
 	 
 <mapper namespace="com.oracle.s202350101.UserInfoMapper">
 	
-	<!-- 회원가입 sql -->
+	<!-- 회원가입 insert -->
 	<insert id="InsertUserInfo" parameterType="UserInfo">    <!-- #{project_id, jdbcType = VARCHAR} -->
 		insert into user_info (user_id,      class_id,    user_pw,    user_name,    user_number,    user_email,  user_auth) 
 					   VALUES (#{user_id}, #{class_id}, #{user_pw}, #{user_name}, #{user_number}, #{user_email}, 'student')  
@@ -20,6 +20,14 @@
 		Where user_id = #{user_id}
 		And   user_pw = #{user_pw}
 	</select>
+	
+	<!-- 회원가입 ID 중복확인 -->
+	<select id="IdConfirm" parameterType="String" resultType="userInfo">
+		Select *
+		From  user_info
+		Where user_id = #{user_id}
+	</select>
+	
 	
 
 </mapper>

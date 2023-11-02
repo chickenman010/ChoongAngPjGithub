@@ -44,68 +44,8 @@ public class MkhController {
 		return "user/user_login";
 	}
 	
-////	 단순 로그인 체크
-//	@RequestMapping(value = "user_login_check")
-//	public String userLoginCheck(UserInfo userInfoDTO, HttpSession session) {
-//		System.out.println("MkhController userLoginCheck Start..");
-//		System.out.println("userInfo.getUser_id()->"+userInfoDTO.getUser_id());
-//		System.out.println("userInfo.getUser_pw()->"+userInfoDTO.getUser_pw());
-//		
-//		UserInfo userInfo = mkhService.userLoginCheck(userInfoDTO);
-//		if(userInfo != null) {
-//			session.setAttribute("userInfo", userInfo);
-//			return "main";	// 로그인 성공시 메인화면
-//		} else {
-//			return "redirect:/user_login"; // 로그인 실패시 로그인 화면
-//		}
-//	}
-	
-	// 로그인 인터셉터(origianl)
+	// 로그인 인터셉터 체크
 	// 2번째 실행
-//	@RequestMapping(value = "user_login_check", method = RequestMethod.POST)
-//	public String interCeptor(UserInfo userInfoDTO, Model model) {
-//		System.out.println("MkhController userLoginCheck Start..");
-//		System.out.println("userInfo.getUser_id()->"+userInfoDTO.getUser_id());
-//		System.out.println("userInfo.getUser_pw()->"+userInfoDTO.getUser_pw());
-//		
-//		UserInfo userInfo = mkhService.userLoginCheck(userInfoDTO);
-//		
-//		model.addAttribute("userInfo", userInfo);
-////		model.addAttribute("urlGo", "main");   미완성
-//
-//		System.out.println("user_login_check End");
-//		// 형식적으로 만들어줌
-//		return "main";
-//	}
-	
-//	// 로그인 인터셉터(second)
-//	// 2번째 실행
-//	@RequestMapping(value = "user_login_check", method = RequestMethod.POST)
-//	public String interCeptor(UserInfo userInfoDTO, Model model, HttpServletRequest request) {
-//		System.out.println("MkhController userLoginCheck Start..");
-//		System.out.println("userInfo.getUser_id()->"+userInfoDTO.getUser_id());
-//		System.out.println("userInfo.getUser_pw()->"+userInfoDTO.getUser_pw());
-//		
-//		UserInfo userInfo = mkhService.userLoginCheck(userInfoDTO);
-//		// 뷰로 보내줌
-//		if(userInfo == null) {
-//			return "user_login";
-//		}
-//		// 기존 세션 폐기
-//		request.getSession().invalidate();
-//		// 세션이 있으면 있는 세션 반환, 없으면 신규 세션 생성
-//		HttpSession session = request.getSession(true);
-//		session.setAttribute("userId", userInfo.getUser_id());
-//		// 세션 30분동안 유지
-//		session.setMaxInactiveInterval(1800);
-//		
-//		System.out.println("user_login_check End");
-//		// 형식적으로 만들어줌
-//		return "main";
-//	}
-	
-//	 로그인 인터셉터(third)
-//		 2번째 실행
 	@RequestMapping(value = "user_login_check", method = RequestMethod.POST)
 	public String interCeptor(HttpServletRequest  request, UserInfo userInfoDTO, 
 							  				Model model,   HttpSession session) {
@@ -116,14 +56,15 @@ public class MkhController {
 		// 검증
 		UserInfo userInfo = mkhService.userLoginCheck(userInfoDTO);
 		
-		if(userInfo != null) {
-			System.out.println("userInfo exists");
+		if(userInfo != null) {	// userInfo가 있으면 main으로 가라
+			System.out.println("user_login_check userInfo exists");
+			// 검증된 userInfo를 세션에 담음
 			session.setAttribute("userInfo", userInfo);
 			System.out.println("session.getAttribute(userInfo)->"+session.getAttribute("userInfo"));
-			return "redirect:/main";	// redirect의 의미
+			return "redirect:/main";
 		} else {
-			System.out.println("userInfo is not exist");
-			return "redirect:/user_login";
+			System.out.println("user_login_check userInfois not exist");
+			return "redirect:/user_login";	// userInfo가 없으면 user_login으로 가라
 		}
 	}
 	
@@ -147,7 +88,7 @@ public class MkhController {
 	@RequestMapping(value = "user_join_write")
 	public String userJoinWrite(Model model) {
 		System.out.println("MkhController userJoinWrite Start..");
-		// class_id GET
+		// classroom 모든 정보 가져옴
 		List<ClassRoom> classList = mkhService.createdClass();
 		System.out.println("MkhController user_join_write classList.size->"+classList.size());
 		model.addAttribute("classList", classList);
@@ -155,7 +96,25 @@ public class MkhController {
 		return "user/user_join_write";
 	}
 	
-//	 회원가입 정보 insert
+	// 중복확인 (PK를 주고 모든 정보 SELECT)
+	@GetMapping(value = "id_confirm")
+	public String confirm(String user_id, Model model) {
+		// ID을 주면 dto를 돌려주는 메소드
+		UserInfo userInfo = mkhService.confirm(user_id);
+		// 입력한 사번을 중복 확인하고 view로 보내주기 위해 model 사용
+		model.addAttribute("userInfo", userInfo);
+		if (userInfo != null) {
+			System.out.println("중복된 사번..");
+			model.addAttribute("msg", "중복된 사번입니다");
+			return "forward:user_join_write";
+		} else {
+			System.out.println("MkhController confirm 사용 가능한 사번..");
+			model.addAttribute("msg", "사용 가능한 사번입니다");
+			return "forward:user_join_write";
+		}
+	}
+	
+	// 회원가입 정보 insert
 	@PostMapping(value = "writeUserInfo")
 	public String writeUserInfo(UserInfo userInfo, Model model) {
 		System.out.println("MkhController writeUserInfo Start...");
@@ -164,7 +123,6 @@ public class MkhController {
 		if(result > 0) return "user/user_login";
 		else return "redirect:user_join_write";
 	}
-	
 	
 	/* 마이페이지 */
 	// 마이페이지 수정으로 이동
@@ -185,42 +143,39 @@ public class MkhController {
 		return "mypage/mypage_check_pw";
 	}
 	
-	// 개인정보 수정 페이지 인터셉터 검증
-	@RequestMapping(value = "mypage_update")
-	public String mypageUpdate(HttpServletRequest request, Model model) {
-		System.out.println("2.MkhController mypageUpdate Start..");
-		System.out.println("session.userInfo->"+request.getSession().getAttribute("userInfo"));
-
-	//	이미 loginCheck할 때 세션이 올바르면 userInfo 객체가 잡혀있음
-		model.addAttribute("urlGo", "mypage_update_view");
-		return "mypage/mypage_update";
-	}
-	
 	// 개인정보 수정 페이지로 이동
-	@RequestMapping(value = "mypage_update_view")
-	public String mypage_update_view(HttpServletRequest request,Model model) {
+	@RequestMapping(value = "mypage_update")
+	public String mypage_update_view(HttpServletRequest request, Model model, String redirectURL) {
 		System.out.println("2.MkhController mypage_update_view Start..");
-
+		System.out.println("session.userInfo->"+request.getSession().getAttribute("userInfo"));
+		
+		// URI 꺼내옴
+		String requestURI = (String) request.getSession().getAttribute("requestURI");
+		System.out.println("requestURI->"+requestURI);
+		
+		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+		System.out.println("userInfoDTO.getUser_id()->"+userInfoDTO.getUser_id());
+		
 		return "mypage/mypage_update";
 	}
 	
 	/* MYPOST */
-	
 	// 내가 쓴 게시글
 	@RequestMapping(value = "mypost_board_list")
 	public String mypostBoardList(HttpServletRequest request,  BdQna bdQna, 
 								  			UserInfo userInfo, Model model) {
 		System.out.println("MkhController mypostBoardList Start..");
-		System.out.println("userinfo.getUser_id()->"+userInfo.getUser_id());
-		
-		// userInfo가 있으면 보여주고 아니면 권한없음처리
+	    System.out.println("session.userInfo->"+request.getSession().getAttribute("userInfo"));
+	    // userInfo 세션값 받아와서 userInfoDTO로 사용
+	    UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+	    System.out.println("userinfo.getUser_id()->"+userInfoDTO.getUser_id());
 		
 		// 내가 쓴 게시글 Count
 		// Q&A 게시판 Count
-		int totalBdQna = mkhService.totalQna(userInfo);
+		int totalBdQna = mkhService.totalQna(userInfoDTO);
 		System.out.println("totalBdQnaCount->"+totalBdQna);
 		model.addAttribute("totalBdQna", totalBdQna);
-		
+
 		// 공용게시판 Count
 //		int totalBdFree = mkhService.totalFree();
 //		System.out.println("totalBdQnaCount->"+totalBdFree);
@@ -234,19 +189,19 @@ public class MkhController {
 
 		/* 내가 쓴 게시글 출력 */
 		// Q&A 게시판
-		List<BdQna> qnaList = mkhService.bdQnaList(userInfo);
+		List<BdQna> qnaList = mkhService.bdQnaList(userInfoDTO);
 		System.out.println("MkhController mypostBoardList qnaList.size->"+qnaList.size());
 		model.addAttribute("qnaList", qnaList);
 		// 공용 게시판
-		List<BdFree> freeList = mkhService.bdFreeList(userInfo);
+		List<BdFree> freeList = mkhService.bdFreeList(userInfoDTO);
 		System.out.println("MkhController mypostBoardList freeList.size->"+freeList.size());
 		model.addAttribute("freeList", freeList);
 		// 프로젝트 & 공지자료 게시판
-		List<PrjBdData> dataPrjList = mkhService.PrjDataList(userInfo);
+		List<PrjBdData> dataPrjList = mkhService.prjDataList(userInfoDTO);
 		System.out.println("MkhController mypostBoardList prjList.size->"+dataPrjList.size());
 		model.addAttribute("dataPrjList", dataPrjList);
 		// 업무보고 게시판
-		List<PrjBdRep> RepPrjList = mkhService.PrjRepList(userInfo);
+		List<PrjBdRep> RepPrjList = mkhService.prjRepList(userInfoDTO);
 		System.out.println("MkhController mypostBoardList RepPrjList.size->"+RepPrjList.size());
 		model.addAttribute("RepPrjList", RepPrjList);
 		
@@ -262,6 +217,9 @@ public class MkhController {
 	@RequestMapping(value = "mypost_comment_list")
 	public String mypostCommentList(HttpServletRequest request) {
 		System.out.println("MkhController mypostCommentList Start..");
+		// userInfo 세션값 받아와서 userInfoDTO로 사용
+	    UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+	    
 		return "mypost/mypost_comment_list";
 	}
 	
@@ -269,6 +227,9 @@ public class MkhController {
 	@RequestMapping(value = "mypost_good_list")
 	public String mypostGoodList(HttpServletRequest request) {
 		System.out.println("MkhController mypostGoodList Start..");
+		// userInfo 세션값 받아와서 userInfoDTO로 사용
+	    UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+	    
 		return "mypost/mypost_good_list";
 	}
 

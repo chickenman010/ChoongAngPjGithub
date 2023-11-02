@@ -17,8 +17,9 @@ public interface MkhService {
 	UserInfo           userLoginCheck(UserInfo userInfo);
 	List<BdQna>        bdQnaList(UserInfo userInfo);
 	List<BdFree> 	   bdFreeList(UserInfo userInfo);
-	List<PrjBdData>    PrjDataList(UserInfo userInfo);
-	List<PrjBdRep>     PrjRepList(UserInfo userInfo);
+	List<PrjBdData>    prjDataList(UserInfo userInfo);
+	List<PrjBdRep>     prjRepList(UserInfo userInfo);
+	UserInfo           confirm(String user_id);
 	
 
 }

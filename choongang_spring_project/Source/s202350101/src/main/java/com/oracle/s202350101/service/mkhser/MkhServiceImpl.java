@@ -75,23 +75,31 @@ public class MkhServiceImpl implements MkhService {
 	}
 
 	@Override
-	public List<PrjBdData> PrjDataList(UserInfo userInfo) {
+	public List<PrjBdData> prjDataList(UserInfo userInfo) {
 		List<PrjBdData> dataPrjList = null;
 		System.out.println("MkhServiceImpl PrjDataList Start...");
-		dataPrjList = mkhdao.PrjDataList(userInfo);
+		dataPrjList = mkhdao.prjDataList(userInfo);
 		System.out.println("MkhServiceImpl dataPrjList.size()->" +dataPrjList.size());
 		
 		return dataPrjList;
 	}
 
 	@Override
-	public List<PrjBdRep> PrjRepList(UserInfo userInfo) {
+	public List<PrjBdRep> prjRepList(UserInfo userInfo) {
 		List<PrjBdRep> RepPrjList = null;
 		System.out.println("MkhServiceImpl PrjRepList Start...");
-		RepPrjList = mkhdao.PrjRepList(userInfo);
+		RepPrjList = mkhdao.prjRepList(userInfo);
 		System.out.println("MkhServiceImpl RepPrjList.size()->" +RepPrjList.size());
 		
 		return RepPrjList;
+	}
+
+	@Override
+	public UserInfo confirm(String user_id) {
+		System.out.println("MkhServiceImpl confirm Start...");
+		UserInfo userInfo = mkhdao.confirm(user_id);
+		
+		return userInfo;
 	}
 
 }

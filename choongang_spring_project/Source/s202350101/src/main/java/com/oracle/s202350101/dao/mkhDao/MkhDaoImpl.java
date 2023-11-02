@@ -99,7 +99,7 @@ public class MkhDaoImpl implements MkhDao {
 	}
 
 	@Override
-	public List<PrjBdData> PrjDataList(UserInfo userInfo) {
+	public List<PrjBdData> prjDataList(UserInfo userInfo) {
 		List<PrjBdData> dataPrjList = null;
 		System.out.println("MkhDaoImpl PrjDataList start...");
 		try {
@@ -112,7 +112,7 @@ public class MkhDaoImpl implements MkhDao {
 	}
 
 	@Override
-	public List<PrjBdRep> PrjRepList(UserInfo userInfo) {
+	public List<PrjBdRep> prjRepList(UserInfo userInfo) {
 		List<PrjBdRep> RepPrjList = null;
 		System.out.println("MkhDaoImpl PrjRepList start...");
 		try {
@@ -122,6 +122,18 @@ public class MkhDaoImpl implements MkhDao {
 			System.out.println("MkhDaoImpl PrjRepList Exception->" +e.getMessage());
 		}
 		return RepPrjList;
+	}
+
+	@Override
+	public UserInfo confirm(String user_id) {
+		System.out.println("MkhDaoImpl confirm start...");
+		UserInfo userInfo = new UserInfo();
+		try {
+			userInfo = session.selectOne("IdConfirm", user_id);
+		} catch (Exception e) {
+			System.out.println("MkhDaoImpl confirm Exception->"+e.getMessage());
+		}
+		return userInfo;
 	}
 
 }

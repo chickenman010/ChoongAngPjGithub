@@ -41,6 +41,12 @@ select {
 }
 
 </style>
+<script type="text/javascript">
+	function chk() {
+		location.href="id_confirm?user_id="+frm.user_id.value;
+	}
+
+</script>
 </head>
 <body>
 	<div class="login-wrapper">
@@ -48,37 +54,37 @@ select {
         
         <form action="writeUserInfo" method="post" name="frm" id="login-form">
         	<table>
-        	<!-- <tr><td>
-        		<input type="hidden" name="attach_name" value="">
-        		<input type="hidden" name="attach_path">
-        		<input type="hidden" name="project_id">
-        		<input type="hidden" name="del_status">
-        		<input type="hidden" name="chat_room_ses">
-        	</td></tr>
-			 -->
+        	
 			<tr><th>아이디 : </th><td><input type="text" name="user_id" 
-				required="required" >
-				<input type="button" value="중복확인:미구현" onclick="chk()"> </td></tr>
+				required="required" value="${user_id }">
+				<input type="button" value="중복확인" onclick="chk()">
+				<c:if test="${msg != null }"> ${msg }</c:if>
+			</td></tr>
 			<tr><th>비밀번호 : </th><td><input type="password" name="user_pw" 
 				required="required"> </td></tr>
 			<!-- <tr><th>비밀번호 확인 : </th><td><input type="password" name="user_pw2" 
 				required="required"> </td></tr>	 -->
 			<tr><th>소속</th>
 			<td>
-				<select name="class_area">
+				<%-- <select name="class_area">
 					<c:forEach var="classList" items="${classList}">
 						<option value="${classList.class_area }">${classList.class_area }</option>
 					</c:forEach>
+				</select><p> --%>
+				<select name="class_area">
+						<option value="option1">이대</option>
+						<option value="option2">강남</option>
 				</select><p>
 				<select name="class_id">
 					<c:forEach var="classList" items="${classList}">
-						<option value="${classList.class_id }">${classList.class_room_num }</option>
+						<option value="${classList.class_id }">${classList.class_room_num }반   ${classList.class_start_date } ~ ${classList.class_end_date }</option>
 					</c:forEach>
 				</select><p>
 			</td></tr>
 			<tr><th>이름 : </th><td><input type="text" name="user_name"></td></tr>
            	<tr><th>성별 : </th><td><input type="radio" name="user_gender" value="M">남  <input type="radio" name="user_gender" value="F">여</td></tr>
-          	<tr><th>전화번호 : </th><td><input type="tel" name="user_number" placeholder="010-xxxx-xxxx"></td></tr>
+          	<tr><th>전화번호 : </th><td><input type="tel" name="user_number" placeholder="010-xxxx-xxxx"><input type="button" value="인증하기"></td></tr>
+          	
             <tr><th>이메일 : </th><td><input type="email" name="user_email" placeholder="ID@Email.com"></td></tr>
           	<tr><th>주소 : </th><td><input type="text" name="user_address"><p> </td></tr>
           	<tr><th>생년월일test : </th><td><input type="date" name="user_birth"><p> </td></tr>

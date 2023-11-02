@@ -85,9 +85,9 @@
 				<p style="height:10px"></p>
  				<p class="menu-title">내 글 모음</p>
 				<ul>
-					<li class="menu-box"><a href="mypost_board_list?user_id=${userInfo.user_id }">내가 쓴 게시글</a></li>
-					<li class="menu-box"><a href="mypost_comment_list?user_id=${userInfo.user_id }">내가 쓴 댓글</a></li>
-					<li class="menu-box"><a href="mypost_good_list?user_id=${userInfo.user_id }">내가 추천한 게시글</a></li>
+					<li class="menu-box"><a href="mypost_board_list">내가 쓴 게시글</a></li>
+					<li class="menu-box"><a href="mypost_comment_list">내가 쓴 댓글</a></li>
+					<li class="menu-box"><a href="mypost_good_list">내가 추천한 게시글</a></li>
 				</ul>
 				<p class="menu-title">오늘 할 일</p>
   				<!-- <p class="project-title">
