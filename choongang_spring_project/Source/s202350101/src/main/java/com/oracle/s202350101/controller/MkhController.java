@@ -6,10 +6,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,21 +48,29 @@ public class MkhController {
 	
 	// 로그인 인터셉터 체크
 	// 2번째 실행
-	@RequestMapping(value = "user_login_check", method = RequestMethod.POST)
-	public String interCeptor(HttpServletRequest  request, UserInfo userInfoDTO, 
-							  				Model model,   HttpSession session) {
+	@PostMapping(value = "user_login_check")
+	public String interCeptor(@ModelAttribute("userInfo") @Valid UserInfo userInfo
+							 , BindingResult result		 , Model model
+							 , HttpServletRequest request, UserInfo userInfoDTO 
+							 , HttpSession session
+							  ) {
 		System.out.println("MkhController userLoginCheck Start..");
-		System.out.println("userInfo.getUser_id()->"+userInfoDTO.getUser_id());
-		System.out.println("userInfo.getUser_pw()->"+userInfoDTO.getUser_pw());
 		
-		// 검증
-		UserInfo userInfo = mkhService.userLoginCheck(userInfoDTO);
+		// Validation 오류시 결과
+		if(result.hasErrors()) {
+			System.out.println("MkhController user_login_check hasErrors...");
+			model.addAttribute("msg", "오류발생");
+			return "forward:user_login";
+		}
 		
-		if(userInfo != null) {	// userInfo가 있으면 main으로 가라
+		// Login 검증
+		UserInfo userInfoDto = mkhService.userLoginCheck(userInfoDTO);
+		
+		if(userInfoDto != null) {	// userInfo가 있으면 main으로 가라
 			System.out.println("user_login_check userInfo exists");
 			// 검증된 userInfo를 세션에 담음
-			session.setAttribute("userInfo", userInfo);
-			System.out.println("session.getAttribute(userInfo)->"+session.getAttribute("userInfo"));
+			session.setAttribute("userInfo", userInfoDto);
+			System.out.println("session.getAttribute(userInfo)->"+session.getAttribute("userInfoDto"));
 			return "redirect:/main";
 		} else {
 			System.out.println("user_login_check userInfois not exist");
@@ -104,12 +114,12 @@ public class MkhController {
 		// 입력한 사번을 중복 확인하고 view로 보내주기 위해 model 사용
 		model.addAttribute("userInfo", userInfo);
 		if (userInfo != null) {
-			System.out.println("중복된 사번..");
-			model.addAttribute("msg", "중복된 사번입니다");
+			System.out.println("중복된 ID..");
+			model.addAttribute("msg", "중복된 ID 입니다");
 			return "forward:user_join_write";
 		} else {
 			System.out.println("MkhController confirm 사용 가능한 사번..");
-			model.addAttribute("msg", "사용 가능한 사번입니다");
+			model.addAttribute("msg", "사용 가능한 ID 입니다");
 			return "forward:user_join_write";
 		}
 	}
