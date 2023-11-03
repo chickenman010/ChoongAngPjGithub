@@ -41,10 +41,24 @@ select {
 }
 
 </style>
+
+<!-- <script type="text/javascript" src="js/jquery.js"></script> -->
 <script type="text/javascript">
-	function chk() {
+	function id_confirm() {
 		location.href="id_confirm?user_id="+frm.user_id.value;
 	}
+ 	
+	function send_save_mail() {
+		location.href="send_save_mail?user_email="+frm.user_email.value;
+		alert("인증번호가 전송 되었습니다.")
+	}
+	
+	function confirm_authNumber() {
+		location.href="confirm_auth_number?auth_number="+frm.user_email.value;
+		alert("인증번호가 전송 되었습니다.")
+	}
+
+	
 
 </script>
 </head>
@@ -57,7 +71,7 @@ select {
         	
 			<tr><th>아이디 : </th><td><input type="text" name="user_id" 
 				required="required" value="${user_id }">
-				<input type="button" value="중복확인" onclick="chk()">
+				<input type="button" value="중복확인" onclick="id_confirm()">
 				<c:if test="${msg != null }"> ${msg }</c:if>
 			</td></tr>
 			<tr><th>비밀번호 : </th><td><input type="password" name="user_pw" 
@@ -66,30 +80,26 @@ select {
 				required="required"> </td></tr>	 -->
 			<tr><th>소속</th>
 			<td>
-				<%-- <select name="class_area">
-					<c:forEach var="classList" items="${classList}">
-						<option value="${classList.class_area }">${classList.class_area }</option>
-					</c:forEach>
-				</select><p> --%>
-				<select name="class_area">
-						<option value="option1">이대</option>
-						<option value="option2">강남</option>
-				</select><p>
 				<select name="class_id">
 					<c:forEach var="classList" items="${classList}">
-						<option value="${classList.class_id }">${classList.class_room_num }반   ${classList.class_start_date } ~ ${classList.class_end_date }</option>
+						<option value="${classList.class_id }">${classList.class_area }점 ${classList.class_room_num }반   ${classList.class_start_date } ~ ${classList.class_end_date }</option>
 					</c:forEach>
 				</select><p>
 			</td></tr>
 			<tr><th>이름 : </th><td><input type="text" name="user_name"></td></tr>
            	<tr><th>성별 : </th><td><input type="radio" name="user_gender" value="M">남  <input type="radio" name="user_gender" value="F">여</td></tr>
           	<tr><th>전화번호 : </th><td><input type="tel" name="user_number" placeholder="010-xxxx-xxxx"><input type="button" value="인증하기"></td></tr>
-          	
-            <tr><th>이메일 : </th><td><input type="email" name="user_email" placeholder="ID@Email.com"></td></tr>
-          	<tr><th>주소 : </th><td><input type="text" name="user_address"><p> </td></tr>
+            <tr><th>이메일 : </th><td><input type="email" name="user_email" placeholder="ID@Email.com">
+            			  <input type="button" value="이메일 인증(이메일 저장  + 메일전송)" onclick="send_save_mail()">
+            			  <input type="text" placeholder="인증번호 6자리를 입력해주세요!" maxlength="6">
+            			  <input type="button" name="auth_number" value="인증번호 확인" onclick="confirm_authNumber">
+            			  
+            			  </td></tr>
+            			  
+            <tr><th>주소 : </th><td><input type="text" name="user_address"><p> </td></tr>
           	<tr><th>생년월일test : </th><td><input type="date" name="user_birth"><p> </td></tr>
           	<tr><th>생년월일 : </th>
-          	<td>
+          	<!-- <td>
           		<div class="info" id="info__birth">
 				    <select class="box" id="birth-year">
 					    <option disabled selected>출생 연도</option>
@@ -100,8 +110,9 @@ select {
 					    <select class="box" id="birth-day">
 					    <option disabled selected>일</option>
 				    </select>
-				</div><p> </td></tr>
-          	      
+				</div><p> 
+			</td> -->
+			</tr>
         	<td><input type="submit" value="가입하기2" style="float: center"></td>
   			<!-- 가입을 축하합니다 페이지 -->
   			</table>

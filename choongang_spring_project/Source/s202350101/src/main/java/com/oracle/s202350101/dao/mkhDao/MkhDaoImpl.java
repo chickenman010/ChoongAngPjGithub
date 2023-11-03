@@ -47,16 +47,16 @@ public class MkhDaoImpl implements MkhDao {
 
 
 	@Override
-	public int totalQna(UserInfo userInfo) {
-		int totalBdQna = 0;
-		System.out.println("MkhDaoImpl totalQna start...");
+	public int totalBDcount(UserInfo userInfo) {
+		int totalBDCount = 0;
+		System.out.println("MkhDaoImpl totalBDcount start...");
 		try {
-			totalBdQna = session.selectOne("userIdQnaListCount", userInfo);
+			totalBDCount = session.selectOne("totalBDListCount", userInfo);
 		} catch (Exception e) {
-			System.out.println("MkhDaoImpl totalQna Exception->" +e.getMessage());
+			System.out.println("MkhDaoImpl totalBDcount Exception->" +e.getMessage());
 		}
 
-		return totalBdQna;
+		return totalBDCount;
 	}
 	
 	@Override
@@ -134,6 +134,58 @@ public class MkhDaoImpl implements MkhDao {
 			System.out.println("MkhDaoImpl confirm Exception->"+e.getMessage());
 		}
 		return userInfo;
+	}
+
+	@Override
+	public int totalQna(UserInfo userInfo) {
+		int totalBdQna = 0;
+		System.out.println("MkhDaoImpl totalQna start...");
+		try {
+			totalBdQna = session.selectOne("totalQnaCount", userInfo);
+		} catch (Exception e) {
+			System.out.println("MkhDaoImpl totalQna Exception->" +e.getMessage());
+		}
+
+		return totalBdQna;
+	}
+
+	@Override
+	public int totalFree(UserInfo userInfo) {
+		int totalBdFree = 0;
+		System.out.println("MkhDaoImpl totalFree start...");
+		try {
+			totalBdFree = session.selectOne("totalFreeCount", userInfo);
+		} catch (Exception e) {
+			System.out.println("MkhDaoImpl totalFree Exception->" +e.getMessage());
+		}
+
+		return totalBdFree;
+	}
+
+	@Override
+	public int totalDtPj(UserInfo userInfo) {
+		int totalDtPrj = 0;
+		System.out.println("MkhDaoImpl totalDtPj start...");
+		try {
+			totalDtPrj = session.selectOne("totalDtPjCount", userInfo);
+		} catch (Exception e) {
+			System.out.println("MkhDaoImpl totalDtPj Exception->" +e.getMessage());
+		}
+
+		return totalDtPrj;
+	}
+
+	@Override
+	public int totalRepPj(UserInfo userInfo) {
+		int totalRepPrj = 0;
+		System.out.println("MkhDaoImpl totalRepPj start...");
+		try {
+			totalRepPrj = session.selectOne("totalRepPjCount", userInfo);
+		} catch (Exception e) {
+			System.out.println("MkhDaoImpl totalRepPj Exception->" +e.getMessage());
+		}
+
+		return totalRepPrj;
 	}
 
 }

@@ -17,14 +17,14 @@
 	</select>
 	
 	<!-- user_id에 해당하는 count -->
-	<!-- <select id="userIdQnaListCount" resultType="int">
+	<select id="totalQnaCount" parameterType="UserInfo" resultType="int">
 		select count(*) 
 		from   bd_qna 
 		where  user_id = #{user_id}
-	</select> -->
+	</select>
 	
 	<!-- user_id에 해당하는 count -->
-	<select id="userIdQnaListCount" parameterType="UserInfo" resultType="int">
+	<select id="totalBDListCount" parameterType="UserInfo" resultType="int">
 		Select 
 		    (select count(*) from bd_qna      where user_id = #{user_id}) +
 		    (select count(*) from bd_free     where user_id = #{user_id}) +

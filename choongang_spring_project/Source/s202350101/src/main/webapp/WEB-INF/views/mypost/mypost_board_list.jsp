@@ -60,7 +60,11 @@
 			<!------------------------------ //개발자 소스 입력 START ------------------------------->
 	  		<div class="container-fluid">
 					<p>
-					<h3>내가 쓴 게시글 : ${totalBdQna } 개</h3>
+					<h3>내가 쓴 게시글 : ${totalBDCount } 개</h3>
+					<h3>내가 쓴 Q&A 게시글 : ${totalBdQna } 개</h3>
+					<h3>내가 쓴 공용 게시글 : ${totalBdFree } 개</h3>
+					<h3>내가 쓴 PJ& 공지자료 게시글 : ${totalDtPrj } 개</h3>
+					<h3>내가 쓴 업무보고 게시글 : ${totalRepPrj } 개</h3>
 					<p>
 					<table>
 						<tr>

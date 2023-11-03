@@ -39,11 +39,11 @@ public class MkhServiceImpl implements MkhService {
 	}
 
 	@Override
-	public int totalQna(UserInfo userInfo) {
-		System.out.println("MkhServiceImpl totalQna Start...");
-		int totalBdQna = mkhdao.totalQna(userInfo);
+	public int totalBDcount(UserInfo userInfo) {
+		System.out.println("MkhServiceImpl totalBDcount Start...");
+		int totalBDCount = mkhdao.totalBDcount(userInfo);
 
-		return totalBdQna;
+		return totalBDCount;
 	}
 
 	@Override
@@ -100,6 +100,38 @@ public class MkhServiceImpl implements MkhService {
 		UserInfo userInfo = mkhdao.confirm(user_id);
 		
 		return userInfo;
+	}
+
+	@Override
+	public int totalQna(UserInfo userInfo) {
+		System.out.println("MkhServiceImpl totalQna Start...");
+		int totalBdQna = mkhdao.totalQna(userInfo);
+
+		return totalBdQna;
+	}
+
+	@Override
+	public int totalFree(UserInfo userInfo) {
+		System.out.println("MkhServiceImpl totalFree Start...");
+		int totalBdFree = mkhdao.totalFree(userInfo);
+
+		return totalBdFree;
+	}
+
+	@Override
+	public int totalDtPj(UserInfo userInfo) {
+		System.out.println("MkhServiceImpl totalDtPj Start...");
+		int totalDtPrj = mkhdao.totalDtPj(userInfo);
+
+		return totalDtPrj;
+	}
+
+	@Override
+	public int totalRepPj(UserInfo userInfo) {
+		System.out.println("MkhServiceImpl totalRepPj Start...");
+		int totalRepPrj = mkhdao.totalRepPj(userInfo);
+
+		return totalRepPrj;
 	}
 
 }

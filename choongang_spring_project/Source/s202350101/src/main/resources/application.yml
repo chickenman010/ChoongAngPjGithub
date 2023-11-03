@@ -8,6 +8,10 @@ spring:
     url: jdbc:oracle:thin:@localhost:1521/xe
     username: s202350101_mkh
     password: tiger
+    
+  redis:
+    host: localhost
+    port: 6379
 
 # JPA Setting
   jpa:
@@ -17,18 +21,18 @@ spring:
       ddl-auto: create
 
   
-  # view Resolver
+# view Resolver
   mvc:
     view:
       prefix: /WEB-INF/views/
       suffix: .jsp
 
-  #gmail transfer      
+#gmail transfer      
   mail:
     host: smtp.gmail.com
     port: 587
-    username: usertest@gmail.com
-    password: xx
+    username: cristalmoon112@gmail.com
+    password: fqvw peaq rwvt yvhj
     properties:
       mail:
         smtp:
@@ -43,5 +47,4 @@ mybatis:
   
 logging.level:
   org.hibernate.SQL: debug  # logger를 통해 하이버네이트 실행 SQL
-  
   

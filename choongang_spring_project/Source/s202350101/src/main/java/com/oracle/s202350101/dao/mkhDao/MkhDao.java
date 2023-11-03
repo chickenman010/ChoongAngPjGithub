@@ -13,12 +13,16 @@ public interface MkhDao {
 
 	int             insertUserInfo(UserInfo userInfo);
 	List<ClassRoom> createdClass();
-	int             totalQna(UserInfo userInfo);
 	UserInfo        userLoginCheck(UserInfo userInfo);
 	List<BdFree>    bdFreeList(UserInfo userInfo);
 	List<PrjBdData> prjDataList(UserInfo userInfo);
 	List<PrjBdRep>  prjRepList(UserInfo userInfo);
 	List<BdQna>     bdQnaList(UserInfo userInfo);
 	UserInfo        confirm(String user_id);
+	int             totalBDcount(UserInfo userInfo);
+	int 			totalQna(UserInfo userInfo);
+	int 			totalFree(UserInfo userInfo);
+	int 			totalDtPj(UserInfo userInfo);
+	int 			totalRepPj(UserInfo userInfo);
 
 }
