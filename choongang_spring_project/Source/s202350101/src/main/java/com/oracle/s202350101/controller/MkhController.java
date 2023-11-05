@@ -140,7 +140,6 @@ public class MkhController {
 	
 	// 이메일 값 가져옴 + 이메일 전송
 	@GetMapping(value = "send_save_mail")
-	@ResponseBody
 	public String mailCheck(Model model, String user_email) {
 		System.out.println("MkhController mailCheck Start..");
 		

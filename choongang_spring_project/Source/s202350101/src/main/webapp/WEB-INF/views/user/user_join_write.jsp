@@ -54,7 +54,7 @@ select {
 	}
 	
 	function confirm_authNumber() {
-		location.href="confirm_auth_number?auth_number="+frm.user_email.value;
+		location.href="confirm_auth_number?auth_number="+frm.auth_number.value;
 		alert("인증번호가 전송 되었습니다.")
 	}
 
@@ -76,8 +76,8 @@ select {
 			</td></tr>
 			<tr><th>비밀번호 : </th><td><input type="password" name="user_pw" 
 				required="required"> </td></tr>
-			<!-- <tr><th>비밀번호 확인 : </th><td><input type="password" name="user_pw2" 
-				required="required"> </td></tr>	 -->
+			<tr><th>비밀번호 확인 : </th><td><input type="password" name="user_pw2" 
+				required="required"> </td></tr>
 			<tr><th>소속</th>
 			<td>
 				<select name="class_id">
@@ -88,7 +88,7 @@ select {
 			</td></tr>
 			<tr><th>이름 : </th><td><input type="text" name="user_name"></td></tr>
            	<tr><th>성별 : </th><td><input type="radio" name="user_gender" value="M">남  <input type="radio" name="user_gender" value="F">여</td></tr>
-          	<tr><th>전화번호 : </th><td><input type="tel" name="user_number" placeholder="010-xxxx-xxxx"><input type="button" value="인증하기"></td></tr>
+          	<tr><th>전화번호 : </th><td><input type="tel" name="user_number" placeholder="010-xxxx-xxxx"><!-- <input type="button" value="인증하기"> --></td></tr>
             <tr><th>이메일 : </th><td><input type="email" name="user_email" placeholder="ID@Email.com">
             			  <input type="button" value="이메일 인증(이메일 저장  + 메일전송)" onclick="send_save_mail()">
             			  <input type="text" placeholder="인증번호 6자리를 입력해주세요!" maxlength="6">
