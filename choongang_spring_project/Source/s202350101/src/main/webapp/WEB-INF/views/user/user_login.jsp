@@ -74,8 +74,8 @@
             
             <input type="submit" value="Login">
         </form:form>
-        <a href="member_find_pw.html"><input type="button" value="비밀번호 찾기"></a>
-   	    <a href="member_find_id.html"><input type="button" value="아이디 찾기"></a>
+        <a href="user_find_pw"><input type="button" value="비밀번호 찾기"></a>
+   	    <a href="user_find_id"><input type="button" value="아이디 찾기"></a>
    	    <a href="user_join_agree"><input type="button" value="회원가입"></a>
     </div>
 </body>

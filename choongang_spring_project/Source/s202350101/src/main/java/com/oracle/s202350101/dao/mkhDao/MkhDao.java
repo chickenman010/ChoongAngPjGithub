@@ -24,5 +24,6 @@ public interface MkhDao {
 	int 			totalFree(UserInfo userInfo);
 	int 			totalDtPj(UserInfo userInfo);
 	int 			totalRepPj(UserInfo userInfo);
+	int             updatePw(UserInfo userInfo);
 
 }

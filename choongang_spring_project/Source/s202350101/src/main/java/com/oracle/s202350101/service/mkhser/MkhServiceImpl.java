@@ -134,4 +134,12 @@ public class MkhServiceImpl implements MkhService {
 		return totalRepPrj;
 	}
 
+	@Override
+	public int updatePw(UserInfo userInfo) {
+		System.out.println("MkhServiceImpl updatePw Start...");
+		int result = mkhdao.updatePw(userInfo);
+
+		return result;
+	}
+
 }

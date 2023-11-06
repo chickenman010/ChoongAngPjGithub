@@ -51,7 +51,7 @@ public class MkhController {
 	private final JavaMailSender mailSender;
 	
 	/* 로그인  */
-	// 로그인 화면 (Validation 걸어줘야함)
+	// 로그인 화면
 	@RequestMapping(value = "user_login")
 	public String userLogin(Model model) {
 		System.out.println("MkhController userLogin Start..");
@@ -139,12 +139,13 @@ public class MkhController {
 	}
 	
 	// 이메일 값 가져옴 + 이메일 전송
-	@GetMapping(value = "send_save_mail")
-	public String mailCheck(Model model, String user_email) {
+	@ResponseBody
+	@PostMapping(value = "send_save_mail")
+	public String mailCheck(Model model, String auth_email) {
 		System.out.println("MkhController mailCheck Start..");
 		
-		String toMail = user_email;
-		System.out.println("user_email->"+toMail);
+		String toMail = auth_email;
+		System.out.println("auth_email->"+toMail);
 		String setfrom = "cristalmoon112@gmail.com";
 		String title = "[ChoongAng] 인증번호 입니다";
 		try {
@@ -163,6 +164,8 @@ public class MkhController {
 //			messageHelper.addAttachment(MimeUtility.encodeText("ReName.png", "UTF-8", "B"), dataSource);
 			mailSender.send(message);
 			model.addAttribute("check", 1);  // 정상 전달
+			
+			return authNumber;	// 인증번호 돌려줌
 			
 		} catch (Exception e) {
 			System.out.println("mailTransport e.getMessage()->"+e.getMessage());
@@ -273,7 +276,7 @@ public class MkhController {
 		System.out.println("MkhController mypostBoardList RepPrjList.size->"+RepPrjList.size());
 		model.addAttribute("RepPrjList", RepPrjList);
 		
-		/* 내가 추천한 게시글 출력 */
+		/* 내가 추천한 게시글 출력 --> 빨리 해 !!!!!!!!!!!!!!!!!!!!!ㅠ */
 		
 		/* 내가 쓴 댓글 출력 */
 
@@ -300,5 +303,80 @@ public class MkhController {
 	    
 		return "mypost/mypost_good_list";
 	}
+	
+	// 아이디 찾기
+	@RequestMapping(value = "user_find_id")
+	public String userFindId() {
+		System.out.println("MkhController userFindId Start..");
+		
+		return "user/user_find_id";
+	}
+	
+	// 아이디 찾기 결과
+	@RequestMapping(value = "user_find_id_result")
+	public String userFindIdResult() {
+		System.out.println("MkhController userFindIdResult Start..");
+		
+		return "user/user_find_id_result";
+	}
+	
+	// 비밀번호 찾기
+	@RequestMapping(value = "user_find_pw")
+	public String userFindPw() {
+		System.out.println("MkhController userFindPw Start..");
+		
+		return "user/user_find_pw";
+	}
+	
+	// 비밀번호 찾기 인증
+	@ResponseBody
+	@RequestMapping(value = "user_find_pw_auth")
+	public String userFindPwAuth(String user_id, String auth_email, Model model) {
+		System.out.println("MkhController userFindPwAuth Start..");
+		
+		System.out.println("userId->"+user_id);
+		System.out.println("auth_email->"+auth_email);
+		
+		UserInfo userInfo = mkhService.confirm(user_id);
+//		System.out.println("userInfo.getUser_email()->"+userInfo.getUser_email());
+
+		// 입력한 ID가 가입할 때 E-mail과 맞는지 확인		
+		if (userInfo != null) {
+			System.out.println("ID 존재");
+			if(auth_email.equals(userInfo.getUser_email())) {
+				System.out.println("이메일 주소가 같음");
+				return "1";
+			} else {
+				System.out.println("이메일 주소 다름");
+				return "0";
+			}
+		} else {
+			System.out.println("아이디가 존재X");
+			return "2";
+		}
+
+	}
+	
+	// 새로운 비밀번호 만들기 페이지
+	@RequestMapping(value = "user_find_pw_new")
+	public String userFindPwNew() {
+		System.out.println("MkhController userFindPwNew Start..");
+		
+		return "user/user_find_pw_new";
+	}
+	
+	// 비밀번호 업데이트
+	@ResponseBody
+	@RequestMapping(value = "user_find_pw_update")
+	public int userFindPwUpdate(UserInfo userInfo, String user_pw) {
+		System.out.println("MkhController userFindPwNewUpdate Start..");
+		System.out.println("changing PW ->"+user_pw);
+		
+		int result = mkhService.updatePw(userInfo);
+		
+		
+		return result;
+	}
+	
 
 }

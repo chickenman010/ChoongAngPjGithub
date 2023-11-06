@@ -95,10 +95,10 @@
 	        <div>
 		        <h4><input type="checkbox" id="checkALL"> 전체 동의하기</h4>
 		        <h4><input type="checkbox" id="check1"> [필수] 중앙 정보처리 이용약관 
-		        	<a href="member_agree_neces1.html"><small style="color: red;">[전체보기]</small></a>
+		        	<a href="user/user_agree_neces1.html"><small style="color: red;">[전체보기]</small></a>
 		        </h4>
 		        <h4><input type="checkbox" id="check2"> [필수] 개인정보 수집 및 이용
-		        	<a href="member_agree_neces2.html"><small style="color: red;">[전체보기]</small></a>
+		        	<a href="user/user_agree_neces2.html"><small style="color: red;">[전체보기]</small></a>
 		        </h4>
 		       <!--  <h4><input type="checkbox"> [선택] 이벤트・혜택 정보 수신 수집
 		        	<a href="member_agree_option.html"><small style="color: red;">[전체보기]</small></a>

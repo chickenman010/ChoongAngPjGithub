@@ -130,6 +130,7 @@ public class MkhDaoImpl implements MkhDao {
 		UserInfo userInfo = new UserInfo();
 		try {
 			userInfo = session.selectOne("IdConfirm", user_id);
+			
 		} catch (Exception e) {
 			System.out.println("MkhDaoImpl confirm Exception->"+e.getMessage());
 		}
@@ -186,6 +187,19 @@ public class MkhDaoImpl implements MkhDao {
 		}
 
 		return totalRepPrj;
+	}
+
+	@Override
+	public int updatePw(UserInfo userInfo) {
+		int result = 0;
+		System.out.println("MkhDaoImpl updatePw start...");
+		try {
+			result = session.update("pwUpdate", userInfo);
+		} catch (Exception e) {
+			System.out.println("MkhDaoImpl updatePw Exception->" +e.getMessage());
+		}
+
+		return result;
 	}
 
 }

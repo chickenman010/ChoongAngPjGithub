@@ -53,10 +53,10 @@ select {
 		alert("인증번호가 전송 되었습니다.")
 	}
 	
-	function confirm_authNumber() {
+	/* function confirm_authNumber() {
 		location.href="confirm_auth_number?auth_number="+frm.auth_number.value;
 		alert("인증번호가 전송 되었습니다.")
-	}
+	} */
 
 	
 
@@ -91,8 +91,8 @@ select {
           	<tr><th>전화번호 : </th><td><input type="tel" name="user_number" placeholder="010-xxxx-xxxx"><!-- <input type="button" value="인증하기"> --></td></tr>
             <tr><th>이메일 : </th><td><input type="email" name="user_email" placeholder="ID@Email.com">
             			  <input type="button" value="이메일 인증(이메일 저장  + 메일전송)" onclick="send_save_mail()">
-            			  <input type="text" placeholder="인증번호 6자리를 입력해주세요!" maxlength="6">
-            			  <input type="button" name="auth_number" value="인증번호 확인" onclick="confirm_authNumber">
+            			  <input type="text" name="auth_number" placeholder="인증번호 6자리를 입력해주세요!" maxlength="6">
+            			  <input type="button" value="인증번호 확인" onclick="confirm_authNumber">
             			  
             			  </td></tr>
             			  
