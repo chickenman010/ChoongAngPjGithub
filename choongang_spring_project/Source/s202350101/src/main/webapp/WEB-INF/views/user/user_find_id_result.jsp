@@ -40,7 +40,7 @@ select {
 	<div class="login-wrapper">
         <h2>아이디 찾기</h2>
         <form method="post" action="" id="login-form">
-            XXX님의 아이디는 ABC123 입니다.<p>
+            ${userInfoDto.user_name }님의 아이디는 ${userInfoDto.user_id } 입니다.<p>
             <a href="user_login"><input type="button" value="로그인"></a>
             <a href="user_find_pw"><input type="button" value="비밀번호 찾기"></a>
   		</form>

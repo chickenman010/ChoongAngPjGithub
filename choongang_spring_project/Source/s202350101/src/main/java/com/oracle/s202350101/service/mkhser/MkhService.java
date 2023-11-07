@@ -1,12 +1,14 @@
 package com.oracle.s202350101.service.mkhser;
 
 import java.util.List;
+import java.util.Map;
 
 import com.oracle.s202350101.model.BdFree;
 import com.oracle.s202350101.model.BdQna;
 import com.oracle.s202350101.model.ClassRoom;
 import com.oracle.s202350101.model.PrjBdData;
 import com.oracle.s202350101.model.PrjBdRep;
+import com.oracle.s202350101.model.UserEnv;
 import com.oracle.s202350101.model.UserInfo;
 
 public interface MkhService {
@@ -24,7 +26,10 @@ public interface MkhService {
 	int 			   totalFree(UserInfo userInfo);
 	int 			   totalDtPj(UserInfo userInfo);
 	int 			   totalRepPj(UserInfo userInfo);
-	int                updatePw(UserInfo userInfo);
-	
+//	int                updatePw(String user_id, String user_pw);
+	int 			   updatePw(Map<String, String> map);
+	UserInfo           userFindId(UserInfo userInfo);
+	UserEnv            selectEnv(String user_id);
+	ClassRoom          selectClass(String user_id);
 
 }

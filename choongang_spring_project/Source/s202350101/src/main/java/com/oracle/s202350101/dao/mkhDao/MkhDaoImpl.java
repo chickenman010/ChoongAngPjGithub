@@ -1,6 +1,7 @@
 package com.oracle.s202350101.dao.mkhDao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
@@ -10,6 +11,7 @@ import com.oracle.s202350101.model.BdQna;
 import com.oracle.s202350101.model.ClassRoom;
 import com.oracle.s202350101.model.PrjBdData;
 import com.oracle.s202350101.model.PrjBdRep;
+import com.oracle.s202350101.model.UserEnv;
 import com.oracle.s202350101.model.UserInfo;
 
 import lombok.RequiredArgsConstructor;
@@ -190,16 +192,56 @@ public class MkhDaoImpl implements MkhDao {
 	}
 
 	@Override
-	public int updatePw(UserInfo userInfo) {
+	public int updatePw(Map<String, String> map) {
 		int result = 0;
 		System.out.println("MkhDaoImpl updatePw start...");
 		try {
-			result = session.update("pwUpdate", userInfo);
+			result = session.update("pwUpdate", map);
+//			result = session.update("pwUpdate", user_id, user_pw1);
 		} catch (Exception e) {
 			System.out.println("MkhDaoImpl updatePw Exception->" +e.getMessage());
 		}
 
 		return result;
+	}
+
+	@Override
+	public UserInfo userFindId(UserInfo userInfo) {
+		UserInfo userInfoDto = null;
+		System.out.println("MkhDaoImpl userFindId start...");
+		try {
+			userInfoDto = session.selectOne("userFindId", userInfo);
+		} catch (Exception e) {
+			System.out.println("MkhDaoImpl userFindId Exception->" +e.getMessage());
+		}
+
+		return userInfoDto;
+	}
+
+	@Override
+	public UserEnv selectEnv(String user_id) {
+		UserEnv userEnv = null;
+		System.out.println("MkhDaoImpl selectEnv start...");
+		try {
+			userEnv = session.selectOne("selectUserEnv", user_id);
+		} catch (Exception e) {
+			System.out.println("MkhDaoImpl selectEnv Exception->" +e.getMessage());
+		}
+		
+		return userEnv;
+	}
+
+	@Override
+	public ClassRoom selectClass(String user_id) {
+		ClassRoom classRoom = null;
+		System.out.println("MkhDaoImpl selectClass start...");
+		try {
+			classRoom = session.selectOne("selectUserClass", user_id);
+		} catch (Exception e) {
+			System.out.println("MkhDaoImpl selectClass Exception->" +e.getMessage());
+		}
+
+		return classRoom;
 	}
 
 }

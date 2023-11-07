@@ -55,6 +55,7 @@ select {
 	                    dataType: 'json',
 	                    type: 'post',
 	                    data: {
+	                    	'user_id': $('#user_id').val(),
 	                        'auth_email': $('#auth_email').val()
 	                    },
 	                    success: function (data) {
@@ -78,9 +79,12 @@ select {
 		var number1 = $("#number").val();
 		var number2 = $("#Confirm").val();
 		
+		var user_id = $('#user_id').val();
+		var sendurl = "/user_find_pw_new?user_id=" + user_id;
+		
 		if(number1 == number2){
 			alert("인증 되었습니다.");
-			location.href="user_find_pw_new";
+			location.href=sendurl;
 		} else {
 			alert("인증 번호가 다릅니다.");
 		}

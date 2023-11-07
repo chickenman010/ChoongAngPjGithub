@@ -16,21 +16,29 @@
 	<!-- 로그인 check -->
 	<select id="userLoginConfirm" parameterType="UserInfo" resultType="userInfo">
 		Select *
-		From  user_info 
-		Where user_id = #{user_id}
-		And   user_pw = #{user_pw}
+		From   user_info 
+		Where  user_id = #{user_id}
+		And    user_pw = #{user_pw}
 	</select>
 	
 	<!-- 회원가입 ID 중복확인 -->
 	<select id="IdConfirm" parameterType="String" resultType="userInfo">
 		Select *
-		From  user_info
-		Where user_id = #{user_id}
+		From   user_info
+		Where  user_id = #{user_id}
+	</select>
+	
+	<!-- 아이디 찾기 -->
+	<select id="userFindId" parameterType="userInfo" resultType="userInfo">
+		Select *
+		From   user_info
+		Where  user_name   = #{user_name}
+		And    user_number = #{user_number}
 	</select>
 	
 	<!-- 비밀번호 업데이트 -->
-	<update id="pwUpdate" parameterType="UserInfo">
-		Update userInfo
+	<update id="pwUpdate" parameterType="hashmap">
+		Update user_info
 		Set    user_pw = #{user_pw}
 		where  user_id = #{user_id}
 	</update>

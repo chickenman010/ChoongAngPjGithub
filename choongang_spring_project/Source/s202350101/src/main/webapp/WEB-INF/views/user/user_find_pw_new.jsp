@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/views/header.jsp" %> 
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,27 +35,36 @@ select {
 }
 
 </style>
-<script type="text/javascript" src="../js/httpRequest.js"></script>
+
 <script type="text/javascript">
-	function updatePW() {
-		if(frm.user_pw1.value != frm.user_pw1.value){
-			alert("비밀번호가 일치하지 않습니다!");
-			frm.user_pw1.focus();
-			return false;
-		} else location.href="user_find_pw_update?user_pw="+frm.user_pw1.value;
-
+	function updatePw() {
+		alert("클릭했음");
+		var user_pw = $('#user_pw1').val();
+		var user_pw2 = $('#user_pw2').val();
+		var user_id = $('#user_id').val();
+		var sendurl = "/user_find_pw_update?user_pw=" + user_pw + "&user_id=" + user_id; 
+		
+		console.log(user_id + " / " + user_pw);
+		
+		if (user_pw != user_pw2) {
+			alert("틀렸습니다");
+		} else {
+			alert("수정되었습니다");
+			location.href = sendurl;
+		}
+		
 	}
-
 </script>
 
 </head>
 <body>
 	<div class="login-wrapper">
         <h2>비밀번호 찾기</h2>
-        <form method="post" action="" id="login-form">
-           새 비밀번호 : 	 <input type="password" name="user_pw1" value="" required="required" placeholder="PW"><p>
-           새 비밀번호 확인 : <input type="password" name="user_pw2" value="" required="required" placeholder="PW2"><p>
-        <input type="submit" value="확인" onclick="updatePW()">
+        <form method="post" id="login-form" name="frm">
+        <input type="hidden" name="user_id" id="user_id" value="${user_id }">
+           새 비밀번호 : 	 <input type="password" name="user_pw1" id="user_pw1" required="required" placeholder="PW"><p>
+           새 비밀번호 확인 : <input type="password" name="user_pw2" id="user_pw2" required="required" placeholder="PW2"><p>
+        <button type="button" onclick="updatePw()">확인</button>
   		</form>
         
     </div>

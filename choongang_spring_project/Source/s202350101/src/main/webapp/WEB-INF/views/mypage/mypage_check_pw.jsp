@@ -67,6 +67,7 @@
 		    	<hr>
 		    	아이디 : <input type="text" placeholder="Id"><p>
 		    	비밀번호 : <input type="password" placeholder="Password"><p>
+		    	<c:if test="${msg != null}">${msg }</c:if>
 		    	<a href="mypage_update"><input type="button" value="확인"></a>
 		    </div>
 	  		

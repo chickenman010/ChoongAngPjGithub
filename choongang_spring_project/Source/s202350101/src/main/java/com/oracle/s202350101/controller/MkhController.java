@@ -1,6 +1,9 @@
 package com.oracle.s202350101.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
@@ -33,6 +36,7 @@ import com.oracle.s202350101.model.BdQna;
 import com.oracle.s202350101.model.ClassRoom;
 import com.oracle.s202350101.model.PrjBdData;
 import com.oracle.s202350101.model.PrjBdRep;
+import com.oracle.s202350101.model.UserEnv;
 import com.oracle.s202350101.model.UserInfo;
 import com.oracle.s202350101.service.mkhser.MkhService;
 
@@ -138,43 +142,6 @@ public class MkhController {
 		}
 	}
 	
-	// 이메일 값 가져옴 + 이메일 전송
-	@ResponseBody
-	@PostMapping(value = "send_save_mail")
-	public String mailCheck(Model model, String auth_email) {
-		System.out.println("MkhController mailCheck Start..");
-		
-		String toMail = auth_email;
-		System.out.println("auth_email->"+toMail);
-		String setfrom = "cristalmoon112@gmail.com";
-		String title = "[ChoongAng] 인증번호 입니다";
-		try {
-			MimeMessage message = mailSender.createMimeMessage();
-															// true는 멀티파트 메세지를 사용하겠다는 의미
-			MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8");
-			messageHelper.setFrom(setfrom);
-			messageHelper.setTo(toMail);
-			messageHelper.setSubject(title); // 생략 가능
-			String authNumber = (int) (Math.random() * 999999) + 1 + "";
-			messageHelper.setText("이메일 인증번호 입니다: " + authNumber);
-			System.out.println("이메일 인증번호 입니다: " + authNumber);
-			
-			// 첨부파일 보내기 위한 로직
-//			DataSource dataSource = new FileDataSource("c:\\\\log\\\\hwa.png");
-//			messageHelper.addAttachment(MimeUtility.encodeText("ReName.png", "UTF-8", "B"), dataSource);
-			mailSender.send(message);
-			model.addAttribute("check", 1);  // 정상 전달
-			
-			return authNumber;	// 인증번호 돌려줌
-			
-		} catch (Exception e) {
-			System.out.println("mailTransport e.getMessage()->"+e.getMessage());
-			model.addAttribute("check", 2);  // 전달 실패
-		}
-		
-		return "redirect:user_join_write";
-	}
-	
 	// 회원가입 정보 insert
 	@PostMapping(value = "writeUserInfo")
 	public String writeUserInfo(UserInfo userInfo, Model model) {
@@ -188,20 +155,44 @@ public class MkhController {
 	/* 마이페이지 */
 	// 마이페이지 수정으로 이동
 	@RequestMapping(value = "mypage_main")
-	public String mypageMain(HttpServletRequest request) {
+	public String mypageMain(HttpServletRequest request, Model model) {
 		System.out.println("MkhController mypageMain Start..");
 		System.out.println("session.userInfo->"+request.getSession().getAttribute("userInfo"));
-
+		
+		// 세션값 받음
+		UserInfo userInfo = (UserInfo) request.getSession().getAttribute("userInfo");
+		// user_id 마이페이지
+		UserInfo userInfoDto = mkhService.confirm(userInfo.getUser_id());
+		model.addAttribute("userInfoDto", userInfoDto);
+		
+		// user_id 환경설정
+		UserEnv userEnv = mkhService.selectEnv(userInfo.getUser_id());
+		model.addAttribute("userEnv", userEnv);
+		
+		// user_id 소속
+		ClassRoom classRoom = mkhService.selectClass(userInfo.getUser_id());
+		model.addAttribute("classRoom", classRoom);
+		
+		
 		return "mypage/mypage_main";
 	}
 	
 	// 개인정보 수정용 비밀번호 확인 페이지
 	@RequestMapping(value = "mypage_check_pw")
-	public String mypageCheckPw(HttpServletRequest request) {
+	public String mypageCheckPw(HttpServletRequest request, Model model) {
 		System.out.println("MkhController mypageCheckPw Start..");
 		System.out.println("session.userInfo->"+request.getSession().getAttribute("userInfo"));
-
-		return "mypage/mypage_check_pw";
+		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+		
+		UserInfo userInfo = mkhService.userLoginCheck(userInfoDTO);
+		
+		if(userInfo == null) {
+			System.out.println("ID / PW 안맞음");
+			model.addAttribute("msg", "ID와 PW를 다시 확인해주세요.");
+			return "forward:/mypage_check_pw";
+		} else {
+			return "mypage_update";
+		}
 	}
 	
 	// 개인정보 수정 페이지로 이동
@@ -314,10 +305,22 @@ public class MkhController {
 	
 	// 아이디 찾기 결과
 	@RequestMapping(value = "user_find_id_result")
-	public String userFindIdResult() {
+	public String userFindIdResult(UserInfo userInfo, Model model) {
 		System.out.println("MkhController userFindIdResult Start..");
+		System.out.println("userInfo.getUser_name()->"+userInfo.getUser_name());
+		System.out.println("userInfo.getUser_number()->"+userInfo.getUser_number());
 		
+		UserInfo userInfoDto = mkhService.userFindId(userInfo);
+		
+		if(userInfoDto == null) {
+			System.out.println("이름과 번호가 다름");
+			model.addAttribute("msg", "가입되어 있지 않습니다");
+			return "forward:/user_find_id";
+		}
+		System.out.println("이름과 번호가 같음");
+		model.addAttribute("userInfoDto", userInfoDto);
 		return "user/user_find_id_result";
+		
 	}
 	
 	// 비밀번호 찾기
@@ -334,11 +337,10 @@ public class MkhController {
 	public String userFindPwAuth(String user_id, String auth_email, Model model) {
 		System.out.println("MkhController userFindPwAuth Start..");
 		
-		System.out.println("userId->"+user_id);
+		System.out.println("userFindPwAuth userId->"+user_id);
 		System.out.println("auth_email->"+auth_email);
 		
 		UserInfo userInfo = mkhService.confirm(user_id);
-//		System.out.println("userInfo.getUser_email()->"+userInfo.getUser_email());
 
 		// 입력한 ID가 가입할 때 E-mail과 맞는지 확인		
 		if (userInfo != null) {
@@ -357,25 +359,71 @@ public class MkhController {
 
 	}
 	
+	// 이메일 값 가져옴 + 이메일 전송
+	@ResponseBody
+	@PostMapping(value = "send_save_mail")
+	public String mailCheck(Model model, String auth_email, String user_id, HttpSession session, HttpServletRequest request) {
+		System.out.println("MkhController mailCheck Start..");
+		
+		String user_id2 = user_id;
+		String toMail = auth_email;
+		System.out.println("auth_email->"+toMail);
+		String setfrom = "cristalmoon112@gmail.com";
+		String title = "[ChoongAng] 인증번호 입니다";
+		String authNumber = (int) (Math.random() * 999999) + 1 + "";
+		try {
+			MimeMessage message = mailSender.createMimeMessage();
+															// true는 멀티파트 메세지를 사용하겠다는 의미
+			MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8");
+			messageHelper.setFrom(setfrom);
+			messageHelper.setTo(toMail);
+			messageHelper.setSubject(title); // 생략 가능
+			
+			messageHelper.setText("이메일 인증번호 입니다: " + authNumber);
+			System.out.println("이메일 인증번호 입니다: " + authNumber);
+			
+			// 첨부파일 보내기 위한 로직
+		//	DataSource dataSource = new FileDataSource("c:\\\\log\\\\hwa.png");
+		//	messageHelper.addAttachment(MimeUtility.encodeText("ReName.png", "UTF-8", "B"), dataSource);
+			mailSender.send(message);
+			model.addAttribute("check", 1);  // 정상 전달
+			
+		} catch (Exception e) {
+			System.out.println("mailTransport e.getMessage()->"+e.getMessage());
+			model.addAttribute("check", 2);  // 전달 실패
+		}
+		
+		return authNumber; 	// 인증번호 돌려줌
+	}
+	
 	// 새로운 비밀번호 만들기 페이지
 	@RequestMapping(value = "user_find_pw_new")
-	public String userFindPwNew() {
+	public String userFindPwNew(String user_id, Model model) {
 		System.out.println("MkhController userFindPwNew Start..");
+		
+		System.out.println("user_id ->"+user_id);
+		model.addAttribute("user_id", user_id);
 		
 		return "user/user_find_pw_new";
 	}
 	
 	// 비밀번호 업데이트
-	@ResponseBody
 	@RequestMapping(value = "user_find_pw_update")
-	public int userFindPwUpdate(UserInfo userInfo, String user_pw) {
+	public String userFindPwUpdate(String user_pw, String user_id) {
 		System.out.println("MkhController userFindPwNewUpdate Start..");
+		System.out.println("user_id ->"+user_id);
 		System.out.println("changing PW ->"+user_pw);
 		
-		int result = mkhService.updatePw(userInfo);
+		// MAP으로 하는법
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("user_id", user_id);
+		map.put("user_pw", user_pw);
 		
-		
-		return result;
+		int result = mkhService.updatePw(map);
+		System.out.println("result->"+result);
+	
+		return "redirect:/user_login";
+	
 	}
 	
 

@@ -88,7 +88,7 @@ select {
 			</td></tr>
 			<tr><th>이름 : </th><td><input type="text" name="user_name"></td></tr>
            	<tr><th>성별 : </th><td><input type="radio" name="user_gender" value="M">남  <input type="radio" name="user_gender" value="F">여</td></tr>
-          	<tr><th>전화번호 : </th><td><input type="tel" name="user_number" placeholder="010-xxxx-xxxx"><!-- <input type="button" value="인증하기"> --></td></tr>
+          	<tr><th>전화번호 : </th><td><input type="tel" name="user_number" placeholder="010-xxxx-xxxx" pattern="\d{2,3}-\d{3,4}-\d{4}" title="2,3자리-3,4자리-4자리"><!-- <input type="button" value="인증하기"> --></td></tr>
             <tr><th>이메일 : </th><td><input type="email" name="user_email" placeholder="ID@Email.com">
             			  <input type="button" value="이메일 인증(이메일 저장  + 메일전송)" onclick="send_save_mail()">
             			  <input type="text" name="auth_number" placeholder="인증번호 6자리를 입력해주세요!" maxlength="6">

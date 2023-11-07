@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -40,9 +41,9 @@ select {
 	<div class="login-wrapper">
         <h2>아이디 찾기</h2>
         <form method="post" action="user_find_id_result" id="login-form">
-            이름 : <input type="text" name="userName" placeholder="Name"><p>
-            핸드폰번호 : <input type="text" name="userPhone" placeholder="010-xxxx-xxxx"><p>
-            <small style="color: red;">가입되어 있지 않습니다</small><p>
+            이름 : <input type="text" name="user_name" placeholder="Name"><p>
+            핸드폰번호 : <input type="text" name="user_number" placeholder="010-xxxx-xxxx"><p>
+            <small style="color: red;"><c:if test="${msg != null}">${msg }</c:if></small><p>
             <input type="submit" value="아이디 찾기">
   		</form>
         

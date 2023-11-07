@@ -1,6 +1,7 @@
 package com.oracle.s202350101.service.mkhser;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -10,6 +11,7 @@ import com.oracle.s202350101.model.BdQna;
 import com.oracle.s202350101.model.ClassRoom;
 import com.oracle.s202350101.model.PrjBdData;
 import com.oracle.s202350101.model.PrjBdRep;
+import com.oracle.s202350101.model.UserEnv;
 import com.oracle.s202350101.model.UserInfo;
 
 import lombok.RequiredArgsConstructor;
@@ -135,11 +137,35 @@ public class MkhServiceImpl implements MkhService {
 	}
 
 	@Override
-	public int updatePw(UserInfo userInfo) {
+	public int updatePw(Map<String, String> map) {
 		System.out.println("MkhServiceImpl updatePw Start...");
-		int result = mkhdao.updatePw(userInfo);
+		int result = mkhdao.updatePw(map);
 
 		return result;
+	}
+
+	@Override
+	public UserInfo userFindId(UserInfo userInfo) {
+		System.out.println("MkhServiceImpl userFindId Start...");
+		UserInfo userInfoDto = mkhdao.userFindId(userInfo);
+
+		return userInfoDto;
+	}
+
+	@Override
+	public UserEnv selectEnv(String user_id) {
+		System.out.println("MkhServiceImpl selectEnv Start...");
+		UserEnv userEnv = mkhdao.selectEnv(user_id);
+
+		return userEnv;
+	}
+
+	@Override
+	public ClassRoom selectClass(String user_id) {
+		System.out.println("MkhServiceImpl selectClass Start...");
+		ClassRoom classRoom = mkhdao.selectClass(user_id);
+	
+		return classRoom;
 	}
 
 }
