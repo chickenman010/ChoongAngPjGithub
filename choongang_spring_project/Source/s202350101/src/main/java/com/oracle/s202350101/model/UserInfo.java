@@ -1,9 +1,8 @@
 package com.oracle.s202350101.model;
 
-import java.sql.Date;
 
+import java.util.Date;
 import javax.validation.constraints.NotEmpty;
-
 import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.Data;

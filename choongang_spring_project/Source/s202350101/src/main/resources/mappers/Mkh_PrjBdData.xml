@@ -18,9 +18,18 @@
 	
 	<!-- user_id에 해당하는 count -->
 	<select id="totalDtPjCount" parameterType="UserInfo" resultType="int">
-		select count(*) 
-		from   PRJ_BD_DATA
-		where  user_id = #{user_id}
+		Select count(*) 
+		From   PRJ_BD_DATA
+		Where  user_id = #{user_id}
+	</select>
+	
+	<!-- 내가 추천한 게시글 -->
+	<select id="prjDataGoodSelect" parameterType="UserInfo" resultType="PrjBdData">
+		Select s.user_id, a.app_name, m.doc_no, m.app_id, m.subject, m.create_date, m.bd_count, m.good_count
+		From   prj_bd_data m, bd_data_good s, app_info a
+		Where  m.doc_no = s.doc_no
+		And    m.app_id = a.app_id
+		And    s.user_id = #{user_id}
 	</select>
 	
 </mapper>

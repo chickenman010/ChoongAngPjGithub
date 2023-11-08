@@ -18,9 +18,9 @@
 	
 	<!-- user_id에 해당하는 count -->
 	<select id="totalRepPjCount" parameterType="UserInfo" resultType="int">
-		select count(*) 
-		from   PRJ_BD_REP
-		where  user_id = #{user_id}
+		Select count(*) 
+		From   PRJ_BD_REP
+		Where  user_id = #{user_id}
 	</select>
 	
 </mapper>

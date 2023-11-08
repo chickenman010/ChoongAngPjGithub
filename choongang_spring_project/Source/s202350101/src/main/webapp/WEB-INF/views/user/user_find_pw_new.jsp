@@ -38,7 +38,7 @@ select {
 
 <script type="text/javascript">
 	function updatePw() {
-		alert("클릭했음");
+	//	alert("클릭했음");
 		var user_pw = $('#user_pw1').val();
 		var user_pw2 = $('#user_pw2').val();
 		var user_id = $('#user_id').val();

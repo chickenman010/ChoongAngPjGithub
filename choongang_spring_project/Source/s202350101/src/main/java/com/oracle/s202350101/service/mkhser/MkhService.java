@@ -26,10 +26,14 @@ public interface MkhService {
 	int 			   totalFree(UserInfo userInfo);
 	int 			   totalDtPj(UserInfo userInfo);
 	int 			   totalRepPj(UserInfo userInfo);
-//	int                updatePw(String user_id, String user_pw);
 	int 			   updatePw(Map<String, String> map);
 	UserInfo           userFindId(UserInfo userInfo);
 	UserEnv            selectEnv(String user_id);
 	ClassRoom          selectClass(String user_id);
+//	int                updateUser(Map<String, Object> map);
+	int                updateUser(UserInfo userInfo);
+	List<BdQna> 	   qnaGood(UserInfo userInfoDTO);
+	List<BdFree> 	   freeGood(UserInfo userInfoDTO);
+	List<PrjBdData>    prjDataGood(UserInfo userInfoDTO);
 
 }

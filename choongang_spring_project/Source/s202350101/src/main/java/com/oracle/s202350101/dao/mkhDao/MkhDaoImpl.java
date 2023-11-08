@@ -1,5 +1,6 @@
 package com.oracle.s202350101.dao.mkhDao;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -242,6 +243,67 @@ public class MkhDaoImpl implements MkhDao {
 		}
 
 		return classRoom;
+	}
+
+	@Override
+	public int updateUser(UserInfo userInfo) {
+		int result = 0;
+		System.out.println("MkhDaoImpl updateUser start...");
+		System.out.println("MkhDaoImpl updateUser userInfo->"+userInfo);
+		try {
+//			Iterator<String> keys = map.keySet().iterator();
+//			
+//			while(keys.hasNext()) {
+//				String key = keys.next();
+//				System.out.println(String.format("키 : %s, 값 : %s", key, map.get(key)));
+//			}
+//			
+//			result = session.update("userInfoUpdate", map);
+			result = session.update("userInfoUpdate", userInfo);
+			
+		} catch (Exception e) {
+			System.out.println("MkhDaoImpl updateUser Exception->" +e.getMessage());
+		}
+		return result;
+	}
+
+	@Override
+	public List<BdQna> qnaGood(UserInfo userInfoDTO) {
+		List<BdQna> qnaGood = null;
+		System.out.println("MkhDaoImpl qnaGood start...");
+		try {
+			// user_id에 해당하는 게시물, count 출력 sql
+			qnaGood = session.selectList("qnaGoodSelect", userInfoDTO);
+		} catch (Exception e) {
+			System.out.println("MkhDaoImpl qnaGood Exception->" +e.getMessage());
+		}
+		return qnaGood;
+	}
+
+	@Override
+	public List<BdFree> freeGood(UserInfo userInfoDTO) {
+		List<BdFree> freeGood = null;
+		System.out.println("MkhDaoImpl freeGood start...");
+		try {
+			// user_id에 해당하는 게시물, count 출력 sql
+			freeGood = session.selectList("freeGoodSelect", userInfoDTO);
+		} catch (Exception e) {
+			System.out.println("MkhDaoImpl freeGood Exception->" +e.getMessage());
+		}
+		return freeGood;
+	}
+
+	@Override
+	public List<PrjBdData> prjDataGood(UserInfo userInfoDTO) {
+		List<PrjBdData> prjDataGood = null;
+		System.out.println("MkhDaoImpl prjDataGood start...");
+		try {
+			// user_id에 해당하는 게시물, count 출력 sql
+			prjDataGood = session.selectList("prjDataGoodSelect", userInfoDTO);
+		} catch (Exception e) {
+			System.out.println("MkhDaoImpl prjDataGood Exception->" +e.getMessage());
+		}
+		return prjDataGood;
 	}
 
 }

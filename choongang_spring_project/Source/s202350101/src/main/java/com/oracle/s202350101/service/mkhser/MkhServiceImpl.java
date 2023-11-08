@@ -168,4 +168,43 @@ public class MkhServiceImpl implements MkhService {
 		return classRoom;
 	}
 
+	@Override
+	public int updateUser(UserInfo userInfo) {
+		System.out.println("MkhServiceImpl updateUser Start...");
+		int result = mkhdao.updateUser(userInfo);
+		
+		return result;
+	}
+
+	@Override
+	public List<BdQna> qnaGood(UserInfo userInfoDTO) {
+		List<BdQna> qnaGood = null;
+		System.out.println("MkhServiceImpl qnaGood Start...");
+		qnaGood = mkhdao.qnaGood(userInfoDTO);
+		System.out.println("MkhServiceImpl qnaGood.size()->" +qnaGood.size());
+		
+		return qnaGood;
+	}
+
+	@Override
+	public List<BdFree> freeGood(UserInfo userInfoDTO) {
+		List<BdFree> freeGood = null;
+		System.out.println("MkhServiceImpl freeGood Start...");
+		freeGood = mkhdao.freeGood(userInfoDTO);
+		System.out.println("MkhServiceImpl freeGood.size()->" +freeGood.size());
+		
+		return freeGood;
+	}
+
+	@Override
+	public List<PrjBdData> prjDataGood(UserInfo userInfoDTO) {
+		List<PrjBdData> prjDataGood = null;
+		System.out.println("MkhServiceImpl prjDataGood Start...");
+		prjDataGood = mkhdao.prjDataGood(userInfoDTO);
+		System.out.println("MkhServiceImpl prjDataGood.size()->" +prjDataGood.size());
+		
+		return prjDataGood;
+	}
+
+
 }

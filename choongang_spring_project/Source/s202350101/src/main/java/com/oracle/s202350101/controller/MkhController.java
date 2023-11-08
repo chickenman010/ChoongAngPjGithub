@@ -184,31 +184,70 @@ public class MkhController {
 		System.out.println("session.userInfo->"+request.getSession().getAttribute("userInfo"));
 		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
 		
-		UserInfo userInfo = mkhService.userLoginCheck(userInfoDTO);
-		
-		if(userInfo == null) {
-			System.out.println("ID / PW 안맞음");
-			model.addAttribute("msg", "ID와 PW를 다시 확인해주세요.");
-			return "forward:/mypage_check_pw";
-		} else {
-			return "mypage_update";
-		}
+		return "mypage/mypage_check_pw";
 	}
 	
 	// 개인정보 수정 페이지로 이동
 	@RequestMapping(value = "mypage_update")
-	public String mypage_update_view(HttpServletRequest request, Model model, String redirectURL) {
-		System.out.println("2.MkhController mypage_update_view Start..");
+	public String mypageUpdate(HttpServletRequest request, Model model, String user_id, String user_pw) {
+		System.out.println("MkhController mypage_update_view Start..");
 		System.out.println("session.userInfo->"+request.getSession().getAttribute("userInfo"));
 		
-		// URI 꺼내옴
-		String requestURI = (String) request.getSession().getAttribute("requestURI");
-		System.out.println("requestURI->"+requestURI);
-		
+		// 세션에 담긴 값들
 		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
 		System.out.println("userInfoDTO.getUser_id()->"+userInfoDTO.getUser_id());
+		System.out.println("userInfoDTO.getUser_pw()->"+userInfoDTO.getUser_pw());
 		
-		return "mypage/mypage_update";
+		// 수정 페이지에서 받은 값들
+		System.out.println("user_id->"+user_id);
+		System.out.println("user_pw->"+user_pw);
+		
+		// 반 목록 출력
+		List<ClassRoom> classList = mkhService.createdClass();
+		model.addAttribute("classList", classList);
+		
+		
+		// DB랑 비교해야됨. 비번 수정하고 바로 또 수정하면 안맞음
+		if(!user_id.equals(userInfoDTO.getUser_id())) {
+			System.out.println("아이디 다름");
+			model.addAttribute("msg", "ID를 다시 확인해주세요.");
+			return "forward:/mypage_check_pw";
+		} else if (!user_pw.equals(userInfoDTO.getUser_pw())) {
+			System.out.println("비밀번호가 다름");
+			model.addAttribute("msg", "PW를 다시 확인해주세요.");
+			return "forward:/mypage_check_pw";
+		} else {
+			System.out.println("ID / PW 맞음");
+			model.addAttribute("userInfoDTO", userInfoDTO);
+			return "mypage/mypage_update";
+		}
+		
+	}
+	
+	// 수정페이지 업데이트 액션
+	@ResponseBody
+	@RequestMapping(value = "mypage_update_result")
+	public String mypageUpdateResult (UserInfo userInfo) {
+		System.out.println("MkhController mypageUpdateResult Start..");
+
+		System.out.println("userInfo.getUser_id()"+userInfo.getUser_id());
+		System.out.println("userInfo.getUser_pw()"+userInfo.getUser_pw());
+		System.out.println("userInfo.getUser_birth()"+userInfo.getUser_birth());
+		
+//		Map<String, Object> map = new HashMap<String, Object>();
+//		map.put(userInfo.getUser_id(), userInfo);
+		
+//		int result = mkhService.updateUser(map);
+		int result = mkhService.updateUser(userInfo);
+
+		System.out.println("result->"+result);
+		if(result == 1) {
+			System.out.println("수정성공");
+			return "1";
+		} else {
+			System.out.println("수정실패");
+			return "0";
+		}
 	}
 	
 	/* MYPOST - 내가 글 모음*/
@@ -267,7 +306,6 @@ public class MkhController {
 		System.out.println("MkhController mypostBoardList RepPrjList.size->"+RepPrjList.size());
 		model.addAttribute("RepPrjList", RepPrjList);
 		
-		/* 내가 추천한 게시글 출력 --> 빨리 해 !!!!!!!!!!!!!!!!!!!!!ㅠ */
 		
 		/* 내가 쓴 댓글 출력 */
 
@@ -287,10 +325,23 @@ public class MkhController {
 	
 	// 내가 추천한 게시글
 	@RequestMapping(value = "mypost_good_list")
-	public String mypostGoodList(HttpServletRequest request) {
+	public String mypostGoodList(HttpServletRequest request, Model model) {
 		System.out.println("MkhController mypostGoodList Start..");
 		// userInfo 세션값 받아와서 userInfoDTO로 사용
 	    UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+	    
+	    /* 내가 추천한 게시글 출력  */
+		List<BdQna> qnaGood = mkhService.qnaGood(userInfoDTO);
+		System.out.println("MkhController mypostBoardList qnaGood.size->"+qnaGood.size());
+		model.addAttribute("qnaGood", qnaGood);
+		
+		List<BdFree> freeGood = mkhService.freeGood(userInfoDTO);
+		System.out.println("MkhController mypostBoardList freeGood.size->"+freeGood.size());
+		model.addAttribute("freeGood", freeGood);
+		
+		List<PrjBdData> prjDataGood = mkhService.prjDataGood(userInfoDTO);
+		System.out.println("MkhController mypostBoardList prjDataGood.size->"+prjDataGood.size());
+		model.addAttribute("prjDataGood", prjDataGood);
 	    
 		return "mypost/mypost_good_list";
 	}

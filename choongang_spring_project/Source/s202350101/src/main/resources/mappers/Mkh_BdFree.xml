@@ -18,9 +18,19 @@
 	
 	<!-- user_id에 해당하는 count -->
 	<select id="totalFreeCount" parameterType="UserInfo" resultType="int">
-		select count(*) 
-		from   bd_free
-		where  user_id = #{user_id}
+		Select count(*) 
+		From   bd_free
+		Where  user_id = #{user_id}
+	</select>
+	
+	<!-- 내가 추천한 게시글 -->
+	<select id="freeGoodSelect" parameterType="UserInfo" resultType="BdFree">
+		Select s.user_id, a.app_name, m.*
+		From   bd_free m, bd_free_good s, app_info a
+		Where  m.doc_no = s.doc_no
+		And    m.app_id = a.app_id
+		And    s.user_id = #{user_id}
+
 	</select>
 	
 	

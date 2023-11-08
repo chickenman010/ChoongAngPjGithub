@@ -93,9 +93,7 @@ select {
             			  <input type="button" value="이메일 인증(이메일 저장  + 메일전송)" onclick="send_save_mail()">
             			  <input type="text" name="auth_number" placeholder="인증번호 6자리를 입력해주세요!" maxlength="6">
             			  <input type="button" value="인증번호 확인" onclick="confirm_authNumber">
-            			  
             			  </td></tr>
-            			  
             <tr><th>주소 : </th><td><input type="text" name="user_address"><p> </td></tr>
           	<tr><th>생년월일test : </th><td><input type="date" name="user_birth"><p> </td></tr>
           	<tr><th>생년월일 : </th>

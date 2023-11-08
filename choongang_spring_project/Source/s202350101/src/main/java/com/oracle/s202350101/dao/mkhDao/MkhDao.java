@@ -30,5 +30,9 @@ public interface MkhDao {
 	UserInfo        userFindId(UserInfo userInfo);
 	UserEnv         selectEnv(String user_id);
 	ClassRoom       selectClass(String user_id);
+	int             updateUser(UserInfo userInfo);
+	List<BdQna>     qnaGood(UserInfo userInfoDTO);
+	List<BdFree>    freeGood(UserInfo userInfoDTO);
+	List<PrjBdData> prjDataGood(UserInfo userInfoDTO);
 
 }

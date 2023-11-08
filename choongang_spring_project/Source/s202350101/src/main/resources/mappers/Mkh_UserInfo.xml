@@ -43,6 +43,21 @@
 		where  user_id = #{user_id}
 	</update>
 	
+	<!-- <update id="userInfoUpdate" parameterType="hashmap"> -->
+	<update id="userInfoUpdate" parameterType="userInfo">
+	    UPDATE user_info
+	    SET class_id   = #{class_id},
+	        project_id = #{project_id},
+	        user_pw    = #{user_pw},
+	        user_name  = #{user_name},
+	        user_gender = #{user_gender},
+	        user_number = #{user_number},
+	        <if test="user_birth != null">
+	        	user_birth  = #{user_birth},
+	        </if>
+	        user_address = #{user_address},
+	        user_email   = #{user_email}
+	    WHERE user_id   = #{user_id}
+	</update>
 	
-
 </mapper>
