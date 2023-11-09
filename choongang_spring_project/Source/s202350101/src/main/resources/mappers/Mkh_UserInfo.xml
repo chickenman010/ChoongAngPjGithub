@@ -9,8 +9,8 @@
 	
 	<!-- 회원가입 insert -->
 	<insert id="InsertUserInfo" parameterType="UserInfo">    <!-- #{project_id, jdbcType = VARCHAR} -->
-		insert into user_info (user_id,      class_id,    user_pw,    user_name,    user_number,    user_email,  user_auth) 
-					   VALUES (#{user_id}, #{class_id}, #{user_pw}, #{user_name}, #{user_number}, #{user_email}, 'student')  
+		insert into user_info (user_id,      class_id,    user_pw,    user_name,    user_gender,    user_number,    user_birth,    user_address,    user_email,  user_auth) 
+					   VALUES (#{user_id}, #{class_id}, #{user_pw}, #{user_name}, #{user_gender}, #{user_number}, #{user_birth}, #{user_address}, #{user_email}, 'student')  
 	</insert>
 	
 	<!-- 로그인 check -->

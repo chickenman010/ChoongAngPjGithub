@@ -42,7 +42,7 @@ select {
 
 </style>
 
-<!-- <script type="text/javascript" src="js/jquery.js"></script> -->
+<!-- <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script> -->
 <script type="text/javascript">
 	function id_confirm() {
 		location.href="id_confirm?user_id="+frm.user_id.value;
@@ -71,7 +71,7 @@ select {
         	
 			<tr><th>아이디 : </th><td><input type="text" name="user_id" 
 				required="required" value="${user_id }">
-				<input type="button" value="중복확인" onclick="id_confirm()">
+				<input type="button" value="중복확인(ajax)" onclick="id_confirm()">
 				<c:if test="${msg != null }"> ${msg }</c:if>
 			</td></tr>
 			<tr><th>비밀번호 : </th><td><input type="password" name="user_pw" 
@@ -90,7 +90,7 @@ select {
            	<tr><th>성별 : </th><td><input type="radio" name="user_gender" value="M">남  <input type="radio" name="user_gender" value="F">여</td></tr>
           	<tr><th>전화번호 : </th><td><input type="tel" name="user_number" placeholder="010-xxxx-xxxx" pattern="\d{2,3}-\d{3,4}-\d{4}" title="2,3자리-3,4자리-4자리"><!-- <input type="button" value="인증하기"> --></td></tr>
             <tr><th>이메일 : </th><td><input type="email" name="user_email" placeholder="ID@Email.com">
-            			  <input type="button" value="이메일 인증(이메일 저장  + 메일전송)" onclick="send_save_mail()">
+            			  <input type="button" value="이메일 인증(구현중 )" onclick="send_save_mail()">
             			  <input type="text" name="auth_number" placeholder="인증번호 6자리를 입력해주세요!" maxlength="6">
             			  <input type="button" value="인증번호 확인" onclick="confirm_authNumber">
             			  </td></tr>
@@ -111,8 +111,7 @@ select {
 				</div><p> 
 			</td> -->
 			</tr>
-        	<td><input type="submit" value="가입하기2" style="float: center"></td>
-  			<!-- 가입을 축하합니다 페이지 -->
+        	<td><input type="submit" value="가입하기(ajax)" style="float: center"></td>
   			</table>
   		</form>
         

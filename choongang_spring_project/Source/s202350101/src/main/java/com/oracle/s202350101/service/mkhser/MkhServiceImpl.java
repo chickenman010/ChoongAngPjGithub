@@ -6,8 +6,11 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import com.oracle.s202350101.dao.mkhDao.MkhDao;
+import com.oracle.s202350101.model.BdDataComt;
 import com.oracle.s202350101.model.BdFree;
+import com.oracle.s202350101.model.BdFreeComt;
 import com.oracle.s202350101.model.BdQna;
+import com.oracle.s202350101.model.BdRepComt;
 import com.oracle.s202350101.model.ClassRoom;
 import com.oracle.s202350101.model.PrjBdData;
 import com.oracle.s202350101.model.PrjBdRep;
@@ -204,6 +207,36 @@ public class MkhServiceImpl implements MkhService {
 		System.out.println("MkhServiceImpl prjDataGood.size()->" +prjDataGood.size());
 		
 		return prjDataGood;
+	}
+
+	@Override
+	public List<BdFreeComt> freeComt(UserInfo userInfoDTO) {
+		List<BdFreeComt> freeComt = null;
+		System.out.println("MkhServiceImpl freeComt Start...");
+		freeComt = mkhdao.freeComt(userInfoDTO);
+		System.out.println("MkhServiceImpl freeComt.size()->" +freeComt.size());
+		
+		return freeComt;
+	}
+
+	@Override
+	public List<BdDataComt> dataComt(UserInfo userInfoDTO) {
+		List<BdDataComt> dataComt = null;
+		System.out.println("MkhServiceImpl dataComt Start...");
+		dataComt = mkhdao.dataComt(userInfoDTO);
+		System.out.println("MkhServiceImpl dataComt.size()->" +dataComt.size());
+		
+		return dataComt;
+	}
+
+	@Override
+	public List<BdRepComt> repComt(UserInfo userInfoDTO) {
+		List<BdRepComt> repComt = null;
+		System.out.println("MkhServiceImpl repComt Start...");
+		repComt = mkhdao.repComt(userInfoDTO);
+		System.out.println("MkhServiceImpl repComt.size()->" +repComt.size());
+		
+		return repComt;
 	}
 
 

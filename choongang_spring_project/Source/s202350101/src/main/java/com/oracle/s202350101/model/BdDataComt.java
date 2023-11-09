@@ -19,5 +19,8 @@ public class BdDataComt {
 	private Date 	modify_date;
 	private String 	comment_context;
 	private String 	alarm_flag;
+	
+	// 조회용
+	private String  app_name;
 
 }

@@ -37,4 +37,13 @@ public class UserInfo {
 	
 	// 조회용
 	private String  class_area;
+	private String  project_name;
+	private String  search;      
+	private String  keyword;
+	private String  pageNum;    
+	private int     total;
+	private int     start;        
+	private int     end;
+	
+	
 }

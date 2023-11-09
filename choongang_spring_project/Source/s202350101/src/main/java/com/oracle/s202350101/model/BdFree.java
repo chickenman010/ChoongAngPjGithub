@@ -24,6 +24,16 @@ public class BdFree {
 	private String 	attach_name;
 	private String 	attach_path;
 	
-	// AppInfo용
-	private String app_name;
+	// 조회용
+	private String  app_name;
+	private int     start;     
+	private int     end;
+	private String  user_name;
+	
+	// 페이징용
+    private String  search;           
+    private String  keyword;
+    private String  pageNum;                
+    private int     total;
+    private int     rn;
 }

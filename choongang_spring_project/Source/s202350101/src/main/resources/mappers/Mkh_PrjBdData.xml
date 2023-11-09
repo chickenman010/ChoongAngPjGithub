@@ -32,5 +32,15 @@
 		And    s.user_id = #{user_id}
 	</select>
 	
+	<!-- PrjBdDataComt -->
+	<select id="mkhDataComt" parameterType="UserInfo" resultType="BdDataComt">
+		Select 	info.app_name, pdata.doc_no, comt.user_id , comt.comment_context, comt.comment_doc_no, comt.create_date
+		From 	app_info info, prj_bd_data pdata, bd_data_comt comt
+		Where 	info.app_id = pdata.app_id
+		And 	pdata.doc_no = comt.doc_no
+		And 	comt.user_id = #{user_id}
+	</select>
+
+	
 </mapper>
 

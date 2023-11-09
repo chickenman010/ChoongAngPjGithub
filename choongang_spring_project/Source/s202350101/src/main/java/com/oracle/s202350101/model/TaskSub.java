@@ -12,4 +12,7 @@ public class TaskSub {
 	private int		task_id;
 	private int		project_id;
 	private String	worker_id;
+	
+	// 추가
+	private String  user_name;
 }

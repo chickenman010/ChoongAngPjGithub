@@ -23,5 +23,14 @@
 		Where  user_id = #{user_id}
 	</select>
 	
+	<!-- PrjBdRepComt -->
+	<select id="mkhRepComt" parameterType="UserInfo" resultType="BdRepComt">
+		Select 	info.app_name, rep.doc_no, comt.user_id , comt.comment_context, comt.comment_doc_no, comt.create_date
+		From 	app_info info, prj_bd_rep rep, bd_rep_comt comt
+		Where 	info.app_id = rep.app_id
+		And 	rep.doc_no = comt.doc_no
+		And 	comt.user_id = #{user_id}
+	</select>
+	
 </mapper>
 

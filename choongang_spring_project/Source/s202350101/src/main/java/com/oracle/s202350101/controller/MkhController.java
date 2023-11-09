@@ -1,23 +1,16 @@
 package com.oracle.s202350101.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.activation.DataSource;
-import javax.activation.FileDataSource;
+
 import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeUtility;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
-import org.springframework.boot.autoconfigure.cache.CacheProperties.Redis;
-import org.springframework.boot.web.servlet.server.Session;
-import org.springframework.mail.MailSender;
+
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
@@ -27,12 +20,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.oracle.s202350101.model.BdDataComt;
 import com.oracle.s202350101.model.BdFree;
+import com.oracle.s202350101.model.BdFreeComt;
 import com.oracle.s202350101.model.BdQna;
+import com.oracle.s202350101.model.BdRepComt;
 import com.oracle.s202350101.model.ClassRoom;
 import com.oracle.s202350101.model.PrjBdData;
 import com.oracle.s202350101.model.PrjBdRep;
@@ -41,11 +35,8 @@ import com.oracle.s202350101.model.UserInfo;
 import com.oracle.s202350101.service.mkhser.MkhService;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import oracle.jdbc.proxy.annotation.Post;
 
 @Controller
-@Slf4j
 @RequiredArgsConstructor
 public class MkhController {
 	
@@ -67,8 +58,7 @@ public class MkhController {
 	// 2번째 실행
 	@PostMapping(value = "user_login_check")
 	public String interCeptor(@ModelAttribute("userInfo") @Valid UserInfo userInfo
-							 , BindingResult result		  , Model model
-							 , HttpServletRequest request , HttpSession session
+							 , BindingResult result     , HttpSession session
 							  ) {
 		System.out.println("MkhController userLoginCheck Start..");
 		System.out.println("MkhController userLoginCheck userInfo.getUser_id()->"+userInfo.getUser_id());
@@ -144,12 +134,17 @@ public class MkhController {
 	
 	// 회원가입 정보 insert
 	@PostMapping(value = "writeUserInfo")
-	public String writeUserInfo(UserInfo userInfo, Model model) {
+	public String writeUserInfo(UserInfo userInfo) {
 		System.out.println("MkhController writeUserInfo Start...");
 	
 		int result = mkhService.insertUserInfo(userInfo);
-		if(result > 0) return "user/user_login";
-		else return "redirect:user_join_write";
+		if(result > 0) {
+			System.out.println("가입완료");
+			return "user/user_login";
+		} else {
+			System.out.println("가입실패");
+			return "redirect:user_join_write";
+		}
 	}
 	
 	/* 마이페이지 */
@@ -179,11 +174,9 @@ public class MkhController {
 	
 	// 개인정보 수정용 비밀번호 확인 페이지
 	@RequestMapping(value = "mypage_check_pw")
-	public String mypageCheckPw(HttpServletRequest request, Model model) {
+	public String mypageCheckPw() {
 		System.out.println("MkhController mypageCheckPw Start..");
-		System.out.println("session.userInfo->"+request.getSession().getAttribute("userInfo"));
-		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
-		
+	
 		return "mypage/mypage_check_pw";
 	}
 	
@@ -233,11 +226,7 @@ public class MkhController {
 		System.out.println("userInfo.getUser_id()"+userInfo.getUser_id());
 		System.out.println("userInfo.getUser_pw()"+userInfo.getUser_pw());
 		System.out.println("userInfo.getUser_birth()"+userInfo.getUser_birth());
-		
-//		Map<String, Object> map = new HashMap<String, Object>();
-//		map.put(userInfo.getUser_id(), userInfo);
-		
-//		int result = mkhService.updateUser(map);
+
 		int result = mkhService.updateUser(userInfo);
 
 		System.out.println("result->"+result);
@@ -252,8 +241,7 @@ public class MkhController {
 	
 	/* MYPOST - 내가 글 모음*/
 	@RequestMapping(value = "mypost_board_list")
-	public String mypostBoardList(HttpServletRequest request,  BdQna bdQna, 
-								  			UserInfo userInfo, Model model) {
+	public String mypostBoardList(HttpServletRequest request, Model model) {
 		System.out.println("MkhController mypostBoardList Start..");
 	    System.out.println("session.userInfo->"+request.getSession().getAttribute("userInfo"));
 	    // userInfo 세션값 받아와서 userInfoDTO로 사용
@@ -315,10 +303,20 @@ public class MkhController {
 	
 	// 내가 쓴 댓글
 	@RequestMapping(value = "mypost_comment_list")
-	public String mypostCommentList(HttpServletRequest request) {
+	public String mypostCommentList(HttpServletRequest request, Model model) {
 		System.out.println("MkhController mypostCommentList Start..");
 		// userInfo 세션값 받아와서 userInfoDTO로 사용
 	    UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+	    
+	    /* 내가 쓴 댓글 출력  */
+		List<BdFreeComt> freeComt = mkhService.freeComt(userInfoDTO);
+		model.addAttribute("freeComt", freeComt);
+		
+		List<BdDataComt> dataComt = mkhService.dataComt(userInfoDTO);
+		model.addAttribute("dataComt", dataComt);
+		
+		List<BdRepComt> repComt = mkhService.repComt(userInfoDTO);
+		model.addAttribute("repComt", repComt);
 	    
 		return "mypost/mypost_comment_list";
 	}
@@ -385,12 +383,13 @@ public class MkhController {
 	// 비밀번호 찾기 인증
 	@ResponseBody
 	@RequestMapping(value = "user_find_pw_auth")
-	public String userFindPwAuth(String user_id, String auth_email, Model model) {
+	public String userFindPwAuth(String user_id, String auth_email) {
 		System.out.println("MkhController userFindPwAuth Start..");
 		
 		System.out.println("userFindPwAuth userId->"+user_id);
 		System.out.println("auth_email->"+auth_email);
 		
+		// user_id의 email 가져오기 위함
 		UserInfo userInfo = mkhService.confirm(user_id);
 
 		// 입력한 ID가 가입할 때 E-mail과 맞는지 확인		
@@ -413,10 +412,9 @@ public class MkhController {
 	// 이메일 값 가져옴 + 이메일 전송
 	@ResponseBody
 	@PostMapping(value = "send_save_mail")
-	public String mailCheck(Model model, String auth_email, String user_id, HttpSession session, HttpServletRequest request) {
+	public String mailCheck(Model model, String auth_email) {
 		System.out.println("MkhController mailCheck Start..");
 		
-		String user_id2 = user_id;
 		String toMail = auth_email;
 		System.out.println("auth_email->"+toMail);
 		String setfrom = "cristalmoon112@gmail.com";
@@ -442,8 +440,7 @@ public class MkhController {
 		} catch (Exception e) {
 			System.out.println("mailTransport e.getMessage()->"+e.getMessage());
 			model.addAttribute("check", 2);  // 전달 실패
-		}
-		
+		}  
 		return authNumber; 	// 인증번호 돌려줌
 	}
 	
@@ -465,7 +462,6 @@ public class MkhController {
 		System.out.println("user_id ->"+user_id);
 		System.out.println("changing PW ->"+user_pw);
 		
-		// MAP으로 하는법
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("user_id", user_id);
 		map.put("user_pw", user_pw);

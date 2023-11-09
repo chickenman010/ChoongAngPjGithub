@@ -23,5 +23,9 @@ public class Meeting {
 	private int 	meeting_status;
 	private String 	attach_name;
 	private String 	attach_path;
+	
+	// 조회용
+	private String  user_name;
+    private String  meetuser_id;
 
 }

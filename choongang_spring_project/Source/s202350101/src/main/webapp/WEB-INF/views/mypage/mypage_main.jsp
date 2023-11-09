@@ -74,7 +74,7 @@
 			        <p><a class="btn btn-secondary" href="/mypage_check_pw">개인정보수정 »</a></p>
 		      	</div>
 		  		
-		    	<h1>환경설정(ajax)</h1><p>
+		    	<h1>환경설정(ajax)(미구현)</h1><p>
 		    	
 			    	댓글알림  : YES<input type="radio" name="env_alarm_comm" value="Y"  ${userEnv.env_alarm_comm == 'Y' ? 'checked' : ''}>  		 
 			    			NO <input type="radio" name="env_alarm_comm" value="N"  ${userEnv.env_alarm_comm == 'N' ? 'checked' : ''} ><p>

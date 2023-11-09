@@ -33,6 +33,13 @@
 
 	</select>
 	
-	
-</mapper>
+	<!-- BdFreeComt -->
+	<select id="mkhFreeComt" parameterType="UserInfo" resultType="BdFreeComt">
+		Select 	info.app_name, free.doc_no, comt.comment_context, comt.comment_doc_no, comt.create_date
+		From 	app_info info, bd_free free, bd_free_comt comt
+		Where 	info.app_id = free.app_id
+		And 	free.doc_no = comt.doc_no
+		And 	comt.user_id = #{user_id}
+	</select>
 
+</mapper>

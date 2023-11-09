@@ -3,8 +3,11 @@ package com.oracle.s202350101.service.mkhser;
 import java.util.List;
 import java.util.Map;
 
+import com.oracle.s202350101.model.BdDataComt;
 import com.oracle.s202350101.model.BdFree;
+import com.oracle.s202350101.model.BdFreeComt;
 import com.oracle.s202350101.model.BdQna;
+import com.oracle.s202350101.model.BdRepComt;
 import com.oracle.s202350101.model.ClassRoom;
 import com.oracle.s202350101.model.PrjBdData;
 import com.oracle.s202350101.model.PrjBdRep;
@@ -30,10 +33,12 @@ public interface MkhService {
 	UserInfo           userFindId(UserInfo userInfo);
 	UserEnv            selectEnv(String user_id);
 	ClassRoom          selectClass(String user_id);
-//	int                updateUser(Map<String, Object> map);
 	int                updateUser(UserInfo userInfo);
 	List<BdQna> 	   qnaGood(UserInfo userInfoDTO);
 	List<BdFree> 	   freeGood(UserInfo userInfoDTO);
 	List<PrjBdData>    prjDataGood(UserInfo userInfoDTO);
+	List<BdFreeComt>   freeComt(UserInfo userInfoDTO);
+	List<BdDataComt>   dataComt(UserInfo userInfoDTO);
+	List<BdRepComt>    repComt(UserInfo userInfoDTO);
 
 }

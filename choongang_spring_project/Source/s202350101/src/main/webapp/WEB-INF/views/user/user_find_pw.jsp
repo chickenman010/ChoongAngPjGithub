@@ -37,7 +37,8 @@ select {
 
 </style>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript">
 	function sendNumber() {
 	    $("#mail_number").css("display", "block");
@@ -80,13 +81,18 @@ select {
 		var number2 = $("#Confirm").val();
 		
 		var user_id = $('#user_id').val();
+		console.log("user_id->" + user_id);
 		var sendurl = "/user_find_pw_new?user_id=" + user_id;
 		
+		// 문제 1. authNumber가 넘어 오기전에 곧바로 확인 누르면 number1과 number2가 빈칸이라서 같음 처리됨
+		// 문제 2. 인증후에 user_id를 바꿔서 확인 누르면 바뀐 아이디의 비밀번호가 바뀜
 		if(number1 == number2){
 			alert("인증 되었습니다.");
 			location.href=sendurl;
+		} else if(number1 == "") {
+			alert("인증 번호를 입력해주세요.");
 		} else {
-			alert("인증 번호가 다릅니다.");
+			alert("인증 번호가 다릅니다.")
 		}
 		
 	}
