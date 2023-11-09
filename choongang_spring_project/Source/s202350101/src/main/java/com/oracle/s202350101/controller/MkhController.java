@@ -114,26 +114,45 @@ public class MkhController {
 	}
 	
 	// 중복확인 (PK를 주고 모든 정보 SELECT)
+//	@ResponseBody
+//	@GetMapping(value = "id_confirm")
+//	public String confirm(String user_id, Model model) {
+//		// ID을 주면 dto를 돌려주는 메소드
+//		System.out.println("userId->"+user_id);
+//		UserInfo userInfo = mkhService.confirm(user_id);
+//		// 입력한 사번을 중복 확인하고 view로 보내주기 위해 model 사용
+//		model.addAttribute("userInfo", userInfo);
+//		if (userInfo != null) {
+//			System.out.println("중복된 ID..");
+//			model.addAttribute("msg", "중복된 ID 입니다");
+//			return "forward:user_join_write";
+//		} else {
+//			System.out.println("MkhController confirm 사용 가능한 사번..");
+//			model.addAttribute("msg", "사용 가능한 ID 입니다");
+//			return "forward:user_join_write";
+//		}
+//	}
+	
+	// 중복확인 (PK를 주고 모든 정보 SELECT)
+	@ResponseBody
 	@GetMapping(value = "id_confirm")
 	public String confirm(String user_id, Model model) {
 		// ID을 주면 dto를 돌려주는 메소드
 		System.out.println("userId->"+user_id);
 		UserInfo userInfo = mkhService.confirm(user_id);
 		// 입력한 사번을 중복 확인하고 view로 보내주기 위해 model 사용
-		model.addAttribute("userInfo", userInfo);
 		if (userInfo != null) {
 			System.out.println("중복된 ID..");
-			model.addAttribute("msg", "중복된 ID 입니다");
-			return "forward:user_join_write";
+			return "1";
 		} else {
 			System.out.println("MkhController confirm 사용 가능한 사번..");
-			model.addAttribute("msg", "사용 가능한 ID 입니다");
-			return "forward:user_join_write";
+			model.addAttribute("user_id", user_id);
+			return "2";
 		}
 	}
 	
 	// 회원가입 정보 insert
-	@PostMapping(value = "writeUserInfo")
+	@PostMapping(value = "write_user_info")
 	public String writeUserInfo(UserInfo userInfo) {
 		System.out.println("MkhController writeUserInfo Start...");
 	

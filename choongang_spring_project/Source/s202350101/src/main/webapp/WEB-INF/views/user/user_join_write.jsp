@@ -42,22 +42,49 @@ select {
 
 </style>
 
-<!-- <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script> -->
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript">
 	function id_confirm() {
-		location.href="id_confirm?user_id="+frm.user_id.value;
+//		alert("클릭!");		
+		$.ajax({
+			url : 'id_confirm',
+			dataType : 'text',
+			data : { user_id : $('#user_id').val() },
+			success : function(data) {
+				if(data == 1) {
+					$('#user_id').val('');		// 필드값 비움
+					$('#msg').text("중복된 ID 입니다!");
+				} else {
+					$('#user_id').val();	// 입력한 id 유지
+					$('#msg').text("사용 가능한 ID 입니다!");
+				}
+			}
+			
+		});
 	}
- 	
+	
 	function send_save_mail() {
-		location.href="send_save_mail?user_email="+frm.user_email.value;
-		alert("인증번호가 전송 되었습니다.")
+		alert("클릭!");
+		
+		if($('#user_email').val() == null) {
+			alert("이메일을 입력해 주세요!");
+		} else {
+			$.ajax({
+				url : 'send_save_mail',
+				dataType : 'text',
+				data : { auth_email : $('user_email').val() },
+				success : function(data) {
+					alert(('#user_email').val+"로 인증번호가 전송 되었습니다!");
+				}
+			});
+		}
+		
 	}
 	
 	/* function confirm_authNumber() {
-		location.href="confirm_auth_number?auth_number="+frm.auth_number.value;
-		alert("인증번호가 전송 되었습니다.")
+		alert("클릭!");
 	} */
-
+	
 	
 
 </script>
@@ -66,13 +93,13 @@ select {
 	<div class="login-wrapper">
         <h2>ChoongAng</h2>
         
-        <form action="writeUserInfo" method="post" name="frm" id="login-form">
+        <form action="write_user_info" method="post" name="frm" id="login-form">
         	<table>
         	
-			<tr><th>아이디 : </th><td><input type="text" name="user_id" 
+			<tr><th>아이디 : </th><td><input type="text" id="user_id" name="user_id" 
 				required="required" value="${user_id }">
 				<input type="button" value="중복확인(ajax)" onclick="id_confirm()">
-				<c:if test="${msg != null }"> ${msg }</c:if>
+				<small style="color: red"><div id="msg"></div></small>
 			</td></tr>
 			<tr><th>비밀번호 : </th><td><input type="password" name="user_pw" 
 				required="required"> </td></tr>

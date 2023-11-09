@@ -53,7 +53,7 @@ select {
 	            if (data == 1) {
 	                $.ajax({
 	                    url: 'send_save_mail',
-	                    dataType: 'json',
+	                    dataType: 'text',
 	                    type: 'post',
 	                    data: {
 	                    	'user_id': $('#user_id').val(),
