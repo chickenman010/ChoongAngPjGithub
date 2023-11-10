@@ -61,8 +61,11 @@
 	  		<div id="contents">
 		    	<div class="col-lg-4">
 		    		
-			        <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect></svg>
-			        
+			        <!-- <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect></svg> -->
+			        	<tr>
+						<td>
+							<img class="uploadFile" alt="UpLoad File" src="${pageContext.request.contextPath}/${userInfoDto.attach_path }/${userInfoDto.attach_name}"></td>
+						</tr>
 				        <h2 class="fw-normal">${userInfoDto.user_name }</h2>
 				        <h3 class="fw-normal">ID : ${userInfoDto.user_id }</h3>
 				        <p>핸드폰 번호 : ${userInfoDto.user_number }

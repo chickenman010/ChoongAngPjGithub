@@ -15,14 +15,24 @@
 <script type="text/javascript">
 	
 	function editAction() {
-		alert("클릭했음");
-		var userInfo = $('#userInfo').serialize();
-		alert("userInfo->"+userInfo);
+//		alert("클릭했음");
+//    	var formData = new FormData();
+
+//	    var file = $('#file1')[0].files[0]; // 파일을 가져옵니다.
+//	    formData.append('file1', file); // FormData에 파일을 추가합니다.
+	
+	    var userInfo = $('#userInfo').serialize(); // 다른 사용자 정보도 FormData에 추가할 수 있습니다.
+//	    formData.append('userInfo', userInfo);
 		
 		$.ajax({
 			 url:'mypage_update_result',
+			 method: 'GET',
+			 
 		     dataType : 'text',
+//		     data : formData, userInfo
 			 data : userInfo,
+			 contentType : false,
+			 processData : false,
 			 success : function(data) {
 				if(data == 1){
 					alert("수정완료");
@@ -87,10 +97,17 @@
 			<!------------------------------ //개발자 소스 입력 START ------------------------------->
 		    
 		    <h2>개인 정보 수정(ajax)</h2>
-			<form id="userInfo" method="post">
+			<form id="userInfo" method="post" enctype="multipart/form-data">
 				<input type="hidden" name="user_id" value="${userInfoDTO.user_id }">
 				<input type="hidden" name="project_id" value="${userInfoDTO.project_id }">
 				<table>
+					<tr>
+						<th>프로필 사진</th>
+						<td><img class="uploadFile" alt="UpLoad File" src="${pageContext.request.contextPath}/${userInfoDTO.attach_path }/${userInfoDTO.attach_name}"><br>
+						<input type="file" class="form-control" name="file1" id="file1">
+						</td>
+						
+					</tr>
 					<tr><th>아이디</th><td>${userInfoDTO.user_id}</td></tr>
 					<tr><th>새 비밀번호</th><td>
 						<input type="password" id="user_pw1" name="user_pw" placeholder="Password"></td></tr>

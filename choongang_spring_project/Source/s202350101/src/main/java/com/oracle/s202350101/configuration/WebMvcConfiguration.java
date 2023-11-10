@@ -14,15 +14,14 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 	public void addInterceptors(InterceptorRegistry registry) {
 		// 누군가가 URL로  /interCeptor라고 친다면 SampleInterceptor() 처리 해줌
 		registry.addInterceptor(new SampleInterceptor())
-//				interceptor 적용
-//				.addPathPatterns("/mypage_update")
+				// interceptor 적용
+			//	.addPathPatterns("/mypage_update")
 				.addPathPatterns("/**")
 				
 				// interceptor 적용하지 않겠다
-				
 				.excludePathPatterns("/user_login", "/user_join_write", "/user_join_agree", "/user_find_pw"
-						, "/user_find_pw_new", "/user_find_id", "/user_find_id_result", "/user_find_pw_auth"
-						, "/send_save_mail"
+						, "/user_find_pw_new/*", "/user_find_id", "/user_find_id_result", "/user_find_pw_auth"
+						, "/send_save_mail", "/write_user_info", "/id_confirm", "/user_find_pw_update", "/user_login_check"
 						)
 				;
 	}

@@ -43,7 +43,7 @@ public class LjhDaoImpl implements LjhDao {
 		
 		try {
 			meetingList = session.selectList("ljhMeetingList", project_id);
-			System.out.println("LjhDaoImpl getMeetingList meetingDateList.size() :" + meetingList.size());
+//			System.out.println("LjhDaoImpl getMeetingList meetingDateList.size() :" + meetingList.size());
 		} catch (Exception e) {
 			System.out.println("LjhDaoImpl getMeetingList Exception : " + e.getMessage());
 		}
@@ -74,7 +74,7 @@ public class LjhDaoImpl implements LjhDao {
 		
 		try {
 			meetingReportList = session.selectList("ljhMeetingReportList", project_id);
-			System.out.println("LjhDaoImpl getMeetingReportList meetingList.size() -> " + meetingReportList.size());
+//			System.out.println("LjhDaoImpl getMeetingReportList meetingList.size() -> " + meetingReportList.size());
 		} catch (Exception e) {
 			System.out.println("LjhDaoImpl getMeetingReportList Exception : " + e.getMessage());
 		}
@@ -242,7 +242,7 @@ public class LjhDaoImpl implements LjhDao {
 		
 		try {
 			meetingList = session.selectList("ljhUserMeeting", map);
-			System.out.println("LjhDaoImpl getUserMeeting meetingList.size() -> " + meetingList.size());
+//			System.out.println("LjhDaoImpl getUserMeeting meetingList.size() -> " + meetingList.size());
 		} catch (Exception e) {
 			System.out.println("LjhDaoImpl getUserMeeting Exception : " + e.getMessage());
 		}

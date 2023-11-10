@@ -337,13 +337,13 @@ public class LjhController {
 	@MessageMapping("/post")
 	@SendTo("/noti/test")
 	public List<Meeting> selMeetingList(HashMap<String, String> map) {
-		System.out.println("LjhController selMeetingList Start");	
+//		System.out.println("LjhController selMeetingList Start");	
 		
  		int loginUserPrj = Integer.parseInt(map.get("project_id"));		// 세션에 저장된 userinfo의 project_id
  		String loginUserId = map.get("user_id");
 		
-		System.out.println("loginUserPrj : " + loginUserPrj);
-		System.out.println("loginUserId : " + loginUserId);
+//		System.out.println("loginUserPrj : " + loginUserPrj);
+//		System.out.println("loginUserId : " + loginUserId);
 		
 		List<Meeting> meetingList = new ArrayList<Meeting>();
 		
@@ -351,7 +351,7 @@ public class LjhController {
 		meetingList = ljhs.getUserMeeting(map);
 		
 		// meetingList = ljhs.getMeetingList(loginUserPrj);
-		System.out.println("meetingList.size() -> " + meetingList.size());
+//		System.out.println("meetingList.size() -> " + meetingList.size());
 		
 		return meetingList;
 	}

@@ -8,47 +8,46 @@
 <title>Insert title here</title>
 <style type="text/css">
 
-.login-wrapper{
-    width: 400px;
-    height: 700px;
-    padding: 40px;
-    box-sizing: border-box;
-    border: 2px solid lightgrey;
-    border-radius: 10px;
-    
-    /* 가로 중앙 정렬을 위한 추가된 스타일 */
-    margin: 0 auto; 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-.login-wrapper > h2{
-    font-size: 30px;
-    padding-bottom: 40px;
-    color: #A6A6A6;
-    margin-bottom: 20px;
-    margin-top: 0px;
-}
-select {
-    width: 230px; /* 원하는 가로 크기로 조정 (예: 200px) */
-    padding: 5px; /* 내용과 경계 사이의 간격을 조절 (옵션) */
-}
-.info#info__birth {
-	width: 10px;
-    padding: 5px;
-    display: flex;
-}
+	.login-wrapper{
+	    width: 500px;
+	    height: 700px;
+	    padding: 40px;
+	    box-sizing: border-box;
+	    border: 2px solid lightgrey;
+	    border-radius: 10px;
+	    
+	    /* 가로 중앙 정렬을 위한 추가된 스타일 */
+	    margin: 0 auto; 
+	    display: flex;
+	    flex-direction: column;
+	    justify-content: center;
+	    align-items: center;
+	}
+	.login-wrapper > h2{
+	    font-size: 30px;
+	    padding-bottom: 40px;
+	    color: #A6A6A6;
+	    margin-bottom: 20px;
+	    margin-top: 0px;
+	}
+	select {
+	    width: 230px; /* 원하는 가로 크기로 조정 (예: 200px) */
+	    padding: 5px; /* 내용과 경계 사이의 간격을 조절 (옵션) */
+	}
+	.info#info__birth {
+		width: 10px;
+	    padding: 5px;
+	    display: flex;
+	}
 
 </style>
 
 <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript">
 
-	let pw_ver = 0;
-	let mail_ver = 0;
+	let pw_ver = 0;		// ID 중복확인
+	let mail_ver = 0;	// 메일인증
 	function id_confirm() {
-		pw_ver = 1;
 //		alert("클릭!");		
 		$.ajax({
 			url : 'id_confirm',
@@ -65,6 +64,7 @@ select {
 				} else {
 					$('#user_id').val();	// 입력한 id 유지
 					$('#msg').text("사용 가능한 ID 입니다!");
+					pw_ver = 1;		// 사용 가능한 ID이면 중복확인 0 -> 1
 					return true;
 				}
 			}
@@ -73,13 +73,13 @@ select {
 	}
 	
 	function send_save_mail() {
-		alert("클릭!");
+//		alert("클릭!");
 		
 		if($('#user_email').val() === "") {
 			alert("이메일을 입력해 주세요!");
 		} else {
 			$("#mail_number").css("display", "block");
-			alert("이메일을 입력했음");
+//			alert("이메일을 입력했음");
 			$.ajax({
 				url : 'send_save_mail',
 				type : 'POST',
@@ -94,8 +94,8 @@ select {
 	}
 	
 	function confirm_authNumber() {
-		mail_ver = 1;
-		alert("클릭!");
+		
+//		alert("클릭!");
 		var number1 = $("#number").val();
 		var number2 = $("#Confirm").val();
 		
@@ -107,19 +107,30 @@ select {
 			return false;
 		} else {
 			$('#msg2').text("인증 되었습니다.");
-			
+			mail_ver = 1;	// 이메일 인증되면 0 -> 1
 			return true;
 		}
 	}
-	
-	function PWD_MAIL_CHK(){
 
-		let total_ver = pw_ver+mail_ver;
-		if(total_ver == 2){
+	function write_user_info() {
+		
+		// 중복확인, 이메일 인증 검증
+		let total_ver = pw_ver + mail_ver;
+		
+		if(total_ver == 2) {
 			return true;
+		} else if (pw_ver != 1) {
+			$('#msg').text("ID 중복확인을 해주세요.");
+			return false;
+		} else if (mail_ver != 1) {
+			$('#msg2').text("이메일 인증이 되지 않았습니다.");
+			return false;
 		}
-		alert("입력실패");
-		return false;
+		
+//		$.ajax({
+//			url : 'write_user_info';		
+//		})
+		
 	}
 	
 	
@@ -178,8 +189,7 @@ select {
 				    </select>
 				</div><p> 
 			</td> -->
-			</tr>
-        	<td><input type="submit" onclick="return PWD_MAIL_CHK()" value="가입하기(ajax)" style="float: center"></td>
+        	<td><input type="submit" onclick="return write_user_info()" value="가입하기(ajax)" style="float: center"></td>
   			</table>
   		</form>
         

@@ -1,9 +1,11 @@
 package com.oracle.s202350101.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.util.UUID;
 
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
@@ -15,12 +17,15 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.oracle.s202350101.model.BdDataComt;
 import com.oracle.s202350101.model.BdFree;
@@ -35,9 +40,11 @@ import com.oracle.s202350101.model.UserInfo;
 import com.oracle.s202350101.service.mkhser.MkhService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class MkhController {
 	
 	private final MkhService mkhService;
@@ -132,11 +139,21 @@ public class MkhController {
 	}
 	
 	// 회원가입 정보 insert
-	@PostMapping(value = "writeUserInfo")
-	public String writeUserInfo(UserInfo userInfo) {
+	@PostMapping(value = "write_user_info")
+	public String writeUserInfo(UserInfo userInfo
+							  , HttpServletRequest request
+							  , @RequestParam(value = "file1", required = false)MultipartFile file1) throws IOException {
 		System.out.println("MkhController writeUserInfo Start...");
-	
+		
+		// 이미지파일 업로드
+		String attach_path = "upload";	// 파일경로
+		
+		// userInfo에 디폴트 이미지와 파일경로 세팅
+		userInfo.setAttach_name("user_default.png");
+		userInfo.setAttach_path(attach_path);
+		
 		int result = mkhService.insertUserInfo(userInfo);
+		
 		if(result > 0) {
 			System.out.println("가입완료");
 			return "user/user_login";
@@ -219,13 +236,32 @@ public class MkhController {
 	// 수정페이지 업데이트 액션
 	@ResponseBody
 	@RequestMapping(value = "mypage_update_result")
-	public String mypageUpdateResult (UserInfo userInfo) {
+	public String mypageUpdateResult (UserInfo userInfo
+									, HttpServletRequest request
+									, @RequestParam(value = "file1", required = false)MultipartFile file1) throws IOException {
 		System.out.println("MkhController mypageUpdateResult Start..");
 
-		System.out.println("userInfo.getUser_id()"+userInfo.getUser_id());
-		System.out.println("userInfo.getUser_pw()"+userInfo.getUser_pw());
-		System.out.println("userInfo.getUser_birth()"+userInfo.getUser_birth());
-
+		System.out.println("mypageUpdateResult userInfo.getUser_id()->"+userInfo.getUser_id());
+		String attach_path = "upload";	// 파일경로
+		String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");		// 저장 위치 주소 지정 (webapp 아래 폴더)
+		
+		System.out.println("File Upload Post Start");
+		
+		
+		log.info("originalName : " + file1.getOriginalFilename());		// 원본 파일명
+		log.info("size : " + file1.getSize());							// 파일 사이즈
+		log.info("contextType : " + file1.getContentType());			// 파일 타입
+		log.info("uploadPath : " + uploadPath);							// 파일 저장되는 주소
+		
+		String savedName = uploadFile(file1.getOriginalFilename(), file1.getBytes(), uploadPath);	// 저장되는 파일명
+		log.info("Return savedName : " + savedName);
+		
+		// userInfo에 파일명과 파일경로 세팅
+		userInfo.setAttach_name(savedName);
+		userInfo.setAttach_path(attach_path);
+		
+		System.out.println("userInfo->"+userInfo);
+		
 		int result = mkhService.updateUser(userInfo);
 
 		System.out.println("result->"+result);
@@ -236,6 +272,30 @@ public class MkhController {
 			System.out.println("수정실패");
 			return "0";
 		}
+	}
+	
+	// 파일 업로드 메소드
+	private String uploadFile(String originalFilename, byte[] bytes, String uploadPath) throws IOException {
+		// Universally Unique Identity (UUID)
+		UUID uid = UUID.randomUUID();
+		System.out.println("uploadPath : " + uploadPath);			// 파일 저장되는 주소
+		// Directory 생성
+		File fileDirectory = new File(uploadPath);
+		if (!fileDirectory.exists()) {
+			// 신규 폴더(Directory) 생성
+			fileDirectory.mkdirs();
+			System.out.println("업로드용 폴더 생성 : " + uploadPath);
+		}
+		
+		String savedName = uid.toString() + "_" + originalFilename;	// 저장되는 파일명
+		log.info("savedName : " + savedName);
+		File target = new File(uploadPath, savedName);
+		
+		// 파일을 복사함.
+		// bytes : 컨텐츠, target : 저장경로와 저장이름이 담겨있는 객체
+		FileCopyUtils.copy(bytes, target);	// org.springframework.util.FileCopyUtils
+		
+		return savedName;
 	}
 	
 	/* MYPOST - 내가 글 모음*/
@@ -292,10 +352,6 @@ public class MkhController {
 		List<PrjBdRep> RepPrjList = mkhService.prjRepList(userInfoDTO);
 		System.out.println("MkhController mypostBoardList RepPrjList.size->"+RepPrjList.size());
 		model.addAttribute("RepPrjList", RepPrjList);
-		
-		
-		/* 내가 쓴 댓글 출력 */
-
 		
 		return "mypost/mypost_board_list";
 	}
