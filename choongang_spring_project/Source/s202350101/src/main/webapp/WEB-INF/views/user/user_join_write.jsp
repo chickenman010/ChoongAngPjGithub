@@ -44,19 +44,28 @@ select {
 
 <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript">
+
+	let pw_ver = 0;
+	let mail_ver = 0;
 	function id_confirm() {
+		pw_ver = 1;
 //		alert("클릭!");		
 		$.ajax({
 			url : 'id_confirm',
 			dataType : 'text',
 			data : { user_id : $('#user_id').val() },
 			success : function(data) {
-				if(data == 1) {
+				if($('#user_id').val() == null) {
+					$('#msg').text("ID를 입력해주세요");
+					return false;
+				} else if(data == 1) {
 					$('#user_id').val('');		// 필드값 비움
 					$('#msg').text("중복된 ID 입니다!");
+					return false;
 				} else {
 					$('#user_id').val();	// 입력한 id 유지
 					$('#msg').text("사용 가능한 ID 입니다!");
+					return true;
 				}
 			}
 			
@@ -66,24 +75,52 @@ select {
 	function send_save_mail() {
 		alert("클릭!");
 		
-		if($('#user_email').val() == null) {
+		if($('#user_email').val() === "") {
 			alert("이메일을 입력해 주세요!");
 		} else {
+			$("#mail_number").css("display", "block");
+			alert("이메일을 입력했음");
 			$.ajax({
 				url : 'send_save_mail',
+				type : 'POST',
 				dataType : 'text',
-				data : { auth_email : $('user_email').val() },
+				data : { auth_email : $('#user_email').val() },
 				success : function(data) {
-					alert(('#user_email').val+"로 인증번호가 전송 되었습니다!");
+					alert("인증번호가 전송 되었습니다!");
+					$("#Confirm").attr("value", data);
 				}
 			});
 		}
-		
 	}
 	
-	/* function confirm_authNumber() {
+	function confirm_authNumber() {
+		mail_ver = 1;
 		alert("클릭!");
-	} */
+		var number1 = $("#number").val();
+		var number2 = $("#Confirm").val();
+		
+		if(number1 == "") {
+			$('#msg2').text("인증 번호를 입력해주세요.");
+			return false;
+		} else if(number1 != number2) {
+			$('#msg2').text("인증 번호가 다릅니다.");
+			return false;
+		} else {
+			$('#msg2').text("인증 되었습니다.");
+			
+			return true;
+		}
+	}
+	
+	function PWD_MAIL_CHK(){
+
+		let total_ver = pw_ver+mail_ver;
+		if(total_ver == 2){
+			return true;
+		}
+		alert("입력실패");
+		return false;
+	}
 	
 	
 
@@ -98,7 +135,7 @@ select {
         	
 			<tr><th>아이디 : </th><td><input type="text" id="user_id" name="user_id" 
 				required="required" value="${user_id }">
-				<input type="button" value="중복확인(ajax)" onclick="id_confirm()">
+				<input type="button" value="중복확인(ajax)" required="required" onclick="return id_confirm()">
 				<small style="color: red"><div id="msg"></div></small>
 			</td></tr>
 			<tr><th>비밀번호 : </th><td><input type="password" name="user_pw" 
@@ -116,10 +153,14 @@ select {
 			<tr><th>이름 : </th><td><input type="text" name="user_name"></td></tr>
            	<tr><th>성별 : </th><td><input type="radio" name="user_gender" value="M">남  <input type="radio" name="user_gender" value="F">여</td></tr>
           	<tr><th>전화번호 : </th><td><input type="tel" name="user_number" placeholder="010-xxxx-xxxx" pattern="\d{2,3}-\d{3,4}-\d{4}" title="2,3자리-3,4자리-4자리"><!-- <input type="button" value="인증하기"> --></td></tr>
-            <tr><th>이메일 : </th><td><input type="email" name="user_email" placeholder="ID@Email.com">
-            			  <input type="button" value="이메일 인증(구현중 )" onclick="send_save_mail()">
-            			  <input type="text" name="auth_number" placeholder="인증번호 6자리를 입력해주세요!" maxlength="6">
-            			  <input type="button" value="인증번호 확인" onclick="confirm_authNumber">
+            <tr><th>이메일 : </th><td><input type="email" name="user_email" id="user_email" placeholder="ID@Email.com">
+            			  <input type="button" value="이메일 인증" onclick="return send_save_mail()">
+            			  <div id="mail_number" name="mail_number" style="display: none">
+				              <input type="text" name="number" id="number" placeholder="인증번호 입력">
+				    		  <button type="button" name="confirmBtn" id="confirmBtn" onclick="return confirm_authNumber()">확인</button>
+				    		  <small style="color: red"><div id="msg2"></div></small>
+				    		  <input type="hidden" id="Confirm" value="">
+			    		  </div>
             			  </td></tr>
             <tr><th>주소 : </th><td><input type="text" name="user_address"><p> </td></tr>
           	<tr><th>생년월일test : </th><td><input type="date" name="user_birth"><p> </td></tr>
@@ -138,7 +179,7 @@ select {
 				</div><p> 
 			</td> -->
 			</tr>
-        	<td><input type="submit" value="가입하기(ajax)" style="float: center"></td>
+        	<td><input type="submit" onclick="return PWD_MAIL_CHK()" value="가입하기(ajax)" style="float: center"></td>
   			</table>
   		</form>
         
