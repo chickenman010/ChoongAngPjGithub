@@ -78,7 +78,7 @@ public class MkhController {
 			System.out.println("user_login_check userInfo exists");
 			// 검증된 userInfo를 세션에 담음
 			session.setAttribute("userInfo", userInfoDTO);
-			System.out.println("session.getAttribute(userInfo)->"+session.getAttribute("userInfoDto"));
+			System.out.println("session.getAttribute(userInfo)->"+session.getAttribute("userInfo"));
 			return "redirect:/main";
 		} else {
 			System.out.println("user_login_check userInfois not exist");
@@ -132,7 +132,7 @@ public class MkhController {
 	}
 	
 	// 회원가입 정보 insert
-	@PostMapping(value = "write_user_info")
+	@PostMapping(value = "writeUserInfo")
 	public String writeUserInfo(UserInfo userInfo) {
 		System.out.println("MkhController writeUserInfo Start...");
 	
