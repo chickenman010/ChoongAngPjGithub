@@ -41,7 +41,6 @@ select {
 <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript">
 	function sendNumber() {
-	    $("#mail_number").css("display", "block");
 	    $.ajax({
 	        url: 'user_find_pw_auth',
 	        dataType: 'text',
@@ -51,6 +50,8 @@ select {
 	        },
 	        success: function (data) {
 	            if (data == 1) {
+	            	$("#mail_number").css("display", "block");	// 입력박스
+	            	alert("인증번호 전송중입니다. 잠시만 기다려주세요");
 	                $.ajax({
 	                    url: 'send_save_mail',
 	                    dataType: 'text',

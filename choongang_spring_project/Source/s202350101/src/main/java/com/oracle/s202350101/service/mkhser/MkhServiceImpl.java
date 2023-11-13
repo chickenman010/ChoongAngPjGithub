@@ -248,10 +248,10 @@ public class MkhServiceImpl implements MkhService {
 	}
 
 	@Override
-	public List<PrjBdData> bdSelectAll(String user_id) {
+	public List<PrjBdData> bdSelectAll(PrjBdData prjBdData) {
 		List<PrjBdData> selectAll = null;
 		System.out.println("MkhServiceImpl bdSelectAll Start...");
-		selectAll = mkhdao.bdSelectAll(user_id);
+		selectAll = mkhdao.bdSelectAll(prjBdData);
 		System.out.println("MkhServiceImpl bdSelectAll.size()->" +selectAll.size());
 		
 		return selectAll;

@@ -149,28 +149,6 @@
 						</c:choose>
 					</c:forEach>
                 
-					
-					<%-- <c:forEach var="bdFree" items="${freeList }">
-						<tr><td>${bdFree.app_name }</td>
-						
-							<c:choose>
-								<c:when test="${bdFree.bd_category} == '자유'">
-									<td><a href="board_content?doc_no=${bdFree.doc_no }">${bdFree.subject }</a></td>
-								</c:when>
-								<c:when test="${bdFree.bd_category} == '이벤트'">
-									<td><a href="board_content?doc_no=${bdFree.doc_no }">${bdFree.subject }</a></td>
-								</c:when>
-								<c:otherwise>
-									<td><a href="board_content?doc_no=${bdFree.doc_no }">${bdFree.subject }</a></td>
-								</c:otherwise>
-							</c:choose>
-							<td>${bdFree.user_id }</td>
-							<td>${bdFree.create_date }</td>
-							<td>${bdFree.bd_count }</td>
-							<td>${bdFree.good_count }</td></tr>
-					</c:forEach> --%>
-					
-					
                     </thead>
                 </table>
             </div>
@@ -178,15 +156,15 @@
 	  		
 					<!-- 페이징 작업 -->
 					<c:if test="${page.startPage > page.pageBlock }">
-						<a href="board_notify?currentPage=${page.startPage - page.pageBlock }">[이전]</a>
+						<a href="mypost_board_list?currentPage=${page.startPage - page.pageBlock }">[이전]</a>
 					</c:if>
 					
 					<c:forEach var="a" begin="${page.startPage }" end="${page.endPage }">
-						<a href="board_notify?currentPage=${a }">[${a }]</a>
+						<a href="mypost_board_list?currentPage=${a }">[${a }]</a>
 					</c:forEach>
 					
 					<c:if test="${page.endPage < page.totalPage }">
-						<a href="board_notify?currentPage=${page.startPage + page.pageBlock }">[다음]</a>
+						<a href="mypost_board_list?currentPage=${page.startPage + page.pageBlock }">[다음]</a>
 					</c:if>
 					  
 	  		<!------------------------------ //개발자 소스 입력 END ------------------------------->

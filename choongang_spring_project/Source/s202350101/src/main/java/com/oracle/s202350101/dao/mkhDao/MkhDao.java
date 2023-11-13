@@ -41,6 +41,6 @@ public interface MkhDao {
 	List<BdDataComt> dataComt(UserInfo userInfoDTO);
 	List<BdRepComt>  repComt(UserInfo userInfoDTO);
 	int              updateEnv(UserEnv userEnv);
-	List<PrjBdData>      bdSelectAll(String user_id);
+	List<PrjBdData>  bdSelectAll(PrjBdData prjBdData);
 
 }

@@ -79,11 +79,11 @@ public class MkhDaoImpl implements MkhDao {
 	
 	// board 전체 select
 	@Override
-	public List<PrjBdData> bdSelectAll(String user_id) {
+	public List<PrjBdData> bdSelectAll(PrjBdData prjBdData) {
 		List<PrjBdData> selectAll = null;
 		System.out.println("MkhDaoImpl bdSelectAll start...");
 		try {
-			selectAll = session.selectList("mkh_bdSelectAll", user_id);
+			selectAll = session.selectList("mkh_bdSelectAll", prjBdData);
 		} catch (Exception e) {
 			System.out.println("MkhDaoImpl bdSelectAll Exception->" +e.getMessage());
 		}

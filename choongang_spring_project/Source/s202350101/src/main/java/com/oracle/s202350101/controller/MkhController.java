@@ -186,7 +186,6 @@ public class MkhController {
 		ClassRoom classRoom = mkhService.selectClass(userInfo.getUser_id());
 		model.addAttribute("classRoom", classRoom);
 		
-		
 		return "mypage/mypage_main";
 	}
 	
@@ -235,8 +234,7 @@ public class MkhController {
 		
 	}
 	
-	// 수정페이지 업데이트 액션
-	@ResponseBody
+	// 수정페이지 이미지첨부 + update
 	@RequestMapping(value = "mypage_update_result")
 	public String mypageUpdateResult (UserInfo userInfo
 									, HttpServletRequest request
@@ -248,7 +246,6 @@ public class MkhController {
 		String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");		// 저장 위치 주소 지정 (webapp 아래 폴더)
 		
 		System.out.println("File Upload Post Start");
-		
 		
 		log.info("originalName : " + file1.getOriginalFilename());		// 원본 파일명
 		log.info("size : " + file1.getSize());							// 파일 사이즈
@@ -269,10 +266,10 @@ public class MkhController {
 		System.out.println("result->"+result);
 		if(result == 1) {
 			System.out.println("수정성공");
-			return "1";
+			return "redirect:/mypage_main";
 		} else {
 			System.out.println("수정실패");
-			return "0";
+			return "redirect:/mypage_update";
 		}
 	}
 	
@@ -325,7 +322,7 @@ public class MkhController {
 	
 	/* MYPOST - 내 글 모음*/
 	@RequestMapping(value = "mypost_board_list")
-	public String mypostBoardList(HttpServletRequest request, Model model, BdFree bdFree, String currentPage) {
+	public String mypostBoardList(HttpServletRequest request, Model model, PrjBdData prjBdDataPg, String currentPage) {
 		System.out.println("MkhController mypostBoardList Start..");
 	    System.out.println("session.userInfo->"+request.getSession().getAttribute("userInfo"));
 	    // userInfo 세션값 받아와서 userInfoDTO로 사용
@@ -361,14 +358,17 @@ public class MkhController {
 		
 		// paging 작업
  		Paging page = new Paging(totalBDCount, currentPage);
- 		bdFree.setStart(page.getStart());
- 		bdFree.setEnd(page.getEnd());
+ 		prjBdDataPg.setStart(page.getStart());
+ 		prjBdDataPg.setEnd(page.getEnd());
  		model.addAttribute("page", page);
 		
 		/* 내가 쓴 게시글 List */
  		
  		// Select ALL
- 		List<PrjBdData> selectAll = mkhService.bdSelectAll(userInfoDTO.getUser_id());
+ 		PrjBdData prjBdData = new PrjBdData();
+ 		prjBdData.setUser_id(userInfoDTO.getUser_id());
+ 		
+ 		List<PrjBdData> selectAll = mkhService.bdSelectAll(prjBdData);
 		System.out.println("MkhController mypostBoardList bdSelectAll.size->"+selectAll.size());
 		model.addAttribute("selectAll", selectAll);
 		
