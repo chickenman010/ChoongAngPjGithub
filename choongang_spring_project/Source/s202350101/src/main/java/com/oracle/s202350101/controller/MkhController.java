@@ -2,6 +2,7 @@ package com.oracle.s202350101.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +34,7 @@ import com.oracle.s202350101.model.BdFreeComt;
 import com.oracle.s202350101.model.BdQna;
 import com.oracle.s202350101.model.BdRepComt;
 import com.oracle.s202350101.model.ClassRoom;
+import com.oracle.s202350101.model.Paging;
 import com.oracle.s202350101.model.PrjBdData;
 import com.oracle.s202350101.model.PrjBdRep;
 import com.oracle.s202350101.model.UserEnv;
@@ -298,15 +300,38 @@ public class MkhController {
 		return savedName;
 	}
 	
-	/* MYPOST - 내가 글 모음*/
+	/* 환경설정 */
+	@ResponseBody
+	@RequestMapping(value = "user_env")
+	public String userEnvUpdate(UserEnv userEnv, HttpServletRequest request) {
+		System.out.println("MkhController userEnvUpdate Start..");
+		
+		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+		userEnv.setUser_id(userInfoDTO.getUser_id());
+		
+		System.out.println("userEnv.userEnv.getUser_id->"+userEnv.getUser_id());
+		System.out.println("userEnv.getEnv_alarm_comm()->"+userEnv.getEnv_alarm_comm());
+		System.out.println("userEnv.userEnv.getEnv_alarm_meeting()->"+userEnv.getEnv_alarm_meeting());
+		
+		int result = mkhService.updateEnv(userEnv);
+		
+		if(result > 0) {
+			System.out.println("수정완료");
+			return "1";
+		}
+		System.out.println("수정실패");
+		return "0";
+	}
+	
+	/* MYPOST - 내 글 모음*/
 	@RequestMapping(value = "mypost_board_list")
-	public String mypostBoardList(HttpServletRequest request, Model model) {
+	public String mypostBoardList(HttpServletRequest request, Model model, BdFree bdFree, String currentPage) {
 		System.out.println("MkhController mypostBoardList Start..");
 	    System.out.println("session.userInfo->"+request.getSession().getAttribute("userInfo"));
 	    // userInfo 세션값 받아와서 userInfoDTO로 사용
 	    UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
 	    System.out.println("userinfo.getUser_id()->"+userInfoDTO.getUser_id());
-
+	    
 		/* 내가 쓴 게시글  Count */
 	    
 		// 전체 게시판 Count
@@ -334,26 +359,41 @@ public class MkhController {
 		System.out.println("totalRepPjCount->"+totalRepPrj);
 		model.addAttribute("totalRepPrj", totalRepPrj);
 		
+		// paging 작업
+ 		Paging page = new Paging(totalBDCount, currentPage);
+ 		bdFree.setStart(page.getStart());
+ 		bdFree.setEnd(page.getEnd());
+ 		model.addAttribute("page", page);
+		
 		/* 내가 쓴 게시글 List */
+ 		
+ 		// Select ALL
+ 		List<PrjBdData> selectAll = mkhService.bdSelectAll(userInfoDTO.getUser_id());
+		System.out.println("MkhController mypostBoardList bdSelectAll.size->"+selectAll.size());
+		model.addAttribute("selectAll", selectAll);
+		
+		System.out.println("app_id : " + selectAll.get(0).getApp_id());
+		System.out.println("app_name : " + selectAll.get(0).getApp_name());
+		System.out.println("Subject : " + selectAll.get(0).getSubject());
 		
 		// Q&A 게시판
-		List<BdQna> qnaList = mkhService.bdQnaList(userInfoDTO);
-		System.out.println("MkhController mypostBoardList qnaList.size->"+qnaList.size());
-		model.addAttribute("qnaList", qnaList);
-		// 공용 게시판
-		List<BdFree> freeList = mkhService.bdFreeList(userInfoDTO);
-		System.out.println("MkhController mypostBoardList freeList.size->"+freeList.size());
-		model.addAttribute("freeList", freeList);
-		// 프로젝트 & 공지자료 게시판
-		List<PrjBdData> dataPrjList = mkhService.prjDataList(userInfoDTO);
-		System.out.println("MkhController mypostBoardList prjList.size->"+dataPrjList.size());
-		model.addAttribute("dataPrjList", dataPrjList);
-		// 업무보고 게시판
-		List<PrjBdRep> RepPrjList = mkhService.prjRepList(userInfoDTO);
-		System.out.println("MkhController mypostBoardList RepPrjList.size->"+RepPrjList.size());
-		model.addAttribute("RepPrjList", RepPrjList);
+//		List<BdQna> qnaList = mkhService.bdQnaList(userInfoDTO);
+//		System.out.println("MkhController mypostBoardList qnaList.size->"+qnaList.size());
+//		model.addAttribute("qnaList", qnaList);
+//		// 공용 게시판
+//		List<BdFree> freeList = mkhService.bdFreeList(userInfoDTO);
+//		System.out.println("MkhController mypostBoardList freeList.size->"+freeList.size());
+//		model.addAttribute("freeList", freeList);
+//		// 프로젝트 & 공지자료 게시판
+//		List<PrjBdData> dataPrjList = mkhService.prjDataList(userInfoDTO);
+//		System.out.println("MkhController mypostBoardList prjList.size->"+dataPrjList.size());
+//		model.addAttribute("dataPrjList", dataPrjList);
+//		// 업무보고 게시판
+//		List<PrjBdRep> RepPrjList = mkhService.prjRepList(userInfoDTO);
+//		System.out.println("MkhController mypostBoardList RepPrjList.size->"+RepPrjList.size());
+//		model.addAttribute("RepPrjList", RepPrjList);
 		
-		return "mypost/mypost_board_list";
+		return "/mypost/mypost_board_list";
 	}
 	
 	// 내가 쓴 댓글
@@ -398,6 +438,8 @@ public class MkhController {
 	    
 		return "mypost/mypost_good_list";
 	}
+	
+	/* 로그인 페이지 */
 	
 	// 아이디 찾기
 	@RequestMapping(value = "user_find_id")
