@@ -82,6 +82,15 @@ public class MkhDaoImpl implements MkhDao {
 	public List<PrjBdData> bdSelectAll(PrjBdData prjBdData) {
 		List<PrjBdData> selectAll = null;
 		System.out.println("MkhDaoImpl bdSelectAll start...");
+		
+//		String user_id = prjBdData.getUser_id();
+//		int start = prjBdData.getStart();
+//		int end = prjBdData.getEnd();
+//		
+//		System.out.println(user_id);
+//		System.out.println(start);
+//		System.out.println(end);
+		
 		try {
 			selectAll = session.selectList("mkh_bdSelectAll", prjBdData);
 		} catch (Exception e) {

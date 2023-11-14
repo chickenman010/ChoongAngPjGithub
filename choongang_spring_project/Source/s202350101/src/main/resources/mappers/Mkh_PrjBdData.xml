@@ -41,7 +41,7 @@
 		And 	comt.user_id = #{user_id}
 	</select>
 	
-	<select id="mkh_bdSelectAll" parameterType="prjBdData" resultType="PrjBdData">
+	<!-- <select id="mkh_bdSelectAll" parameterType="prjBdData" resultType="PrjBdData">
 		SELECT ai.app_name, ai.app_id, bdq.doc_no, bdq.subject, bdq.user_id, bdq.create_date, bdq.bd_count, bdq.good_count, NULL project_id, NULL bd_category
 		FROM bd_qna bdq, app_info ai
 		WHERE bdq.app_id = ai.app_id
@@ -67,7 +67,7 @@
 		FROM prj_bd_rep pbr, app_info ai
 		WHERE pbr.app_id = ai.app_id
 		AND pbr.user_id = #{user_id}
-	</select>
+	</select> -->
 	
 	<!-- <select id="mkh_bdSelectAll" parameterType="prjBdData" resultType="PrjBdData">
 		<![CDATA[
@@ -83,10 +83,14 @@
 		   ]]>
 	</select> -->
 	
-	<!-- <select id="mkh_bdSelectAll" parameterType="prjBdData" resultType="PrjBdData">
+	<select id="mkh_bdSelectAll" parameterType="PrjBdData" resultType="PrjBdData">
 		<![CDATA[
-			SELECT * FROM (
-			    SELECT rownum AS rn, temp.* FROM (
+			SELECT * 
+			FROM 
+			(
+			    SELECT rownum rn, a.* 
+			    FROM 
+			    	(
 			        SELECT ai.app_name, ai.app_id, bdq.doc_no, bdq.subject, bdq.user_id, bdq.create_date, bdq.bd_count, bdq.good_count, NULL AS project_id, NULL AS bd_category
 			        FROM bd_qna bdq, app_info ai
 			        WHERE bdq.app_id = ai.app_id
@@ -112,11 +116,12 @@
 			        FROM prj_bd_rep pbr, app_info ai
 			        WHERE pbr.app_id = ai.app_id
 			        AND pbr.user_id = #{user_id}
-			    ) temp ORDER BY doc_no ASC
+			        ORDER BY create_date DESC
+			    ) a
 			) WHERE rn >= #{start} 
 			  AND   rn <= #{end}
 		   ]]>
-	</select> -->
+	</select>
 
 	
 </mapper>

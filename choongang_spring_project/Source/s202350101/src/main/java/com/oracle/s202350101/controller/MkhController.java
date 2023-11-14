@@ -65,20 +65,46 @@ public class MkhController {
 	
 	// 로그인 인터셉터 체크
 	// 2번째 실행
+	// validation 적용하는거
+//	@PostMapping(value = "user_login_check")
+//	public String interCeptor(@ModelAttribute("userInfo") @Valid UserInfo userInfo
+//							 , BindingResult bindingResult     , HttpSession session
+//							 , Model model
+//							  ) {
+//		System.out.println("MkhController userLoginCheck Start..");
+//		System.out.println("MkhController userLoginCheck userInfo.getUser_id()->"+userInfo.getUser_id());
+//		System.out.println("MkhController userLoginCheck userInfo.getUser_pw()->"+userInfo.getUser_pw());
+//		
+//		// Validation 오류시 결과
+//		if(bindingResult.hasErrors()) {
+//			System.out.println("MkhController user_login_check hasErrors...");
+//			// 오류 메세지를 띄어주기 위해 forward
+//			return "forward:user_login";
+//		} else {
+//			// 오류가 아니면 user_id 유지
+//			model.addAttribute("userInfo", userInfo.getUser_id());
+//		}
+//		
+//		// Login 검증
+//		UserInfo userInfoDTO = mkhService.userLoginCheck(userInfo);
+//		
+//		if(userInfoDTO != null) {	// userInfo가 있으면 main으로 가라
+//			System.out.println("user_login_check userInfo exists");
+//			// 검증된 userInfo를 세션에 담음
+//			session.setAttribute("userInfo", userInfoDTO);
+//			System.out.println("session.getAttribute(userInfo)->"+session.getAttribute("userInfo"));
+//			return "redirect:/main";
+//		} else {
+//			System.out.println("user_login_check userInfois not exist");
+//			return "redirect:/user_login";	// userInfo가 없으면 user_login으로 가라
+//		}
+//	}
+	
 	@PostMapping(value = "user_login_check")
-	public String interCeptor(@ModelAttribute("userInfo") @Valid UserInfo userInfo
-							 , BindingResult result     , HttpSession session
-							  ) {
+	public String interCeptor(UserInfo userInfo, HttpSession session, Model model) {
 		System.out.println("MkhController userLoginCheck Start..");
 		System.out.println("MkhController userLoginCheck userInfo.getUser_id()->"+userInfo.getUser_id());
 		System.out.println("MkhController userLoginCheck userInfo.getUser_pw()->"+userInfo.getUser_pw());
-		
-		// Validation 오류시 결과
-		if(result.hasErrors()) {
-			System.out.println("MkhController user_login_check hasErrors...");
-			// 오류 메세지를 띄어주기 위해 forward
-			return "forward:user_login";
-		}
 		
 		// Login 검증
 		UserInfo userInfoDTO = mkhService.userLoginCheck(userInfo);
@@ -94,6 +120,7 @@ public class MkhController {
 			return "redirect:/user_login";	// userInfo가 없으면 user_login으로 가라
 		}
 	}
+	
 	// 로그아웃
 	@RequestMapping(value = "user_logout")
 	public String userLogout(HttpSession session) {
@@ -122,7 +149,22 @@ public class MkhController {
 		return "user/user_join_write";
 	}
 	
-	// 중복확인 (PK를 주고 모든 정보 SELECT)
+	// 회원가입 페이지 ajax
+//	@ResponseBody
+//	@RequestMapping(value = "validation_ajax")
+//	public String validationAjax(@ModelAttribute("userInfo") @Valid UserInfo userInfo
+//			  					, BindingResult bindingResult, Model model) {
+//		System.out.println("MkhController writeUserIvalidationAjaxnfo Start...");
+//		if(bindingResult.hasErrors()) {
+//			System.out.println("MkhController user_login_check hasErrors...");
+//			// 오류 메세지를 띄어주기 위해 forward
+//			return "forward:user_join_write";
+//		} else {
+//			model.addAttribute("userInfo", userInfo.getUser_id());
+//		}
+//	}
+	
+	// 중복확인 (PK를 주고 모든 정보 SELECT) .Ver 1
 	@ResponseBody
 	@GetMapping(value = "id_confirm")
 	public String confirm(String user_id, Model model) {
@@ -135,17 +177,28 @@ public class MkhController {
 			return "1";
 		} else {
 			System.out.println("MkhController confirm 사용 가능한 사번..");
-//			model.addAttribute("user_id", user_id);
+			model.addAttribute("user_id", user_id);
 			return "2";
 		}
 	}
 	
-	// 회원가입 정보 insert
+	
+	// 회원가입 정보 insert (ver.1)
 	@PostMapping(value = "write_user_info")
-	public String writeUserInfo(UserInfo userInfo
-							  , HttpServletRequest request
-							  , @RequestParam(value = "file1", required = false)MultipartFile file1) throws IOException {
+	public String writeUserInfo(HttpServletRequest request
+							  , @RequestParam(value = "file1", required = false)MultipartFile file1
+							  , @ModelAttribute("userInfo") @Valid UserInfo userInfo
+							  , BindingResult bindingResult, Model model)
+									  throws IOException {
 		System.out.println("MkhController writeUserInfo Start...");
+		// Validation 오류시 결과
+		if(bindingResult.hasErrors()) {
+			System.out.println("MkhController user_login_check hasErrors...");
+			// 오류 메세지를 띄어주기 위해 forward
+			return "forward:user_join_write";
+		} else {
+			model.addAttribute("userInfo", userInfo.getUser_id());
+		}
 		
 		// 이미지파일 업로드
 		String attach_path = "upload";	// 파일경로
@@ -322,7 +375,7 @@ public class MkhController {
 	
 	/* MYPOST - 내 글 모음*/
 	@RequestMapping(value = "mypost_board_list")
-	public String mypostBoardList(HttpServletRequest request, Model model, PrjBdData prjBdDataPg, String currentPage) {
+	public String mypostBoardList(HttpServletRequest request, Model model, @RequestParam(defaultValue = "1") String currentPage) {
 		System.out.println("MkhController mypostBoardList Start..");
 	    System.out.println("session.userInfo->"+request.getSession().getAttribute("userInfo"));
 	    // userInfo 세션값 받아와서 userInfoDTO로 사용
@@ -356,17 +409,17 @@ public class MkhController {
 		System.out.println("totalRepPjCount->"+totalRepPrj);
 		model.addAttribute("totalRepPrj", totalRepPrj);
 		
-		// paging 작업
- 		Paging page = new Paging(totalBDCount, currentPage);
- 		prjBdDataPg.setStart(page.getStart());
- 		prjBdDataPg.setEnd(page.getEnd());
- 		model.addAttribute("page", page);
-		
 		/* 내가 쓴 게시글 List */
  		
  		// Select ALL
  		PrjBdData prjBdData = new PrjBdData();
  		prjBdData.setUser_id(userInfoDTO.getUser_id());
+ 		
+ 		// paging 작업
+ 		Paging page = new Paging(totalBDCount, currentPage);
+ 		prjBdData.setStart(page.getStart());
+ 		prjBdData.setEnd(page.getEnd());
+ 		model.addAttribute("page", page);
  		
  		List<PrjBdData> selectAll = mkhService.bdSelectAll(prjBdData);
 		System.out.println("MkhController mypostBoardList bdSelectAll.size->"+selectAll.size());
