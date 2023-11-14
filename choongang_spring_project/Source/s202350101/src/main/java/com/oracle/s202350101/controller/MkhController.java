@@ -410,24 +410,19 @@ public class MkhController {
 		model.addAttribute("totalRepPrj", totalRepPrj);
 		
 		/* 내가 쓴 게시글 List */
- 		
- 		// Select ALL
+ 		// paging 작업
  		PrjBdData prjBdData = new PrjBdData();
  		prjBdData.setUser_id(userInfoDTO.getUser_id());
  		
- 		// paging 작업
  		Paging page = new Paging(totalBDCount, currentPage);
  		prjBdData.setStart(page.getStart());
  		prjBdData.setEnd(page.getEnd());
  		model.addAttribute("page", page);
- 		
+
+ 		// Select ALL
  		List<PrjBdData> selectAll = mkhService.bdSelectAll(prjBdData);
 		System.out.println("MkhController mypostBoardList bdSelectAll.size->"+selectAll.size());
 		model.addAttribute("selectAll", selectAll);
-		
-		System.out.println("app_id : " + selectAll.get(0).getApp_id());
-		System.out.println("app_name : " + selectAll.get(0).getApp_name());
-		System.out.println("Subject : " + selectAll.get(0).getSubject());
 		
 		// Q&A 게시판
 //		List<BdQna> qnaList = mkhService.bdQnaList(userInfoDTO);
@@ -451,21 +446,45 @@ public class MkhController {
 	
 	// 내가 쓴 댓글
 	@RequestMapping(value = "mypost_comment_list")
-	public String mypostCommentList(HttpServletRequest request, Model model) {
+	public String mypostCommentList(@RequestParam(defaultValue = "1") String currentPage
+									, HttpServletRequest request, Model model) {
 		System.out.println("MkhController mypostCommentList Start..");
 		// userInfo 세션값 받아와서 userInfoDTO로 사용
 	    UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
 	    
-	    /* 내가 쓴 댓글 출력  */
-		List<BdFreeComt> freeComt = mkhService.freeComt(userInfoDTO);
-		model.addAttribute("freeComt", freeComt);
-		
-		List<BdDataComt> dataComt = mkhService.dataComt(userInfoDTO);
-		model.addAttribute("dataComt", dataComt);
-		
-		List<BdRepComt> repComt = mkhService.repComt(userInfoDTO);
-		model.addAttribute("repComt", repComt);
+	    // All Comment Count
+	    int totalComt = mkhService.totalComt(userInfoDTO);
+		System.out.println("totalComt->"+totalComt);
+		model.addAttribute("totalComt", totalComt);
 	    
+	 // paging 작업
+		PrjBdData prjBdData = new PrjBdData();
+		prjBdData.setUser_id(userInfoDTO.getUser_id());
+		
+	  	Paging page = new Paging(totalComt, currentPage);
+	  	prjBdData.setStart(page.getStart());
+	  	prjBdData.setEnd(page.getEnd());
+	  	model.addAttribute("page", page);
+	    
+	    /* 내가 쓴 댓글 출력  */
+//		List<BdFreeComt> freeComt = mkhService.freeComt(userInfoDTO);
+//		model.addAttribute("freeComt", freeComt);
+//		
+//		List<BdDataComt> dataComt = mkhService.dataComt(userInfoDTO);
+//		model.addAttribute("dataComt", dataComt);
+//		
+//		List<BdRepComt> repComt = mkhService.repComt(userInfoDTO);
+//		model.addAttribute("repComt", repComt);
+		
+ 		// Select ALL Comment
+		List<BdDataComt> selectAllComt = mkhService.selectAllComt(prjBdData);
+		model.addAttribute("selectAllComt", selectAllComt);
+		
+		System.out.println("app_id : " + selectAllComt.get(0).getDoc_no());
+		System.out.println("app_name : " + selectAllComt.get(0).getApp_name());
+		System.out.println("Subject : " + selectAllComt.get(0).getComment_context());
+		
+		
 		return "mypost/mypost_comment_list";
 	}
 	

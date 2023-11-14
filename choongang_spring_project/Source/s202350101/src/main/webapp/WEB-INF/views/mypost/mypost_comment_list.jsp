@@ -60,8 +60,8 @@
 			<!------------------------------ //개발자 소스 입력 START ------------------------------->
 	  		<div class="container-fluid">
 					<p>
-					<h3>내가 쓴 댓글 :  개</h3>
-					<%-- <h3>내가 쓴 Q&A 게시글 : ${totalBdQna } 개</h3>
+					<h3>내가 쓴 댓글 :  ${totalComt }개</h3>
+					<%-- <h3>내가 쓴 Q&A 게시글 : ${totalComt } 개</h3>
 					<h3>내가 쓴 공용 게시글 : ${totalBdFree } 개</h3>
 					<h3>내가 쓴 PJ& 공지자료 게시글 : ${totalDtPrj } 개</h3>
 					<h3>내가 쓴 업무보고 게시글 : ${totalRepPrj } 개</h3> --%>
@@ -82,37 +82,71 @@
 						<tbody>
 							<!-- <tr onclick="goto('project_board_data_read.html')"> -->
 							<tr>	
-								<c:forEach var="fComt" items="${freeComt }">
-									<tr><td>${fComt.app_name }</td>
-									<td><a href="bdQnaContent?doc_no=${fComt.doc_no }">${fComt.comment_context }</a></td>
-									<td>${fComt.create_date }</td>
-								</c:forEach>
-								<c:forEach var="dComt" items="${dataComt }">
-									<tr><td>${dComt.app_name }</td>
-									<td><a href="bdQnaContent?doc_no=${dComt.doc_no }">${dComt.comment_context }</a></td>
-									<td>${dComt.create_date }</td>
-								</c:forEach>
-								<c:forEach var="rComt" items="${repComt }">
-									<tr><td>${rComt.app_name }</td>
-									<td><a href="bdQnaContent?doc_no=${rComt.doc_no }">${rComt.comment_context }</a></td>
-									<td>${rComt.create_date }</td>
+								<c:forEach var="allComt" items="${selectAllComt }">
+									<c:choose>
+										<c:when test="${allComt.app_id == 1}">
+											<c:if test="${allComt.bd_category == '공지'}">
+												<tr>
+													<td>${allComt.bd_category }</td>
+													<td><a href="board_content?doc_no=${allComt.doc_no }">${allComt.comment_context }</a></td>
+													<td>${allComt.create_date }</td>
+												</tr>
+											</c:if>
+											<c:if test="${allComt.bd_category == '자유'}">
+												<tr>
+													<td>${allComt.bd_category }</td>
+													<td><a href="free_content?doc_no=${allComt.doc_no }">${allComt.comment_context }</a></td>
+													<td>${allComt.create_date }</td>
+												</tr>
+											</c:if>
+											<c:if test="${allComt.bd_category == '이벤트'}">
+												<tr>
+													<td>${allComt.bd_category }</td>
+													<td><a href="event_content?doc_no=${allComt.doc_no }">${allComt.comment_context }</a></td>
+													<td>${allComt.create_date }</td>
+												</tr>
+											</c:if>
+										</c:when>
+										<c:when test="${allComt.app_id == 2}">
+											<tr>
+												<td>${allComt.app_name }</td>
+												<td><a href="bdQnaContent?doc_no=${allComt.doc_no }">${allComt.comment_context }</a></td>
+												<td>${allComt.create_date }</td>
+											</tr>
+										</c:when>
+										<c:when test="${allComt.app_id == 3}">
+											<tr>
+												<td>${allComt.app_name }</td>
+												<td><a href="prj_board_data_read?doc_no=${allComt.doc_no }&project_id=${allComt.project_id}">${allComt.comment_context }</a></td>
+												<td>${allComt.create_date }</td>
+											</tr>
+										</c:when>
+										<c:when test="${allComt.app_id == 4}">
+											<tr>
+												<td>${allComt.app_name }</td>
+												<td><a href="prj_board_report_read?doc_no=${allComt.doc_no }&project_id=${allComt.project_id}">${allComt.comment_context }</a></td>
+												<td>${allComt.create_date }</td>
+											</tr>
+										</c:when>
+									</c:choose>
 								</c:forEach>
 							</tr>
 						</tbody>
 					</table>
-					<nav aria-label="Page navigation example">
-					  <ul class="pagination justify-content-center">
-					    <li class="page-item disabled">
-					      <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-					    </li>
-					    <li class="page-item"><a class="page-link" href="#">1</a></li>
-					    <li class="page-item"><a class="page-link" href="#">2</a></li>
-					    <li class="page-item"><a class="page-link" href="#">3</a></li>
-					    <li class="page-item">
-					      <a class="page-link" href="#">Next</a>
-					    </li>
-					  </ul>
-					</nav>
+					
+					<!-- 페이징 작업 -->
+					<c:if test="${page.startPage > page.pageBlock }">
+						<a href="mypost_comment_list?currentPage=${page.startPage - page.pageBlock }">[이전]</a>
+					</c:if>
+					
+					<c:forEach var="a" begin="${page.startPage }" end="${page.endPage }">
+						<a href="mypost_comment_list?currentPage=${a }">[${a }]</a>
+					</c:forEach>
+					
+					<c:if test="${page.endPage < page.totalPage }">
+						<a href="mypost_comment_list?currentPage=${page.startPage + page.pageBlock }">[다음]</a>
+					</c:if>
+
 				</div>
 	  		
 	  		<!------------------------------ //개발자 소스 입력 END ------------------------------->

@@ -83,14 +83,6 @@ public class MkhDaoImpl implements MkhDao {
 		List<PrjBdData> selectAll = null;
 		System.out.println("MkhDaoImpl bdSelectAll start...");
 		
-//		String user_id = prjBdData.getUser_id();
-//		int start = prjBdData.getStart();
-//		int end = prjBdData.getEnd();
-//		
-//		System.out.println(user_id);
-//		System.out.println(start);
-//		System.out.println(end);
-		
 		try {
 			selectAll = session.selectList("mkh_bdSelectAll", prjBdData);
 		} catch (Exception e) {
@@ -360,6 +352,31 @@ public class MkhDaoImpl implements MkhDao {
 			System.out.println("MkhDaoImpl updateEnv Exception->" +e.getMessage());
 		}
 		return result;
+	}
+
+	@Override
+	public List<BdDataComt> selectAllComt(PrjBdData prjBdData) {
+		List<BdDataComt> selectAllComt = null;
+		System.out.println("MkhDaoImpl selectAllComt start...");
+		try {
+			selectAllComt = session.selectList("mkh_selectAllComt", prjBdData);
+		} catch (Exception e) {
+			System.out.println("MkhDaoImpl selectAllComt Exception->" +e.getMessage());
+		}
+		return selectAllComt;
+	}
+
+	@Override
+	public int totalComt(UserInfo userInfoDTO) {
+		int totalComt = 0;
+		System.out.println("MkhDaoImpl totalComt start...");
+		try {
+			totalComt = session.selectOne("mkh_totalComt", userInfoDTO);
+		} catch (Exception e) {
+			System.out.println("MkhDaoImpl totalComt Exception->" +e.getMessage());
+		}
+
+		return totalComt;
 	}
 
 }

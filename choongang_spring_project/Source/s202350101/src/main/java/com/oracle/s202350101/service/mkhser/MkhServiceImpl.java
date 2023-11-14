@@ -257,5 +257,23 @@ public class MkhServiceImpl implements MkhService {
 		return selectAll;
 	}
 
+	@Override
+	public List<BdDataComt> selectAllComt(PrjBdData prjBdData) {
+		List<BdDataComt> selectAllComt = null;
+		System.out.println("MkhServiceImpl selectAllComt Start...");
+		selectAllComt = mkhdao.selectAllComt(prjBdData);
+		System.out.println("MkhServiceImpl selectAllComt.size()->" +selectAllComt.size());
+		
+		return selectAllComt;
+	}
+
+	@Override
+	public int totalComt(UserInfo userInfoDTO) {
+		System.out.println("MkhServiceImpl totalComt Start...");
+		int totalComt = mkhdao.totalComt(userInfoDTO);
+
+		return totalComt;
+	}
+
 
 }
