@@ -23,7 +23,6 @@ public class BdDataComt {
 	//조회용
 	private String  user_name;
 	private String 	app_name;
-	private String 	app_id;
-	private String 	bd_category;
-	
+	private String  app_id;
+	private String  bd_category;
 }

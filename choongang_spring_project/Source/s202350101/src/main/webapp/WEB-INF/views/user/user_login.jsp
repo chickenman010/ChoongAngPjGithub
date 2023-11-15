@@ -7,6 +7,21 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+
+<script type="text/javascript">
+	function chkInfo() {
+		var id = $('#user_id').val();
+		var pw = $('#user_pw').val();
+	    var oInput = $("#user_id");
+		
+		if (id == "") {
+			​​​​​​​​showErrorMsg(oMsg,"필수 정보입니다.");
+		}
+		
+	}
+
+</script>
+
 <style type="text/css">
 .login-wrapper{
     width: 400px;
@@ -63,17 +78,15 @@
 <body>
     <div class="login-wrapper">
         <h2>ChoongAng</h2>
-        <form:form action="user_login_check" id="login-form" method="post" modelAttribute="userInfo">
-            <input type="text" 	   name="user_id" placeholder="ID" value="${userInfo.user_id }">
-            	<small style="color: red"><form:errors path="user_id"/></small>
-            <input type="password" name="user_pw" placeholder="Password">
-            	<small style="color: red"><form:errors path="user_pw"/></small>
+        <form action="user_login_check" id="login-form" method="post">
+            <input type="text" 	   name="user_id" id="user_id" placeholder="ID" value="${userInfo.user_id }">
+            <input type="password" name="user_pw" id="user_pw" placeholder="Password">
             <label for="remember-check">
                 <input type="checkbox" id="remember-check">아이디 저장하기
             </label>
             
-            <input type="submit" value="Login">
-        </form:form>
+            <input type="submit" value="Login" onclick="chkInfo()">
+        </form>
         <a href="user_find_pw"><input type="button" value="비밀번호 찾기"></a>
    	    <a href="user_find_id"><input type="button" value="아이디 찾기"></a>
    	    <a href="user_join_agree"><input type="button" value="회원가입"></a>

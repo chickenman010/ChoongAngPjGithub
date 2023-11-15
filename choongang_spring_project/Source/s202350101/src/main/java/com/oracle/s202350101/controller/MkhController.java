@@ -29,11 +29,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.oracle.s202350101.model.BdDataComt;
+import com.oracle.s202350101.model.BdDataGood;
 import com.oracle.s202350101.model.BdFree;
 import com.oracle.s202350101.model.BdFreeComt;
 import com.oracle.s202350101.model.BdQna;
 import com.oracle.s202350101.model.BdRepComt;
 import com.oracle.s202350101.model.ClassRoom;
+import com.oracle.s202350101.model.Code;
 import com.oracle.s202350101.model.Paging;
 import com.oracle.s202350101.model.PrjBdData;
 import com.oracle.s202350101.model.PrjBdRep;
@@ -375,71 +377,45 @@ public class MkhController {
 	
 	/* MYPOST - 내 글 모음*/
 	@RequestMapping(value = "mypost_board_list")
-	public String mypostBoardList(HttpServletRequest request, Model model, @RequestParam(defaultValue = "1") String currentPage) {
+	public String mypostBoardList(PrjBdData prjBdData, HttpServletRequest request, Model model, @RequestParam(defaultValue = "1") String currentPage) {
 		System.out.println("MkhController mypostBoardList Start..");
 	    System.out.println("session.userInfo->"+request.getSession().getAttribute("userInfo"));
 	    // userInfo 세션값 받아와서 userInfoDTO로 사용
 	    UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
-	    System.out.println("userinfo.getUser_id()->"+userInfoDTO.getUser_id());
+	    
+	    prjBdData.setUser_id(userInfoDTO.getUser_id());
 	    
 		/* 내가 쓴 게시글  Count */
-	    
-		// 전체 게시판 Count
-		int totalBDCount = mkhService.totalBDcount(userInfoDTO);
+		int totalBDCount = mkhService.totalBDcount(prjBdData);
 		System.out.println("totalBdCount->"+totalBDCount);
 		model.addAttribute("totalBDCount", totalBDCount);
 		
-		// Q&A게시판 Count
-		int totalBdQna = mkhService.totalQna(userInfoDTO);
-		System.out.println("totalBdQnaCount->"+totalBdQna);
-		model.addAttribute("totalBdQna", totalBdQna);
-		
-		// 공용게시판 Count
-		int totalBdFree = mkhService.totalFree(userInfoDTO);
-		System.out.println("totalFreeCount->"+totalBdFree);
-		model.addAttribute("totalBdFree", totalBdFree);
-		
-		// 프로젝트 & 공지자료 게시판 Count
-		int totalDtPrj = mkhService.totalDtPj(userInfoDTO);
-		System.out.println("totalDtPjCount->"+totalDtPrj);
-		model.addAttribute("totalDtPrj", totalDtPrj);
-		
-		// 업무보고 게시판 Count
-		int totalRepPrj = mkhService.totalRepPj(userInfoDTO);
-		System.out.println("totalRepPjCount->"+totalRepPrj);
-		model.addAttribute("totalRepPrj", totalRepPrj);
-		
 		/* 내가 쓴 게시글 List */
  		// paging 작업
- 		PrjBdData prjBdData = new PrjBdData();
- 		prjBdData.setUser_id(userInfoDTO.getUser_id());
- 		
  		Paging page = new Paging(totalBDCount, currentPage);
  		prjBdData.setStart(page.getStart());
  		prjBdData.setEnd(page.getEnd());
  		model.addAttribute("page", page);
-
+ 		
+ 		//검색 분류코드 가져오기
+		Code code = new Code();
+		code.setTable_name("MYPOST");
+		code.setField_name("MYPOST_CATEGORY");
+		//-----------------------------------------------------
+		List<Code> search_codelist = mkhService.codeList(code);
+		//-----------------------------------------------------
+		model.addAttribute("search", prjBdData.getSearch()); //검색필드
+		model.addAttribute("keyword", prjBdData.getKeyword()); //검색어
+		model.addAttribute("search_codelist", search_codelist); //검색 분류
+ 	
  		// Select ALL
  		List<PrjBdData> selectAll = mkhService.bdSelectAll(prjBdData);
 		System.out.println("MkhController mypostBoardList bdSelectAll.size->"+selectAll.size());
 		model.addAttribute("selectAll", selectAll);
 		
-		// Q&A 게시판
-//		List<BdQna> qnaList = mkhService.bdQnaList(userInfoDTO);
-//		System.out.println("MkhController mypostBoardList qnaList.size->"+qnaList.size());
-//		model.addAttribute("qnaList", qnaList);
-//		// 공용 게시판
-//		List<BdFree> freeList = mkhService.bdFreeList(userInfoDTO);
-//		System.out.println("MkhController mypostBoardList freeList.size->"+freeList.size());
-//		model.addAttribute("freeList", freeList);
-//		// 프로젝트 & 공지자료 게시판
-//		List<PrjBdData> dataPrjList = mkhService.prjDataList(userInfoDTO);
-//		System.out.println("MkhController mypostBoardList prjList.size->"+dataPrjList.size());
-//		model.addAttribute("dataPrjList", dataPrjList);
-//		// 업무보고 게시판
-//		List<PrjBdRep> RepPrjList = mkhService.prjRepList(userInfoDTO);
-//		System.out.println("MkhController mypostBoardList RepPrjList.size->"+RepPrjList.size());
-//		model.addAttribute("RepPrjList", RepPrjList);
+//		System.out.println("app_id : " + selectAll.get(0).getApp_id());
+//		System.out.println("app_name : " + selectAll.get(0).getApp_name());
+//		System.out.println("Subject : " + selectAll.get(0).getSubject());
 		
 		return "/mypost/mypost_board_list";
 	}
@@ -457,7 +433,7 @@ public class MkhController {
 		System.out.println("totalComt->"+totalComt);
 		model.addAttribute("totalComt", totalComt);
 	    
-	 // paging 작업
+		// paging 작업
 		PrjBdData prjBdData = new PrjBdData();
 		prjBdData.setUser_id(userInfoDTO.getUser_id());
 		
@@ -466,48 +442,45 @@ public class MkhController {
 	  	prjBdData.setEnd(page.getEnd());
 	  	model.addAttribute("page", page);
 	    
-	    /* 내가 쓴 댓글 출력  */
-//		List<BdFreeComt> freeComt = mkhService.freeComt(userInfoDTO);
-//		model.addAttribute("freeComt", freeComt);
-//		
-//		List<BdDataComt> dataComt = mkhService.dataComt(userInfoDTO);
-//		model.addAttribute("dataComt", dataComt);
-//		
-//		List<BdRepComt> repComt = mkhService.repComt(userInfoDTO);
-//		model.addAttribute("repComt", repComt);
-		
- 		// Select ALL Comment
-		List<BdDataComt> selectAllComt = mkhService.selectAllComt(prjBdData);
-		model.addAttribute("selectAllComt", selectAllComt);
-		
-		System.out.println("app_id : " + selectAllComt.get(0).getDoc_no());
-		System.out.println("app_name : " + selectAllComt.get(0).getApp_name());
-		System.out.println("Subject : " + selectAllComt.get(0).getComment_context());
-		
-		
+	  	/* 내가 쓴 댓글 출력  */
+ 		List<BdDataComt> selectAllComt = mkhService.selectAllComt(prjBdData);
+ 		model.addAttribute("selectAllComt", selectAllComt);
+ 		System.out.println("MkhController selectAllComt.get(0).getComment_doc_no()->"+selectAllComt.get(0).getComment_doc_no());
+ 		
+ 		System.out.println("app_id : " + selectAllComt.get(0).getDoc_no());
+ 		System.out.println("app_name : " + selectAllComt.get(0).getApp_name());
+ 		System.out.println("Subject : " + selectAllComt.get(0).getComment_context());
+	  	
 		return "mypost/mypost_comment_list";
 	}
 	
 	// 내가 추천한 게시글
 	@RequestMapping(value = "mypost_good_list")
-	public String mypostGoodList(HttpServletRequest request, Model model) {
+	public String mypostGoodList(HttpServletRequest request, Model model, String currentPage) {
 		System.out.println("MkhController mypostGoodList Start..");
 		// userInfo 세션값 받아와서 userInfoDTO로 사용
 	    UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
 	    
-	    /* 내가 추천한 게시글 출력  */
-		List<BdQna> qnaGood = mkhService.qnaGood(userInfoDTO);
-		System.out.println("MkhController mypostBoardList qnaGood.size->"+qnaGood.size());
-		model.addAttribute("qnaGood", qnaGood);
-		
-		List<BdFree> freeGood = mkhService.freeGood(userInfoDTO);
-		System.out.println("MkhController mypostBoardList freeGood.size->"+freeGood.size());
-		model.addAttribute("freeGood", freeGood);
-		
-		List<PrjBdData> prjDataGood = mkhService.prjDataGood(userInfoDTO);
-		System.out.println("MkhController mypostBoardList prjDataGood.size->"+prjDataGood.size());
-		model.addAttribute("prjDataGood", prjDataGood);
+	    // All Good Count
+	    int totalGood = mkhService.totalGood(userInfoDTO);
+		System.out.println("totalGood->"+totalGood);
+		model.addAttribute("totalGood", totalGood);
 	    
+		// paging 작업
+		PrjBdData prjBdData = new PrjBdData();
+		prjBdData.setUser_id(userInfoDTO.getUser_id());
+		
+	  	Paging page = new Paging(totalGood, currentPage);
+	  	prjBdData.setStart(page.getStart());
+	  	prjBdData.setEnd(page.getEnd());
+	  	model.addAttribute("page", page);
+	    
+	  	/* 내가 추천한 게시글 출력  */
+ 		List<BdDataGood> selectAllGood = mkhService.selectAllGood(prjBdData);
+ 		model.addAttribute("selectAllGood", selectAllGood);
+ 		
+ 		System.out.println("app_id : " + selectAllGood.get(0).getDoc_no());
+		
 		return "mypost/mypost_good_list";
 	}
 	

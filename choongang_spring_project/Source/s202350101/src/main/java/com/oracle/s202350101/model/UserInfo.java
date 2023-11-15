@@ -30,7 +30,7 @@ public class UserInfo {
 	private String 	user_pw;
 	private String 	user_name;
 	private String 	user_gender;
-	@Pattern(regexp = "(01[016789])(\\d{3,4})(\\d{4})", message = "올바른 휴대폰 번호를 입력해주세요.")
+	@Pattern(regexp = "(01[016789])[-]?(\\d{3,4})[-]?(\\d{4})", message = "올바른 휴대폰 번호를 입력해주세요.")
 	@NotBlank(message = "전화번호를 입력해 주세요.")
 	private String 	user_number;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")

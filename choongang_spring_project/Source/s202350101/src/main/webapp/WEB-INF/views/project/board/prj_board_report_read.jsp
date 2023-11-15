@@ -73,11 +73,14 @@ function drawCommentList(comments){
 	$("#divCommentList").empty();
 	if(comments.length==0){
 		//alert("댓글 정보가 없습니다.");
+		$("#divCommentList").html("");
 		$("#divCommentList").hide();
+		$("#divCommentCount").html("");
+		$("#divCommentCount").hide();
 	}
 	else{
 		$(comments).each(function(index, comment){
-			var list = '<label class="list-group-item d-flex gap-2">';
+			var list = '<label class="list-group-item d-flex gap-2" id="comment_' + comment.comment_doc_no + '">';
 			list 	+= '<span>';
 			list 	+= '<small class="d-block text-body-secondary">작성자 : ' + comment.user_name + '</small>';
 			//작성일 표시처리 : common.js안에 formatDateTime() : 2023-11-09T01:44:25.000+00:00->2023-11-09 01:44:25
@@ -90,8 +93,18 @@ function drawCommentList(comments){
 			list 	+= '</label>';			
 			$("#divCommentList").append(list);
 			$("#divCommentList").show();
-		});	
+		});
+		$("#divCommentCount").html("댓글 : " + comments.length.toString());
+		$("#divCommentCount").show();
 	}
+	 var params = getUrlParams(); //common.js안 정의
+	   if(params.comment_doc_no != null) {
+	      var comment_doc_no = params.comment_doc_no;
+	      var offset = $("#comment_"+comment_doc_no).offset(); //선택한 태그의 위치를 반환
+	      //animate()메서드를 이용해서 선택한 태그의 스크롤 위치를 지정해서 0.4초 동안 부드럽게 해당 위치로 이동함
+	      $('html').animate({scrollTop : offset.top}, 400);
+	   }
+
 }
 
 //댓글 삭제
@@ -165,7 +178,7 @@ $(function(){
 								<td>분류</td>
 								<td>${board.bd_category_name}</td>
 							</tr>
-							<c:if test="${board.attach_path != null}">
+							<c:if test="${board.attach_path ne null}">
 								<tr>
 									<td>파일첨부</td>
 									<td><a href="javascript:popup('/upload/${board.attach_path}',800,600)">${board.attach_name}</a></td>
@@ -191,6 +204,7 @@ $(function(){
 							</tr>
 						</table>
 						<!-- 댓글 조회 -->
+						<div id="divCommentCount" style="margin-left:16px"></div>
 						<div id="divCommentList" class="list-group p-3 px-md-3"></div>
 					</form>
 			</div>

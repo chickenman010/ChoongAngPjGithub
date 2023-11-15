@@ -11,6 +11,7 @@
 <!-- CSS END -->
 
 <!-- JS START -->
+
 <!-- JS END -->
 
 <script type="text/javascript">
@@ -58,74 +59,110 @@
 		<!-- 본문 -->
 		<main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 			<!------------------------------ //개발자 소스 입력 START ------------------------------->
-	  		<div class="container-fluid">
-					<p>
-					<h3>내가 추천한 게시글 :  개</h3>
-					<%-- <h3>내가 쓴 Q&A 게시글 : ${totalBdQna } 개</h3>
-					<h3>내가 쓴 공용 게시글 : ${totalBdFree } 개</h3>
-					<h3>내가 쓴 PJ& 공지자료 게시글 : ${totalDtPrj } 개</h3>
-					<h3>내가 쓴 업무보고 게시글 : ${totalRepPrj } 개</h3> --%>
-					<p>
-					<table>
-						<tr>
-							<td><button type="button" class="btn btn-secondary btn-sm" onclick="goto('project_board_data_write.html')">작성</button></td>
-						</tr>
-					</table>
-					<table class="table table-hover">
-						<thead>
-							<tr>
-								<td>게시판</td>
-								<td>제목</td>
-								<td>작성자</td>
-								<td>작성일</td>
-								<td>조회수</td>
-								<td>추천수</td>
-							</tr>
-						</thead>
-						<tbody>
-							<!-- <tr onclick="goto('project_board_data_read.html')"> -->
-							<tr>	
-								<c:forEach var="qGood" items="${qnaGood }">
-									<tr><td>${qGood.app_name }</td>
-									<td><a href="bdQnaContent?doc_no=${qGood.doc_no }">${qGood.subject }</a></td>
-									<td>${qGood.user_id }</td>
-									<td>${qGood.create_date }</td>
-									<td>${qGood.bd_count }</td>
-									<td>${qGood.good_count }</td></tr>
-								</c:forEach>
-								<c:forEach var="fGood" items="${freeGood }">
-									<tr><td>${fGood.app_name }</td>
-									<td><a href="bdQnaContent?doc_no=${fGood.doc_no }">${fGood.subject }</a></td>
-									<td>${fGood.user_id }</td>
-									<td>${fGood.create_date }</td>
-									<td>${fGood.bd_count }</td>
-									<td>${fGood.good_count }</td></tr>
-								</c:forEach>
-								<c:forEach var="Dgood" items="${prjDataGood }">
-									<tr><td>${PrjBdData.app_name }</td>
-									<td><a href="bdQnaContent?doc_no=${Dgood.doc_no }">${Dgood.subject }</a></td>
-									<td>${Dgood.user_id }</td>
-									<td>${Dgood.create_date }</td>
-									<td>${Dgood.bd_count }</td>
-									<td>${Dgood.good_count }</td></tr>
-								</c:forEach>
-							</tr>
-						</tbody>
-					</table>
-					<nav aria-label="Page navigation example">
-					  <ul class="pagination justify-content-center">
-					    <li class="page-item disabled">
-					      <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-					    </li>
-					    <li class="page-item"><a class="page-link" href="#">1</a></li>
-					    <li class="page-item"><a class="page-link" href="#">2</a></li>
-					    <li class="page-item"><a class="page-link" href="#">3</a></li>
-					    <li class="page-item">
-					      <a class="page-link" href="#">Next</a>
-					    </li>
-					  </ul>
-					</nav>
-				</div>
+	  		<div id="test">
+                <div id="admin_page_list">
+	                <div class="btn btn-primary">내가 추천한 게시글  ${totalGood }</div>
+                    <!-- <div class="btn btn-secondary" onclick="location.href='/admin_projectmanager'">내가 쓴 Q&A 게시글</div>
+                    <div class="btn btn-secondary" onclick="location.href='/admin_board'">내가 쓴 공용 게시글</div>
+                    <div class="btn btn-secondary" onclick="location.href='/admin_approval'">내가 쓴 PJ& 공지자료 게시글</div>
+                    <div class="btn btn-secondary" onclick="location.href='/admin_add_class'">내가 쓴 업무보고 게시글</div> -->
+                </div>
+
+                <table class="table">
+                    <thead>
+                    <tr class="table-warning">
+                        <td>게시판</td>
+						<td>제목</td>
+						<td>작성자</td>
+						<td>작성일</td>
+						<td>조회수</td>
+						<td>추천수</td>
+                    </tr>
+                    <c:forEach var="sAllGood" items="${selectAllGood }">
+                    	<c:choose>
+							<c:when test="${sAllGood.app_id == 1}">
+								<c:if test="${sAllGood.bd_category == '공지'}">
+									<tr>
+										<td>${sAllGood.bd_category }</td>
+										<td><a href="board_content?doc_no=${sAllGood.doc_no }">${sAllGood.subject }</a></td>
+										<td>${sAllGood.user_id }</td>
+										<td>${sAllGood.create_date }</td>
+										<td>${sAllGood.bd_count }</td>
+										<td>${sAllGood.good_count }</td>
+									</tr>
+								</c:if>
+								<c:if test="${sAllGood.bd_category == '자유'}">
+									<tr>
+										<td>${sAllGood.bd_category }</td>
+										<td><a href="free_content?doc_no=${sAllGood.doc_no }">${sAllGood.subject }</a></td>
+										<td>${sAllGood.user_id }</td>
+										<td>${sAllGood.create_date }</td>
+										<td>${sAllGood.bd_count }</td>
+										<td>${sAllGood.good_count }</td>
+									</tr>
+								</c:if>
+								<c:if test="${sAllGood.bd_category == '이벤트'}">
+									<tr>
+										<td>${sAllGood.bd_category }</td>
+										<td><a href="event_content?doc_no=${sAllGood.doc_no }">${sAllGood.subject }</a></td>
+										<td>${sAllGood.user_id }</td>
+										<td>${sAllGood.create_date }</td>
+										<td>${sAllGood.bd_count }</td>
+										<td>${sAllGood.good_count }</td>
+									</tr>
+								</c:if>
+							</c:when>
+							<c:when test="${sAllGood.app_id == 2}">
+								<tr>
+									<td>${sAllGood.app_name }</td>
+									<td><a href="bdQnaContent?doc_no=${sAllGood.doc_no }">${sAllGood.subject }</a></td>
+									
+									<td>${sAllGood.user_id }</td>
+									<td>${sAllGood.create_date }</td>
+									<td>${sAllGood.bd_count }</td>
+									<td>${sAllGood.good_count }</td>
+								</tr>
+							</c:when>
+							<c:when test="${sAllGood.app_id == 3}">
+								<tr>
+									<td>${sAllGood.app_name }</td>
+									<td><a href="javascript:popup('prj_board_data_read?doc_no=${sAllGood.doc_no}&project_id=${sAllGood.project_id}')">${sAllGood.subject }</a></td>
+									<td>${sAllGood.user_id }</td>
+									<td>${sAllGood.create_date }</td>
+									<td>${sAllGood.bd_count }</td>
+									<td>${sAllGood.good_count }</td>
+								</tr>
+							</c:when>
+							<c:when test="${sAllGood.app_id == 4}">
+								<tr>
+									<td>${sAllGood.app_name }</td>
+									<td><a href="prj_board_report_read?doc_no=${sAllGood.doc_no }&project_id=${sAllGood.project_id}">${sAllGood.subject }</a></td>
+									<td>${sAllGood.user_id }</td>
+									<td>${sAllGood.create_date }</td>
+									<td>${sAllGood.bd_count }</td>
+									<td>${sAllGood.good_count }</td>
+								</tr>
+							</c:when>
+						</c:choose>
+					</c:forEach>
+                
+                    </thead>
+                </table>
+            </div>
+	  		
+	  		
+			<!-- 페이징 작업 -->
+			<c:if test="${page.startPage > page.pageBlock }">
+				<a href="mypost_good_list?currentPage=${page.startPage - page.pageBlock }">[이전]</a>
+			</c:if>
+			
+			<c:forEach var="a" begin="${page.startPage }" end="${page.endPage }">
+				<a href="mypost_good_list?currentPage=${a }">[${a }]</a>
+			</c:forEach>
+			
+			<c:if test="${page.endPage < page.totalPage }">
+				<a href="mypost_good_list?currentPage=${page.startPage + page.pageBlock }">[다음]</a>
+			</c:if>
 	  		
 	  		<!------------------------------ //개발자 소스 입력 END ------------------------------->
 		</main>		
