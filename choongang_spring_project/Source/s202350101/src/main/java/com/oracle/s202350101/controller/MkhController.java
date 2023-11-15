@@ -67,41 +67,6 @@ public class MkhController {
 	
 	// 로그인 인터셉터 체크
 	// 2번째 실행
-	// validation 적용하는거
-//	@PostMapping(value = "user_login_check")
-//	public String interCeptor(@ModelAttribute("userInfo") @Valid UserInfo userInfo
-//							 , BindingResult bindingResult     , HttpSession session
-//							 , Model model
-//							  ) {
-//		System.out.println("MkhController userLoginCheck Start..");
-//		System.out.println("MkhController userLoginCheck userInfo.getUser_id()->"+userInfo.getUser_id());
-//		System.out.println("MkhController userLoginCheck userInfo.getUser_pw()->"+userInfo.getUser_pw());
-//		
-//		// Validation 오류시 결과
-//		if(bindingResult.hasErrors()) {
-//			System.out.println("MkhController user_login_check hasErrors...");
-//			// 오류 메세지를 띄어주기 위해 forward
-//			return "forward:user_login";
-//		} else {
-//			// 오류가 아니면 user_id 유지
-//			model.addAttribute("userInfo", userInfo.getUser_id());
-//		}
-//		
-//		// Login 검증
-//		UserInfo userInfoDTO = mkhService.userLoginCheck(userInfo);
-//		
-//		if(userInfoDTO != null) {	// userInfo가 있으면 main으로 가라
-//			System.out.println("user_login_check userInfo exists");
-//			// 검증된 userInfo를 세션에 담음
-//			session.setAttribute("userInfo", userInfoDTO);
-//			System.out.println("session.getAttribute(userInfo)->"+session.getAttribute("userInfo"));
-//			return "redirect:/main";
-//		} else {
-//			System.out.println("user_login_check userInfois not exist");
-//			return "redirect:/user_login";	// userInfo가 없으면 user_login으로 가라
-//		}
-//	}
-	
 	@PostMapping(value = "user_login_check")
 	public String interCeptor(UserInfo userInfo, HttpSession session, Model model) {
 		System.out.println("MkhController userLoginCheck Start..");
@@ -111,16 +76,31 @@ public class MkhController {
 		// Login 검증
 		UserInfo userInfoDTO = mkhService.userLoginCheck(userInfo);
 		
-		if(userInfoDTO != null) {	// userInfo가 있으면 main으로 가라
+		if(userInfo.getUser_id() == "" && userInfo.getUser_pw() == "") {
+			System.out.println("ID, PW 공백");
+			model.addAttribute("idMsgBox", "아이디를 입력해 주세요.");
+			model.addAttribute("pwMsgBox", "비밀번호를 입력해 주세요.");
+			return "forward:/user_login";
+		} else if (userInfo.getUser_id() == "") {
+			System.out.println("ID 공백");
+			model.addAttribute("idMsgBox", "아이디를 입력해 주세요.");
+			return "forward:/user_login";
+		} else if (userInfo.getUser_pw() == "") {
+			System.out.println("PW 공백");
+			model.addAttribute("user_id", userInfo.getUser_id());
+			model.addAttribute("pwMsgBox", "비밀번호를 입력해 주세요.");
+			return "forward:/user_login";
+		} else if (userInfoDTO == null) {
+			System.out.println("ID or PW 틀림");
+			model.addAttribute("pwMsgBox", "아이디 또는 비밀번호를 확인해 주세요.");
+			return "forward:/user_login";
+		} else {
 			System.out.println("user_login_check userInfo exists");
-			// 검증된 userInfo를 세션에 담음
 			session.setAttribute("userInfo", userInfoDTO);
 			System.out.println("session.getAttribute(userInfo)->"+session.getAttribute("userInfo"));
 			return "redirect:/main";
-		} else {
-			System.out.println("user_login_check userInfois not exist");
-			return "redirect:/user_login";	// userInfo가 없으면 user_login으로 가라
 		}
+		
 	}
 	
 	// 로그아웃
