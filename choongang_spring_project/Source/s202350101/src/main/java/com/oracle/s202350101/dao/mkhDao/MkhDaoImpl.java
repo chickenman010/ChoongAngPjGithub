@@ -1,5 +1,6 @@
 package com.oracle.s202350101.dao.mkhDao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -87,7 +88,7 @@ public class MkhDaoImpl implements MkhDao {
 		System.out.println("MkhDaoImpl bdSelectAll start...");
 		
 		try {
-			selectAll = session.selectList("mkh_bdSelectAll", prjBdData);
+			selectAll = session.selectList("mkhBdSelectAll", prjBdData);
 		} catch (Exception e) {
 			System.out.println("MkhDaoImpl bdSelectAll Exception->" +e.getMessage());
 		}
@@ -177,7 +178,7 @@ public class MkhDaoImpl implements MkhDao {
 		int result = 0;
 		System.out.println("MkhDaoImpl updateEnv start...");
 		try {
-			result = session.update("mkh_updateEnv", userEnv);
+			result = session.update("mkhUpdateEnv", userEnv);
 			
 		} catch (Exception e) {
 			System.out.println("MkhDaoImpl updateEnv Exception->" +e.getMessage());
@@ -186,11 +187,11 @@ public class MkhDaoImpl implements MkhDao {
 	}
 
 	@Override
-	public int totalComt(UserInfo userInfoDTO) {
+	public int totalComt(PrjBdData prjBdData) {
 		int totalComt = 0;
 		System.out.println("MkhDaoImpl totalComt start...");
 		try {
-			totalComt = session.selectOne("mkh_totalComt", userInfoDTO);
+			totalComt = session.selectOne("mkhTotalComt", prjBdData);
 		} catch (Exception e) {
 			System.out.println("MkhDaoImpl totalComt Exception->" +e.getMessage());
 		}
@@ -203,7 +204,7 @@ public class MkhDaoImpl implements MkhDao {
 		List<BdDataComt> selectAllComt = null;
 		System.out.println("MkhDaoImpl selectAllComt start...");
 		try {
-			selectAllComt = session.selectList("mkh_selectAllComt", prjBdData);
+			selectAllComt = session.selectList("mkhSelectAllComt", prjBdData);
 		} catch (Exception e) {
 			System.out.println("MkhDaoImpl selectAllComt Exception->" +e.getMessage());
 		}
@@ -211,11 +212,11 @@ public class MkhDaoImpl implements MkhDao {
 	}
 
 	@Override
-	public int totalGood(UserInfo userInfoDTO) {
+	public int totalGood(PrjBdData prjBdData) {
 		int totalGood = 0;
 		System.out.println("MkhDaoImpl totalGood start...");
 		try {
-			totalGood = session.selectOne("mkh_totalGood", userInfoDTO);
+			totalGood = session.selectOne("mkhTotalGood", prjBdData);
 		} catch (Exception e) {
 			System.out.println("MkhDaoImpl totalGood Exception->" +e.getMessage());
 		}
@@ -228,11 +229,8 @@ public class MkhDaoImpl implements MkhDao {
 		List<BdDataGood> selectAllGood = null;
 		System.out.println("MkhDaoImpl selectAllGood start...");
 		
-		System.out.println("prjBdData.getStart()->"+prjBdData.getStart());
-		System.out.println("prjBdData.getEnd()->"+prjBdData.getEnd());
-		
 		try {
-			selectAllGood = session.selectList("mkh_selectAllGood", prjBdData);
+			selectAllGood = session.selectList("mkhSelectAllGood", prjBdData);
 		} catch (Exception e) {
 			System.out.println("MkhDaoImpl selectAllGood Exception->" +e.getMessage());
 		}
@@ -264,23 +262,56 @@ public class MkhDaoImpl implements MkhDao {
 	
 	//검색 문서 건수
 	@Override
-	public int searchCount(PrjBdData prjBdData) {
-		System.out.println("MkhDaoImpl searchCount START...");
+	public int searchDBCount(PrjBdData prjBdData) {
+		System.out.println("MkhDaoImpl searchDBCount START...");
 		int searchCnt = 0;				
 		try {
 			//----------------------------------------------------------------------
 			searchCnt = session.selectOne("mkhBDListSearchCount", prjBdData);
 			//----------------------------------------------------------------------
-			System.out.println("MkhDaoImpl searchCount searchCnt->"+searchCnt);
+			System.out.println("MkhDaoImpl searchDBCount searchCnt->"+searchCnt);
 		} catch (Exception e) {
-			System.out.println("MkhDaoImpl searchCount Exception->"+e.getMessage());
+			System.out.println("MkhDaoImpl searchDBCount Exception->"+e.getMessage());
 		}
-		System.out.println("MkhDaoImpl searchCount END...");
+		System.out.println("MkhDaoImpl searchDBCount END...");
 		return searchCnt;
 	}
+	
+	@Override
+	public int searchGoodCount(PrjBdData prjBdData) {
+		System.out.println("MkhDaoImpl searchGoodCount START...");
+		int searchCnt = 0;				
+		try {
+			//----------------------------------------------------------------------
+			searchCnt = session.selectOne("mkhGoodListSearchCount", prjBdData);
+			//----------------------------------------------------------------------
+			System.out.println("MkhDaoImpl searchGoodCount searchCnt->"+searchCnt);
+		} catch (Exception e) {
+			System.out.println("MkhDaoImpl searchGoodCount Exception->"+e.getMessage());
+		}
+		System.out.println("MkhDaoImpl searchGoodCount END...");
+		return searchCnt;
+	}
+	
+	@Override
+	public int searchComtCount(PrjBdData prjBdData) {
+		System.out.println("MkhDaoImpl searchComtCount START...");
+		int searchCnt = 0;				
+		try {
+			//----------------------------------------------------------------------
+			searchCnt = session.selectOne("mkhComtListSearchCount", prjBdData);
+			//----------------------------------------------------------------------
+			System.out.println("MkhDaoImpl searchComtCount searchCnt->"+searchCnt);
+		} catch (Exception e) {
+			System.out.println("MkhDaoImpl searchComtCount Exception->"+e.getMessage());
+		}
+		System.out.println("MkhDaoImpl searchComtCount END...");
+		return searchCnt;
+	}
+	
 
 	@Override
-	public List<PrjBdData> searchList(PrjBdData prjBdData) {
+	public List<PrjBdData> searchBDList(PrjBdData prjBdData) {
 		System.out.println("MkhDaoImpl searchList START...");
 		List<PrjBdData> searchAllList = null;		
 		try {
@@ -298,5 +329,46 @@ public class MkhDaoImpl implements MkhDao {
 		System.out.println("MkhDaoImpl searchList END...");
 		return searchAllList;
 	}
+
+	@Override
+	public List<BdDataGood> searchGoodList(PrjBdData prjBdData) {
+		System.out.println("MkhDaoImpl searchList START...");
+		List<BdDataGood> searchAllList = null;		
+		try {
+			//----------------------------------------------------------------------
+			searchAllList = session.selectList("mkhSearchGoodList", prjBdData);
+			//----------------------------------------------------------------------
+			if(searchAllList != null) {
+				System.out.println("MkhDaoImpl searchGoodList prjBdDataList.get(0).getSubject()->"+((BdDataGood) searchAllList.get(0)).getSubject());
+			}else {
+				System.out.println("SQL오류");
+			}
+		} catch (Exception e) {
+			System.out.println("MkhDaoImpl searchGoodList Exception->"+e.getMessage());
+		}
+		System.out.println("MkhDaoImpl searchGoodList END...");
+		return searchAllList;
+	}
+
+	@Override
+	public List<BdDataComt> searchComtList(PrjBdData prjBdData) {
+		System.out.println("MkhDaoImpl searchComtList START...");
+		List<BdDataComt> searchComtList = null;		
+		try {
+			//----------------------------------------------------------------------
+			searchComtList = session.selectList("mkhSearchComtList", prjBdData);
+			//----------------------------------------------------------------------
+			if(searchComtList != null) {
+				System.out.println("MkhDaoImpl searchComtList.get(0)).getComment_context()->"+((BdDataComt) searchComtList.get(0)).getComment_context());
+			}else {
+				System.out.println("SQL오류");
+			}
+		} catch (Exception e) {
+			System.out.println("MkhDaoImpl searchComtList Exception->"+e.getMessage());
+		}
+		System.out.println("MkhDaoImpl searchComtList END...");
+		return searchComtList;
+	}
+
 
 }

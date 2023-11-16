@@ -25,12 +25,16 @@ public interface MkhDao {
 	int              updateUser(UserInfo userInfo);
 	int              updateEnv(UserEnv userEnv);
 	List<PrjBdData>  bdSelectAll(PrjBdData prjBdData);
-	int              totalComt(UserInfo userInfoDTO);
+	int              totalComt(PrjBdData prjBdData);
 	List<BdDataComt> selectAllComt(PrjBdData prjBdData);
-	int              totalGood(UserInfo userInfoDTO);
+	int              totalGood(PrjBdData prjBdData);
 	List<BdDataGood> selectAllGood(PrjBdData prjBdData);
 	List<Code>       codeList(Code code);
-	int              searchCount(PrjBdData prjBdData);
-	List<PrjBdData>  searchList(PrjBdData prjBdData);
+	int              searchDBCount(PrjBdData prjBdData);
+	List<PrjBdData>  searchBDList(PrjBdData prjBdData);
+	List<BdDataGood> searchGoodList(PrjBdData prjBdData);
+	int              searchGoodCount(PrjBdData prjBdData);
+	int              searchComtCount(PrjBdData prjBdData);
+	List<BdDataComt> searchComtList(PrjBdData prjBdData);
 
 }

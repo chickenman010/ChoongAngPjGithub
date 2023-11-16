@@ -41,6 +41,7 @@ import com.oracle.s202350101.model.PrjBdData;
 import com.oracle.s202350101.model.PrjBdRep;
 import com.oracle.s202350101.model.UserEnv;
 import com.oracle.s202350101.model.UserInfo;
+import com.oracle.s202350101.service.kjoSer.UserInfoService;
 import com.oracle.s202350101.service.mkhser.MkhService;
 
 import lombok.RequiredArgsConstructor;
@@ -50,7 +51,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class MkhController {
-	
+	// kjo 서비스 사용
+	private final UserInfoService uis;
 	private final MkhService mkhService;
 	
 	// SMTP(Send Mail Transport protocol) 메일 전송 객체
@@ -143,6 +145,7 @@ public class MkhController {
 //			return "forward:user_join_write";
 //		} else {
 //			model.addAttribute("userInfo", userInfo.getUser_id());
+//			return "";
 //		}
 //	}
 	
@@ -179,7 +182,7 @@ public class MkhController {
 			// 오류 메세지를 띄어주기 위해 forward
 			return "forward:user_join_write";
 		} else {
-			model.addAttribute("userInfo", userInfo.getUser_id());
+			model.addAttribute("userInfo", userInfo);
 		}
 		
 		// 이미지파일 업로드
@@ -234,7 +237,7 @@ public class MkhController {
 	
 	// 개인정보 수정 페이지로 이동
 	@RequestMapping(value = "mypage_update")
-	public String mypageUpdate(HttpServletRequest request, Model model, String user_id, String user_pw) {
+	public String mypageUpdate(HttpServletRequest request, Model model, UserInfo userInfo, HttpSession session) {
 		System.out.println("MkhController mypage_update_view Start..");
 		System.out.println("session.userInfo->"+request.getSession().getAttribute("userInfo"));
 		
@@ -244,26 +247,23 @@ public class MkhController {
 		System.out.println("userInfoDTO.getUser_pw()->"+userInfoDTO.getUser_pw());
 		
 		// 수정 페이지에서 받은 값들
-		System.out.println("user_id->"+user_id);
-		System.out.println("user_pw->"+user_pw);
+		System.out.println("user_id->"+userInfo.getUser_id());
+		System.out.println("user_pw->"+userInfo.getUser_pw());
 		
 		// 반 목록 출력
 		List<ClassRoom> classList = mkhService.createdClass();
+		UserInfo userinfo = new UserInfo();
+		model.addAttribute("userInfo", userinfo);
 		model.addAttribute("classList", classList);
 		
-		
-		// DB랑 비교해야됨. 비번 수정하고 바로 또 수정하면 안맞음
-		if(!user_id.equals(userInfoDTO.getUser_id())) {
-			System.out.println("아이디 다름");
-			model.addAttribute("msg", "ID를 다시 확인해주세요.");
-			return "forward:/mypage_check_pw";
-		} else if (!user_pw.equals(userInfoDTO.getUser_pw())) {
-			System.out.println("비밀번호가 다름");
-			model.addAttribute("msg", "PW를 다시 확인해주세요.");
+		userInfoDTO = mkhService.userLoginCheck(userInfo);
+		if(userInfoDTO == null) {
+			System.out.println("인증 실패");
+			model.addAttribute("msg", "ID와 PW를 다시 확인해주세요.");
 			return "forward:/mypage_check_pw";
 		} else {
-			System.out.println("ID / PW 맞음");
-			model.addAttribute("userInfoDTO", userInfoDTO);
+			System.out.println("인증 성공");
+			session.setAttribute("userInfoDTO", userInfoDTO);
 			return "mypage/mypage_update";
 		}
 		
@@ -271,10 +271,21 @@ public class MkhController {
 	
 	// 수정페이지 이미지첨부 + update
 	@RequestMapping(value = "mypage_update_result")
-	public String mypageUpdateResult (UserInfo userInfo
+	public String mypageUpdateResult (@ModelAttribute("userInfo") @Valid UserInfo userInfo
+									, BindingResult bindingResult
 									, HttpServletRequest request
+									, Model model
 									, @RequestParam(value = "file1", required = false)MultipartFile file1) throws IOException {
 		System.out.println("MkhController mypageUpdateResult Start..");
+//		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+
+		if(bindingResult.hasErrors()) {
+			System.out.println("validation 에러 발생");
+			List<ClassRoom> classList = mkhService.createdClass();
+			model.addAttribute("classList", classList);
+			
+			return "mypage/mypage_update";
+		}
 
 		System.out.println("mypageUpdateResult userInfo.getUser_id()->"+userInfo.getUser_id());
 		String attach_path = "upload";	// 파일경로
@@ -301,6 +312,11 @@ public class MkhController {
 		System.out.println("result->"+result);
 		if(result == 1) {
 			System.out.println("수정성공");
+			// 이미지 update가 성공하면 세션정보 최신화
+			// kjo 서비스 내에 findID메소드를 사용
+			UserInfo us = uis.findbyuserId(userInfo);
+			// 세션정보 최신화
+			request.getSession().setAttribute("userInfo", us);
 			return "redirect:/mypage_main";
 		} else {
 			System.out.println("수정실패");
@@ -379,7 +395,7 @@ public class MkhController {
  		
  		//검색 분류코드 가져오기
 		Code code = new Code();
-		code.setTable_name("MYPOST");
+		code.setTable_name("MYPOST_BOARD");
 		code.setField_name("MYPOST_CATEGORY");
 		//-----------------------------------------------------
 		List<Code> search_codelist = mkhService.codeList(code);
@@ -403,63 +419,74 @@ public class MkhController {
 	// 내가 쓴 댓글
 	@RequestMapping(value = "mypost_comment_list")
 	public String mypostCommentList(@RequestParam(defaultValue = "1") String currentPage
-									, HttpServletRequest request, Model model) {
+									, HttpServletRequest request, Model model, PrjBdData prjBdData) {
 		System.out.println("MkhController mypostCommentList Start..");
 		// userInfo 세션값 받아와서 userInfoDTO로 사용
 	    UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
 	    
+	    prjBdData.setUser_id(userInfoDTO.getUser_id());
 	    // All Comment Count
-	    int totalComt = mkhService.totalComt(userInfoDTO);
+	    int totalComt = mkhService.totalComt(prjBdData);
 		System.out.println("totalComt->"+totalComt);
 		model.addAttribute("totalComt", totalComt);
-	    
+
+	  	/* 내가 쓴 댓글 출력  */
 		// paging 작업
-		PrjBdData prjBdData = new PrjBdData();
-		prjBdData.setUser_id(userInfoDTO.getUser_id());
-		
 	  	Paging page = new Paging(totalComt, currentPage);
 	  	prjBdData.setStart(page.getStart());
 	  	prjBdData.setEnd(page.getEnd());
 	  	model.addAttribute("page", page);
+	  	
+	  	//검색 분류코드 가져오기
+  		Code code = new Code();
+  		code.setTable_name("MYPOST_COMMENT");
+  		code.setField_name("MYPOST_CATEGORY");
+  		//-----------------------------------------------------
+  		List<Code> search_codelist = mkhService.codeList(code);
+  		//-----------------------------------------------------
+  		model.addAttribute("search", prjBdData.getSearch()); //검색필드
+  		model.addAttribute("keyword", prjBdData.getKeyword()); //검색어
+  		model.addAttribute("search_codelist", search_codelist); //검색 분류
 	    
-	  	/* 내가 쓴 댓글 출력  */
  		List<BdDataComt> selectAllComt = mkhService.selectAllComt(prjBdData);
  		model.addAttribute("selectAllComt", selectAllComt);
- 		System.out.println("MkhController selectAllComt.get(0).getComment_doc_no()->"+selectAllComt.get(0).getComment_doc_no());
- 		
- 		System.out.println("app_id : " + selectAllComt.get(0).getDoc_no());
- 		System.out.println("app_name : " + selectAllComt.get(0).getApp_name());
- 		System.out.println("Subject : " + selectAllComt.get(0).getComment_context());
 	  	
 		return "mypost/mypost_comment_list";
 	}
 	
 	// 내가 추천한 게시글
 	@RequestMapping(value = "mypost_good_list")
-	public String mypostGoodList(HttpServletRequest request, Model model, String currentPage) {
+	public String mypostGoodList(HttpServletRequest request, Model model, String currentPage, PrjBdData prjBdData) {
 		System.out.println("MkhController mypostGoodList Start..");
 		// userInfo 세션값 받아와서 userInfoDTO로 사용
 	    UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
-	    
+
+		prjBdData.setUser_id(userInfoDTO.getUser_id());
 	    // All Good Count
-	    int totalGood = mkhService.totalGood(userInfoDTO);
+	    int totalGood = mkhService.totalGood(prjBdData);
 		System.out.println("totalGood->"+totalGood);
 		model.addAttribute("totalGood", totalGood);
-	    
+
+	  	/* 내가 추천한 게시글 출력  */
 		// paging 작업
-		PrjBdData prjBdData = new PrjBdData();
-		prjBdData.setUser_id(userInfoDTO.getUser_id());
-		
 	  	Paging page = new Paging(totalGood, currentPage);
 	  	prjBdData.setStart(page.getStart());
 	  	prjBdData.setEnd(page.getEnd());
 	  	model.addAttribute("page", page);
+	  	
+	  	//검색 분류코드 가져오기
+  		Code code = new Code();
+  		code.setTable_name("MYPOST_BOARD");
+  		code.setField_name("MYPOST_CATEGORY");
+  		//-----------------------------------------------------
+  		List<Code> search_codelist = mkhService.codeList(code);
+  		//-----------------------------------------------------
+  		model.addAttribute("search", prjBdData.getSearch()); //검색필드
+  		model.addAttribute("keyword", prjBdData.getKeyword()); //검색어
+  		model.addAttribute("search_codelist", search_codelist); //검색 분류
 	    
-	  	/* 내가 추천한 게시글 출력  */
  		List<BdDataGood> selectAllGood = mkhService.selectAllGood(prjBdData);
  		model.addAttribute("selectAllGood", selectAllGood);
- 		
- 		System.out.println("app_id : " + selectAllGood.get(0).getDoc_no());
 		
 		return "mypost/mypost_good_list";
 	}

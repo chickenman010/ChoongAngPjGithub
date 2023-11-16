@@ -26,9 +26,11 @@ public class UserInfo {
 	private int		class_id;
 	private int		project_id;
 	@NotBlank(message = "비밀번호를 입력해 주세요.")
-	@Size(min = 8, max = 20, message = "비밀번호는 8자 이상 20자 이하로 입력해주세요.")
-	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\\\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\\\\d~!@#$%^&*()+|=]{8,20}$", message = "적어도 하나의 숫자와 영문자 그리고 특수기호가 포함되어야 합니다.")
+//	@Size(min = 8, max = 20, message = "비밀번호는 8자 이상 20자 이하로 입력해주세요.")
+//	@Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,20}$", message = "적어도 하나의 숫자와 영문자 그리고 특수문자가 포함되어야 합니다.")
 	private String 	user_pw;
+	@NotBlank(message = "이름을 입력해 주세요.")
+	@Size(min = 1, max = 10, message = "2자 이상 10자 이하로 입력해주세요.")
 	private String 	user_name;
 	private String 	user_gender;
 	@Pattern(regexp = "(01[016789])[-]?(\\d{3,4})[-]?(\\d{4})", message = "휴대폰 번호 바르게 입력해 주세요.")

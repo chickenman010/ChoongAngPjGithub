@@ -62,17 +62,47 @@
 			<!------------------------------ //개발자 소스 입력 START ------------------------------->
 	  		<div class="container-fluid">
 					<p>
-					<h3>내가 쓴 댓글 :  ${totalComt }개</h3>
+					<h3>내가 쓴 댓글 </h3>
 					<%-- <h3>내가 쓴 Q&A 게시글 : ${totalComt } 개</h3>
 					<h3>내가 쓴 공용 게시글 : ${totalBdFree } 개</h3>
 					<h3>내가 쓴 PJ& 공지자료 게시글 : ${totalDtPrj } 개</h3>
 					<h3>내가 쓴 업무보고 게시글 : ${totalRepPrj } 개</h3> --%>
 					<p>
-					<table>
+					<table width="100%" style="margin-top:20px;height:45px">
 						<tr>
-							<td><button type="button" class="btn btn-secondary btn-sm" onclick="goto('project_board_data_write.html')">작성</button></td>
+							<td align="right">
+								<form action="mypost_comment_list">
+									<table>
+										<tr>
+											<td>
+												<select class="form-select" name="search" style="font-size:0.8rem">
+													<c:forEach var="code" items="${search_codelist}">
+														<option value="${code.cate_code}">${code.cate_name}</option>
+													</c:forEach>
+												</select>
+											</td>
+											<td><input type="text" class="form-control me-2" style="font-size:0.8rem" name="keyword" placeholder="검색어를 입력하세요" required="required"></td>
+											<td><button type="submit" class="btn btn-primary btn-sm">검색</button></td>
+										</tr>
+									</table>
+								</form>	
+							</td>
+						</tr>
+					</table>						
+					<table width="100%">
+						<tr>
+							<td width="*" style="text-align:right">
+								<c:if test="${not empty keyword}">								
+									<a href="mypost_comment_list"><img src="/common/images/btn_icon_delete2.png" width="18" height="19" style="vertical-align:bottom"></a> 
+									검색어( <c:forEach var="code" items="${search_codelist}"><c:if test="${code.cate_code == search}">${code.cate_name}</c:if></c:forEach> = ${keyword} ) 
+									<img src="/common/images/icon_search.png" width="14" height="14" style="vertical-align:bottom"> 검색 건수
+								</c:if>
+								<c:if test="${keyword eq null}">총 건수</c:if>
+								 : ${totalComt}
+							</td>
 						</tr>
 					</table>
+					
 					<table class="table table-hover">
 						<thead>
 							<tr>
@@ -137,7 +167,7 @@
 					</table>
 					
 					<!-- 페이징 작업 -->
-					<c:if test="${page.startPage > page.pageBlock }">
+					<%-- <c:if test="${page.startPage > page.pageBlock }">
 						<a href="mypost_comment_list?currentPage=${page.startPage - page.pageBlock }">[이전]</a>
 					</c:if>
 					
@@ -147,7 +177,21 @@
 					
 					<c:if test="${page.endPage < page.totalPage }">
 						<a href="mypost_comment_list?currentPage=${page.startPage + page.pageBlock }">[다음]</a>
+					</c:if> --%>
+					
+					<c:if test="${page.startPage > page.pageBlock}">
+					   	<li class="page-item disabled"><a class="page-link" href="javascript:gotoPage('${page.startPage-page.pageBlock}')" tabindex="-1" aria-disabled="true">Previous</a></li>
 					</c:if>
+				    <c:forEach var="i" begin="${page.startPage}" end="${page.endPage}">
+						<c:choose>
+							<c:when test="${page.currentPage==i}"><li class="page-item active"></c:when>
+							<c:otherwise><li class="page-item"></c:otherwise>
+						</c:choose>
+						<a class="page-link" href="javascript:gotoPage('${i}')">${i}</a></li>
+					</c:forEach>						
+				    <c:if test="${page.endPage > page.totalPage}">
+				    	<li class="page-item"><a class="page-link" href="javascript:gotoPage('${page.startPage+page.pageBlock}')">Next</a></li>
+				    </c:if>
 
 				</div>
 	  		

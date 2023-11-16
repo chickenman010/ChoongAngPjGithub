@@ -65,7 +65,7 @@
 			<!------------------------------ //개발자 소스 입력 START ------------------------------->
 	  		<div id="test">
                 <div id="admin_page_list">
-	                <div class="btn btn-primary">내가 쓴 전체 게시글 ${totalBDCount }</div>
+	                <div class="btn btn-primary">내가 쓴 전체 게시글 </div>
                     <!-- <div class="btn btn-secondary" onclick="location.href='/admin_projectmanager'">내가 쓴 Q&A 게시글</div>
                     <div class="btn btn-secondary" onclick="location.href='/admin_board'">내가 쓴 공용 게시글</div>
                     <div class="btn btn-secondary" onclick="location.href='/admin_approval'">내가 쓴 PJ& 공지자료 게시글</div>
@@ -96,7 +96,7 @@
 					<tr>
 						<td width="*" style="text-align:right">
 							<c:if test="${not empty keyword}">								
-								<a href="prj_board_data_list"><img src="/common/images/btn_icon_delete2.png" width="18" height="19" style="vertical-align:bottom"></a> 
+								<a href="mypost_board_list"><img src="/common/images/btn_icon_delete2.png" width="18" height="19" style="vertical-align:bottom"></a> 
 								검색어( <c:forEach var="code" items="${search_codelist}"><c:if test="${code.cate_code == search}">${code.cate_name}</c:if></c:forEach> = ${keyword} ) 
 								<img src="/common/images/icon_search.png" width="14" height="14" style="vertical-align:bottom"> 검색 건수
 							</c:if>

@@ -25,9 +25,9 @@ public interface MkhService {
 	int                updateUser(UserInfo userInfo);
 	int                updateEnv(UserEnv userEnv);
 	List<PrjBdData>    bdSelectAll(PrjBdData prjBdData);
-	int                totalComt(UserInfo userInfoDTO);
+	int                totalComt(PrjBdData prjBdData);
 	List<BdDataComt>   selectAllComt(PrjBdData prjBdData);
-	int                totalGood(UserInfo userInfoDTO);
+	int                totalGood(PrjBdData prjBdData);
 	List<BdDataGood>   selectAllGood(PrjBdData prjBdData);
 	List<Code>         codeList(Code code);
 	

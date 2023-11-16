@@ -18,7 +18,6 @@ import com.oracle.s202350101.model.PrjBdData;
 import com.oracle.s202350101.model.PrjBdRep;
 import com.oracle.s202350101.model.UserEnv;
 import com.oracle.s202350101.model.UserInfo;
-
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -56,10 +55,10 @@ public class MkhServiceImpl implements MkhService {
 				System.out.println("★검색 SearchKeyword---->"+prjBdData.getKeyword());
 				//검색 건수 가져오기
 				//------------------------------------------
-				totalCnt = mkhdao.searchCount(prjBdData);
+				totalCnt = mkhdao.searchDBCount(prjBdData);
 				//------------------------------------------
-				System.out.println("JmhServiceImpl totalCount totalCnt->" + totalCnt);
-				System.out.println("JmhServiceImpl totalCount END...");
+				System.out.println("MkhServiceImpl totalBDcount totalCnt->" + totalCnt);
+				System.out.println("MkhServiceImpl totalBDcount END...");
 				return totalCnt;
 			}
 		}
@@ -67,8 +66,8 @@ public class MkhServiceImpl implements MkhService {
 		totalCnt = mkhdao.totalBDcount(prjBdData);
 		//------------------------------------------
 
-		System.out.println("JmhServiceImpl totalCount totalCnt->" + totalCnt);
-		System.out.println("JmhServiceImpl totalCount END...");
+		System.out.println("MkhServiceImpl totalBDcount totalCnt->" + totalCnt);
+		System.out.println("MkhServiceImpl totalBDcount END...");
 		
 
 		return totalCnt;
@@ -145,7 +144,7 @@ public class MkhServiceImpl implements MkhService {
 		if(prjBdData.getKeyword() != null) {
 			if(!prjBdData.getKeyword().equals("")) {
 				//-----------------------------------------------
-				selectAll = mkhdao.searchList(prjBdData);
+				selectAll = mkhdao.searchBDList(prjBdData);
 				//-----------------------------------------------
 				System.out.println("MkhServiceImpl boardList > searchList END...");
 				return selectAll;
@@ -158,27 +157,80 @@ public class MkhServiceImpl implements MkhService {
 	}
 
 	@Override
-	public int totalComt(UserInfo userInfoDTO) {
+	public int totalComt(PrjBdData prjBdData) {
 		System.out.println("MkhServiceImpl totalComt Start...");
-		int totalComt = mkhdao.totalComt(userInfoDTO);
+		int totalComt = 0;
+		
+		if(prjBdData.getKeyword() != null) {
+			System.out.println("★검색 Search---->"+prjBdData.getSearch());
+			if(!prjBdData.getKeyword().equals("")) {
+				System.out.println("★검색 SearchKeyword---->"+prjBdData.getKeyword());
+				//검색 건수 가져오기
+				//------------------------------------------
+				totalComt = mkhdao.searchComtCount(prjBdData);
+				//------------------------------------------
+				System.out.println("MkhServiceImpl searchComtCount ->" + totalComt);
+				System.out.println("MkhServiceImpl searchComtCount END...");
+				return totalComt;
+			}
+		}
+		//------------------------------------------
+		totalComt = mkhdao.totalComt(prjBdData);
+		//------------------------------------------
 
+		System.out.println("MkhServiceImpl totalCount totalCnt->" + totalComt);
+		System.out.println("MkhServiceImpl totalCount END...");
+		
 		return totalComt;
 	}
 
 	@Override
 	public List<BdDataComt> selectAllComt(PrjBdData prjBdData) {
+		
 		List<BdDataComt> selectAllComt = null;
 		System.out.println("MkhServiceImpl selectAllComt Start...");
+		if(prjBdData.getKeyword() != null) {
+			if(!prjBdData.getKeyword().equals("")) {
+				//-----------------------------------------------
+				selectAllComt = mkhdao.searchComtList(prjBdData);
+				//-----------------------------------------------
+				System.out.println("MkhServiceImpl boardList > searchList END...");
+				return selectAllComt;
+			}
+		}
 		selectAllComt = mkhdao.selectAllComt(prjBdData);
-		System.out.println("MkhServiceImpl selectAllComt.size()->" +selectAllComt.size());
+		System.out.println("MkhServiceImpl bdSelectAll.size()->" +selectAllComt.size());
 		
 		return selectAllComt;
+		
+		
 	}
 
 	@Override
-	public int totalGood(UserInfo userInfoDTO) {
+	public int totalGood(PrjBdData prjBdData) {
 		System.out.println("MkhServiceImpl totalGood Start...");
-		int totalGood = mkhdao.totalGood(userInfoDTO);
+		int totalGood = 0;
+		
+		if(prjBdData.getKeyword() != null) {
+			System.out.println("★검색 Search---->"+prjBdData.getSearch());
+			if(!prjBdData.getKeyword().equals("")) {
+				System.out.println("★검색 SearchKeyword---->"+prjBdData.getKeyword());
+				//검색 건수 가져오기
+				//------------------------------------------
+				totalGood = mkhdao.searchGoodCount(prjBdData);
+				//------------------------------------------
+				System.out.println("MkhServiceImpl searchGoodCount ->" + totalGood);
+				System.out.println("MkhServiceImpl searchGoodCount END...");
+				return totalGood;
+			}
+		}
+		//------------------------------------------
+		totalGood = mkhdao.totalGood(prjBdData);
+		//------------------------------------------
+
+		System.out.println("MkhServiceImpl totalCount totalCnt->" + totalGood);
+		System.out.println("MkhServiceImpl totalCount END...");
+		
 
 		return totalGood;
 	}
@@ -187,6 +239,13 @@ public class MkhServiceImpl implements MkhService {
 	public List<BdDataGood> selectAllGood(PrjBdData prjBdData) {
 		List<BdDataGood> selectAllGood = null;
 		System.out.println("MkhServiceImpl selectAllGood Start...");
+		if(prjBdData.getKeyword() != null) {
+			if(!prjBdData.getKeyword().equals("")) {
+				selectAllGood = mkhdao.searchGoodList(prjBdData);
+				
+				return selectAllGood;
+			}
+		}
 		selectAllGood = mkhdao.selectAllGood(prjBdData);
 		System.out.println("MkhServiceImpl selectAllGood.size()->" +selectAllGood.size());
 		
@@ -204,5 +263,5 @@ public class MkhServiceImpl implements MkhService {
 		return reCodeList;
 	}
 
-
+	
 }
