@@ -173,7 +173,11 @@ public class MkhController {
 	public String writeUserInfo(HttpServletRequest request
 							  , @RequestParam(value = "file1", required = false)MultipartFile file1
 							  , @ModelAttribute("userInfo") @Valid UserInfo userInfo
-							  , BindingResult bindingResult, Model model)
+							  , BindingResult bindingResult, Model model
+							  , String sample6_postcode
+							  , String sample6_address
+							  , String sample6_detailAddress
+							  , String sample6_extraAddress)
 									  throws IOException {
 		System.out.println("MkhController writeUserInfo Start...");
 		// Validation 오류시 결과
@@ -185,6 +189,11 @@ public class MkhController {
 			model.addAttribute("userInfo", userInfo);
 		}
 		
+		// 주소
+		String user_address = sample6_postcode +"~"+ sample6_address +"~"+ sample6_detailAddress + sample6_extraAddress;
+		System.out.println("user_address->"+ user_address);
+		userInfo.setUser_address(user_address);	
+
 		// 이미지파일 업로드
 		String attach_path = "upload";	// 파일경로
 		
@@ -246,27 +255,56 @@ public class MkhController {
 		System.out.println("userInfoDTO.getUser_id()->"+userInfoDTO.getUser_id());
 		System.out.println("userInfoDTO.getUser_pw()->"+userInfoDTO.getUser_pw());
 		
-		// 수정 페이지에서 받은 값들
-		System.out.println("user_id->"+userInfo.getUser_id());
-		System.out.println("user_pw->"+userInfo.getUser_pw());
+		// 주소값 slice
+		System.out.println("userInfoDTO.getUser_address()->"+userInfoDTO.getUser_address());
+		String address = userInfoDTO.getUser_address();
+		System.out.println("address -> " + address);
+		
+		String[] addressList = address.split("~");
+		
+		String sample6_postcode = addressList[0];
+		String sample6_address = addressList[1];
+		String addressdetail = addressList[2];
+
+		String[] addressdetailList = addressdetail.split("\\(");
+		
+		String sample6_detailAddress = addressdetailList[0];
+		String sample6_extraAddress = "(" + addressdetailList[1];
+
+		model.addAttribute("postcode", sample6_postcode);
+		model.addAttribute("address", sample6_address);
+		model.addAttribute("detailAddress", sample6_detailAddress);
+		model.addAttribute("extraAddress", sample6_extraAddress);
 		
 		// 반 목록 출력
 		List<ClassRoom> classList = mkhService.createdClass();
+		// validation 에러처리 하기 위해 modelAttribute="userInfo"로 보내기 위해 new
 		UserInfo userinfo = new UserInfo();
 		model.addAttribute("userInfo", userinfo);
 		model.addAttribute("classList", classList);
 		
-		userInfoDTO = mkhService.userLoginCheck(userInfo);
-		if(userInfoDTO == null) {
-			System.out.println("인증 실패");
+		// 수정 페이지에서 받은 값들
+		System.out.println("user_id->"+userInfo.getUser_id());
+		System.out.println("user_pw->"+userInfo.getUser_pw());
+		
+		if(!userInfo.getUser_id().equals(userInfoDTO.getUser_id()) || 
+		   !userInfo.getUser_pw().equals(userInfoDTO.getUser_pw())) {
+			System.out.println("아이디와 비밀번호 재확인 인증 실패");
 			model.addAttribute("msg", "ID와 PW를 다시 확인해주세요.");
 			return "forward:/mypage_check_pw";
 		} else {
-			System.out.println("인증 성공");
-			session.setAttribute("userInfoDTO", userInfoDTO);
-			return "mypage/mypage_update";
+			// 재확인 인증 성공시 로직으로 검증
+			userInfoDTO = mkhService.userLoginCheck(userInfo);
+			if(userInfoDTO == null) {
+				System.out.println("인증 실패");
+				model.addAttribute("msg", "ID와 PW를 다시 확인해주세요.");
+				return "forward:/mypage_check_pw";
+			} else {
+				System.out.println("인증 성공");
+				session.setAttribute("userInfoDTO", userInfoDTO);
+				return "mypage/mypage_update";
+			}
 		}
-		
 	}
 	
 	// 수정페이지 이미지첨부 + update
@@ -281,6 +319,7 @@ public class MkhController {
 
 		if(bindingResult.hasErrors()) {
 			System.out.println("validation 에러 발생");
+			// 에러 발생해도 반 목록 출력
 			List<ClassRoom> classList = mkhService.createdClass();
 			model.addAttribute("classList", classList);
 			
@@ -535,6 +574,7 @@ public class MkhController {
 	public String userFindPwAuth(String user_id, String auth_email) {
 		System.out.println("MkhController userFindPwAuth Start..");
 		
+//		String auth_email = auth_email;
 		System.out.println("userFindPwAuth userId->"+user_id);
 		System.out.println("auth_email->"+auth_email);
 		
@@ -547,8 +587,10 @@ public class MkhController {
 			if(auth_email.equals(userInfo.getUser_email())) {
 				System.out.println("이메일 주소가 같음");
 				return "1";
+			} else if (auth_email.equals("")) {
+				System.out.println("이메일 주소 없음");
+				return "3";
 			} else {
-				System.out.println("이메일 주소 다름");
 				return "0";
 			}
 		} else {
@@ -557,6 +599,7 @@ public class MkhController {
 		}
 
 	}
+
 	
 	// 이메일 값 가져옴 + 이메일 전송
 	@ResponseBody

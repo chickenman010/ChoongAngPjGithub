@@ -12,19 +12,71 @@
 <!-- CSS END -->
 
 <!-- JS START -->
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript">
+
+	/* 주소 API */
+	function sample6_execDaumPostcode() {
+	    new daum.Postcode({
+	        oncomplete: function(data) {
+	            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+	
+	            // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+	            // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+	            var addr = ''; // 주소 변수
+	            var extraAddr = ''; // 참고항목 변수
+	
+	            //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+	            if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+	                addr = data.roadAddress;
+	            } else { // 사용자가 지번 주소를 선택했을 경우(J)
+	                addr = data.jibunAddress;
+	            }
+	
+	            // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+	            if(data.userSelectedType === 'R'){
+	                // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+	                // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+	                if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+	                    extraAddr += data.bname;
+	                }
+	                // 건물명이 있고, 공동주택일 경우 추가한다.
+	                if(data.buildingName !== '' && data.apartment === 'Y'){
+	                    extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+	                }
+	                // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+	                if(extraAddr !== ''){
+	                    extraAddr = ' (' + extraAddr + ')';
+	                }
+	                // 조합된 참고항목을 해당 필드에 넣는다.
+	                document.getElementById("sample6_extraAddress").value = extraAddr;
+	            
+	            } else {
+	                document.getElementById("sample6_extraAddress").value = '';
+	            }
+	
+	            // 우편번호와 주소 정보를 해당 필드에 넣는다.
+	            document.getElementById('sample6_postcode').value = data.zonecode;
+	            document.getElementById("sample6_address").value = addr;
+	            // 커서를 상세주소 필드로 이동한다.
+	            document.getElementById("sample6_detailAddress").focus();
+	        }
+	    }).open();
+	}
 	
 	/* 비밀번호 확인 */
 	$(document).ready(function(){
-		$("#user_pw2").blur(function(){
-			if($("#user_pw2").val() == $("#user_pw1").val()){
-				$(".successPwChk").text("비밀번호가 일치합니다.");
-				$(".successPwChk").css("color", "green");
-				$("#pwDoubleChk").val("true");
-			}else{
-				$(".successPwChk").text("비밀번호가 일치하지 않습니다.");
-				$(".successPwChk").css("color", "red");
-				$("#pwDoubleChk").val("false");
+		$("#userpasschk").blur(function(){
+			if($("#userpasschk").val() != "" && $("#userpass").val() != ""){
+				if($("#userpasschk").val() == $("#userpass").val()){
+					$(".successPwChk").text("비밀번호가 일치합니다.");
+					$(".successPwChk").css("color", "green");
+					$("#pwDoubleChk").val("true");
+				}else{
+					$(".successPwChk").text("비밀번호가 일치하지 않습니다.");
+					$(".successPwChk").css("color", "red");
+					$("#pwDoubleChk").val("false");
+				}
 			}
 		});
 	});
@@ -47,6 +99,49 @@
 					$("#Confirm").attr("value", data);
 				}
 			});
+			
+			/* 메일 타이머 */
+			var timer = null;
+			var isRunning = false;
+			$(function(){
+				    $(".timerButton").click(function(e){
+				    	var display = $('.time');
+				    	var leftSec = 10;
+				    	// 남은 시간
+				    	// 이미 타이머가 작동중이면 중지
+				    	if (isRunning){
+				    		clearInterval(timer);
+				    		display.html("");
+				    		startTimer(leftSec, display);
+				    	}else{
+				    	startTimer(leftSec, display);
+			    		
+			    		}
+			    	});
+			})
+			    
+			function startTimer(count, display) {
+			            
+			    		var minutes, seconds;
+			            timer = setInterval(function () {
+			            minutes = parseInt(count / 60, 10);
+			            seconds = parseInt(count % 60, 10);
+			     
+			            minutes = minutes < 10 ? "0" + minutes : minutes;
+			            seconds = seconds < 10 ? "0" + seconds : seconds;
+			     
+			            display.html(minutes + ":" + seconds);
+			     
+			            // 타이머 끝
+			            if (--count < 0) {
+			    	     clearInterval(timer);
+			    	     display.html("다시 인증해 주세요");
+			    	     $('.confirmBtn').attr("disabled","disabled");
+			    	     isRunning = false;
+			            }
+			        }, 1000);
+			             isRunning = true;
+			}
 		}
 	}
 	
@@ -68,7 +163,7 @@
 			return true;
 		}
 	}
-	
+
 
 </script>
 
@@ -176,10 +271,11 @@
 				    	<th>이메일(*) : </th>
 					    <td>
 					    	<input type="email" name="user_email" id="user_email" value="${userInfoDTO.user_email }" placeholder="ID@Email.com">
-	           			  	<input type="button" value="수정" onclick="return send_save_mail()">
+	           			  	<input class="timerButton" type="button" value="수정" onclick="return send_save_mail()">
 	           			  	<div id="mail_number" name="mail_number" style="display: none">
 							    <input type="text" name="number" id="number" placeholder="인증번호 입력">
-							    <button type="button" name="confirmBtn" id="confirmBtn" onclick="return confirm_authNumber()">확인</button>
+							    <button class="confirmBtn" name="confirmBtn" id="confirmBtn" onclick="return confirm_authNumber()">확인</button>
+							    <small style="color: red"><div class="time"></div></small>
 					    		<small style="color: red"><div id="msg2"></div></small>
 					    		<small style="color: red"><form:errors path="user_email"/></small>
 					    		<input type="hidden" id="Confirm" value="">
@@ -188,7 +284,13 @@
            			</tr>
 					<tr><th>주소</th>
 						<td>
-						<input type="text" name="user_address" value="${userInfoDTO.user_address }">
+							<input type="text" name="sample6_postcode" id="sample6_postcode" value="${postcode }" placeholder="우편번호">
+							<input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"><br>
+							<input type="text" name="sample6_address" id="sample6_address" value="${address }" placeholder="주소"><br>
+							<input type="text" name="sample6_detailAddress" id="sample6_detailAddress" value="${detailAddress }" placeholder="상세주소">
+							<input type="text" name="sample6_extraAddress" id="sample6_extraAddress" value="${extraAddress }" placeholder="참고항목">
+							
+		            		<input type="hidden" name="user_address" value="${userInfo.user_address}"><p>
 						</td>
 					</tr>
 					<tr><td colspan="2">

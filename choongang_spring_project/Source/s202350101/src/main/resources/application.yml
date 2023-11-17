@@ -14,10 +14,6 @@ spring:
     url: jdbc:oracle:thin:@localhost:1521/xe
     username: s202350101_mkh
     password: tiger
-    
-  redis:
-    host: localhost
-    port: 6379
 
 # JPA Setting
   jpa:

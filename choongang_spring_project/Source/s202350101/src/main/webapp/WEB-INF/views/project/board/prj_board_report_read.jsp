@@ -97,15 +97,15 @@ function drawCommentList(comments){
 		$("#divCommentCount").html("댓글 : " + comments.length.toString());
 		$("#divCommentCount").show();
 	}
-	 var params = getUrlParams(); //common.js안 정의
-	   if(params.comment_doc_no != null) {
-	      var comment_doc_no = params.comment_doc_no;
-	      var offset = $("#comment_"+comment_doc_no).offset(); //선택한 태그의 위치를 반환
-	      //animate()메서드를 이용해서 선택한 태그의 스크롤 위치를 지정해서 0.4초 동안 부드럽게 해당 위치로 이동함
-	      $('html').animate({scrollTop : offset.top}, 400);
-	      $('html, body').animate({scrollTop : offset.top}, 400); 
-	   }
-
+	
+	var params = getUrlParams(); //common.js안 정의
+	if(params.comment_doc_no != null) {
+		var comment_doc_no = params.comment_doc_no;
+		var offset = $("#comment_"+comment_doc_no).offset(); //선택한 태그의 위치를 반환
+		//animate()메서드를 이용해서 선택한 태그의 스크롤 위치를 지정해서 0.4초 동안 부드럽게 해당 위치로 이동함
+		$('html, body').animate({scrollTop : offset.top}, 400);
+		$("#comment_"+comment_doc_no).css('backgroundColor', '#fff3cd');
+	}
 }
 
 //댓글 삭제
@@ -147,7 +147,7 @@ $(function(){
 			<div class="container-fluid">
 					<form action="" method="post" enctype="multipart/form-data">
 						<div style="margin-top:20px;height:34px">
-							<h3>문서 조회</h3>
+							<span class="apptitle">문서 조회</span>
 						</div>
 						<table width="100%" style="margin-top:10px">
 							<tr>

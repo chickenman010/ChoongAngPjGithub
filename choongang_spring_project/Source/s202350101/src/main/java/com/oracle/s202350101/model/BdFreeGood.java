@@ -21,4 +21,5 @@ public class BdFreeGood {
 	private String  bd_count;
 	private String  good_count;
 	private int 	project_id;
+	
 }
