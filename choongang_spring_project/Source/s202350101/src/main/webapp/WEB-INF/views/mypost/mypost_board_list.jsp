@@ -190,31 +190,23 @@
 	  		
 	  		
 			<!-- 페이징 작업 -->
-			<%-- <c:if test="${page.startPage > page.pageBlock }">
-				<a href="mypost_board_list?currentPage=${page.startPage - page.pageBlock }">[이전]</a>
-			</c:if>
-			
-			<c:forEach var="a" begin="${page.startPage }" end="${page.endPage }">
-				<a href="mypost_board_list?currentPage=${a }">[${a }]</a>
-			</c:forEach>
-			
-			<c:if test="${page.endPage < page.totalPage }">
-				<a href="mypost_board_list?currentPage=${page.startPage + page.pageBlock }">[다음]</a>
-			</c:if> --%>
-			
-			<c:if test="${page.startPage > page.pageBlock}">
-			   	<li class="page-item disabled"><a class="page-link" href="javascript:gotoPage('${page.startPage-page.pageBlock}')" tabindex="-1" aria-disabled="true">Previous</a></li>
-			</c:if>
-		    <c:forEach var="i" begin="${page.startPage}" end="${page.endPage}">
-				<c:choose>
-					<c:when test="${page.currentPage==i}"><li class="page-item active"></c:when>
-					<c:otherwise><li class="page-item"></c:otherwise>
-				</c:choose>
-				<a class="page-link" href="javascript:gotoPage('${i}')">${i}</a></li>
-			</c:forEach>						
-		    <c:if test="${page.endPage > page.totalPage}">
-		    	<li class="page-item"><a class="page-link" href="javascript:gotoPage('${page.startPage+page.pageBlock}')">Next</a></li>
-		    </c:if>
+			<nav aria-label="Page navigation example">
+			  <ul class="pagination justify-content-center">
+				<c:if test="${page.startPage > page.pageBlock}">
+				   	<li class="page-item disabled"><a class="page-link" href="javascript:gotoPage('${page.startPage-page.pageBlock}')" tabindex="-1" aria-disabled="true">Previous</a></li>
+				</c:if>
+			    <c:forEach var="i" begin="${page.startPage}" end="${page.endPage}">
+					<c:choose>
+						<c:when test="${page.currentPage==i}"><li class="page-item active"></c:when>
+						<c:otherwise><li class="page-item"></c:otherwise>
+					</c:choose>
+					<a class="page-link" href="javascript:gotoPage('${i}')">${i}</a></li>
+				</c:forEach>						
+			    <c:if test="${page.endPage > page.totalPage}">
+			    	<li class="page-item"><a class="page-link" href="javascript:gotoPage('${page.startPage+page.pageBlock}')">Next</a></li>
+			    </c:if>
+		      </ul>
+			</nav>
 					  
 	  		<!------------------------------ //개발자 소스 입력 END ------------------------------->
 		</main>		
