@@ -46,7 +46,7 @@
 	                }
 	                // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
 	                if(extraAddr !== ''){
-	                    extraAddr = ' (' + extraAddr + ')';
+	                    extraAddr = '(' + extraAddr + ')';
 	                }
 	                // 조합된 참고항목을 해당 필드에 넣는다.
 	                document.getElementById("sample6_extraAddress").value = extraAddr;
@@ -59,12 +59,15 @@
 	            document.getElementById('sample6_postcode').value = data.zonecode;
 	            document.getElementById("sample6_address").value = addr;
 	            // 커서를 상세주소 필드로 이동한다.
+	            document.getElementById("sample6_detailAddress").value = '';
 	            document.getElementById("sample6_detailAddress").focus();
 	        }
 	    }).open();
 	}
 	
 	/* 비밀번호 확인 */
+	let pw_ver = 0;
+	
 	$(document).ready(function(){
 		$("#userpasschk").blur(function(){
 			if($("#userpasschk").val() != "" && $("#userpass").val() != ""){
@@ -72,14 +75,29 @@
 					$(".successPwChk").text("비밀번호가 일치합니다.");
 					$(".successPwChk").css("color", "green");
 					$("#pwDoubleChk").val("true");
+					pw_ver = 1;
+					return true;
 				}else{
 					$(".successPwChk").text("비밀번호가 일치하지 않습니다.");
 					$(".successPwChk").css("color", "red");
 					$("#pwDoubleChk").val("false");
+					return false;
 				}
 			}
 		});
 	});
+	
+	/* 비밀번호 확인 2 */
+	function update_user_info() {
+		let total_ver = pw_ver;
+		
+		if(total_ver == 1) {
+			return true;
+		} else if (pw_ver != 1) {
+			$(".successPwChk").text("비밀번호를 확인해주세요.");
+			return false;
+		}
+	}
 	
 	function send_save_mail() {
 //		alert("클릭!");
@@ -163,6 +181,7 @@
 			return true;
 		}
 	}
+	
 
 
 </script>
@@ -217,7 +236,12 @@
 			<!------------------------------ //개발자 소스 입력 START ------------------------------->
 		    
 		    <h2>개인 정보 수정</h2>
-			<form:form action="mypage_update_result" id="userInfo" method="post" enctype="multipart/form-data" modelAttribute="userInfo">
+			<form:form action="mypage_update_result" 
+					   id="userInfo" 
+					   method="post" 
+					   enctype="multipart/form-data" 
+					   modelAttribute="userInfo"
+					   onsubmit="return update_user_info()">
 				<input type="hidden" name="user_id" value="${userInfoDTO.user_id }">
 				<input type="hidden" name="project_id" value="${userInfoDTO.project_id }">
 				<table>
@@ -231,13 +255,13 @@
 					<tr><th>아이디</th><td>${userInfoDTO.user_id}</td></tr>
 					<tr><th>새 비밀번호(*)</th>
 						<td>
-							<input type="password" id="user_pw1" name="user_pw" placeholder="Password">
+							<input type="password" id="userpass" name="user_pw" placeholder="Password">
 							<small style="color: red"><form:errors path="user_pw"/></small><p>
 						</td>
 					</tr>
 						
 					<tr><th>새 비밀번호 확인(*)</th><td>
-						<input type="password" id="user_pw2" placeholder="Password">
+						<input type="password" id="userpasschk" placeholder="Password">
 							<span class="point successPwChk"></span>
 							<input type="hidden" id="pwDoubleChk"/>
 						</td></tr>
@@ -262,7 +286,7 @@
 						</td>
 					</tr>
 					<tr><th>생년월일</th><td>
-						<input type="date" name="user_birth" value="${userInfoDTO.user_birth }"></td></tr>
+						<input type="date" name="user_birth" value="${user_birth}"></td></tr>
 					<tr><th>성별 : </th><td>
 						남 <input type="radio" name="user_gender" value="M" ${userInfoDTO.user_gender == 'M' ? 'checked' : ''}>
 						여 <input type="radio" name="user_gender" value="F" ${userInfoDTO.user_gender == 'F' ? 'checked' : ''}>
@@ -282,16 +306,64 @@
 					    	</div>
 	           			</td>
            			</tr>
-					<tr><th>주소</th>
+					<%-- <tr>
+						<th>주소</th>
 						<td>
-							<input type="text" name="sample6_postcode" id="sample6_postcode" value="${postcode }" placeholder="우편번호">
-							<input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"><br>
-							<input type="text" name="sample6_address" id="sample6_address" value="${address }" placeholder="주소"><br>
-							<input type="text" name="sample6_detailAddress" id="sample6_detailAddress" value="${detailAddress }" placeholder="상세주소">
-							<input type="text" name="sample6_extraAddress" id="sample6_extraAddress" value="${extraAddress }" placeholder="참고항목">
-							
-		            		<input type="hidden" name="user_address" value="${userInfo.user_address}"><p>
+							<c:if test="${postcode != null}">
+								<input type="text" name="sample6_postcode" id="sample6_postcode" value="${postcode }" placeholder="우편번호">
+						    </c:if>
+						    <input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"><br>
+						    <c:if test="${address != null}">
+								<input type="text" name="sample6_address" id="sample6_address" value="${address }" placeholder="주소"><br>
+						    </c:if>
+						    <c:if test="${detailAddress != null}">
+						    	<input type="text" name="sample6_detailAddress" id="sample6_detailAddress" value="${detailAddress }" placeholder="상세주소">
+						    </c:if>
+						    <c:if test="${extraAddress != null}">
+								<input type="text" name="sample6_extraAddress" id="sample6_extraAddress" value="${extraAddress }" placeholder="참고항목">
+						    </c:if>
+						    <c:if test="${userInfo.user_address != null}">
+								<input type="hidden" name="user_address" value="${userInfo.user_address}"><p>
+						    </c:if>
+						    
 						</td>
+					</tr> --%>
+					<tr>
+					    <th>주소</th>
+					    <td>
+					       	<c:set var="sample6_postcode_value" value="${empty postcode ? '' : postcode}" />
+							<input type="text" name="sample6_postcode" id="sample6_postcode" value="${sample6_postcode_value}" placeholder="우편번호">
+					       	
+					        <input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"><br>
+					        
+					        <c:set var="sample6_address_value" value="${empty address ? '' : address}" />
+							<input type="text" name="sample6_address" id="sample6_address" value="${sample6_address_value}" placeholder="주소">
+					        
+							<c:set var="sample6_detailAddress_value" value="${empty detailAddress ? '' : detailAddress}" />
+							<input type="text" name="sample6_detailAddress" id="sample6_detailAddress" value="${sample6_detailAddress_value}" placeholder="상세주소">
+					        
+					        <c:set var="sample6_extraAddress_value" value="${empty extraAddress ? '' : extraAddress}" />
+							<input type="text" name="sample6_extraAddress" id="sample6_extraAddress" value="${sample6_extraAddress_value}" placeholder="참고항목">
+					        
+					        <%-- <c:if test="${address != null}">
+					            <input type="text" name="sample6_address" id="sample6_address" value="${address }" placeholder="주소"><br>
+					        </c:if>
+								<input type="text" name="sample6_address" id="sample6_address" value="" placeholder="주소"><br>
+								
+					        <c:if test="${detailAddress != null}">
+					            <input type="text" name="sample6_detailAddress" id="sample6_detailAddress" value="${detailAddress }" placeholder="상세주소">
+					        </c:if>
+								<input type="text" name="sample6_detailAddress" id="sample6_detailAddress" value="" placeholder="상세주소">
+					
+					        <c:if test="${extraAddress != null}">
+					            <input type="text" name="sample6_extraAddress" id="sample6_extraAddress" value="${extraAddress }" placeholder="참고항목">
+					        </c:if>
+								<input type="text" name="sample6_extraAddress" id="sample6_extraAddress" value="" placeholder="참고항목"> --%>
+					
+					        <c:if test="${userInfo.user_address != null}">
+					            <input type="hidden" name="user_address" value="${userInfo.user_address}">
+					        </c:if>
+					    </td>
 					</tr>
 					<tr><td colspan="2">
 						<input type="submit" value="수정">

@@ -2,7 +2,9 @@ package com.oracle.s202350101.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -174,10 +176,9 @@ public class MkhController {
 							  , @RequestParam(value = "file1", required = false)MultipartFile file1
 							  , @ModelAttribute("userInfo") @Valid UserInfo userInfo
 							  , BindingResult bindingResult, Model model
-							  , String sample6_postcode
-							  , String sample6_address
-							  , String sample6_detailAddress
-							  , String sample6_extraAddress)
+							  , String sample6_postcode		, String sample6_address
+							  , String sample6_detailAddress, String sample6_extraAddress
+							   )
 									  throws IOException {
 		System.out.println("MkhController writeUserInfo Start...");
 		// Validation 오류시 결과
@@ -188,12 +189,23 @@ public class MkhController {
 		} else {
 			model.addAttribute("userInfo", userInfo);
 		}
-		
+		System.out.println("sample6_postcode->"+sample6_postcode);
+		System.out.println("sample6_detailAddress->"+sample6_detailAddress);
+//		ample6_address == null || sample6_detailAddress == null || sample6_extraAddress == null
 		// 주소
-		String user_address = sample6_postcode +"~"+ sample6_address +"~"+ sample6_detailAddress + sample6_extraAddress;
-		System.out.println("user_address->"+ user_address);
-		userInfo.setUser_address(user_address);	
-
+		if(sample6_postcode.isEmpty() || sample6_address.isEmpty()) {
+			System.out.println("주소값 NULL");
+			userInfo.setUser_address("");
+		} else {
+			String user_address = sample6_postcode +"~"+ sample6_address +"~"+ sample6_detailAddress + sample6_extraAddress;
+			System.out.println("user_address->"+ user_address);
+			userInfo.setUser_address(user_address);
+		}
+		
+		// user_Env
+//		userInfo.setEnv_alarm_comm(userEnv.getEnv_alarm_comm());
+		
+		
 		// 이미지파일 업로드
 		String attach_path = "upload";	// 파일경로
 		
@@ -221,6 +233,8 @@ public class MkhController {
 		
 		// 세션값 받음
 		UserInfo userInfo = (UserInfo) request.getSession().getAttribute("userInfo");
+		System.out.println("userInfo.getUser_id() -> " + userInfo.getUser_id());
+		
 		// user_id 마이페이지
 		UserInfo userInfoDto = mkhService.confirm(userInfo.getUser_id());
 		model.addAttribute("userInfoDto", userInfoDto);
@@ -233,6 +247,15 @@ public class MkhController {
 		ClassRoom classRoom = mkhService.selectClass(userInfo.getUser_id());
 		model.addAttribute("classRoom", classRoom);
 		
+		// user_birth
+		if(userInfoDto.getUser_birth() != null) {
+			System.out.println("생일있음");
+			Date birth = userInfoDto.getUser_birth();
+			SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd");
+			String user_birth = sd.format(birth);
+			model.addAttribute("user_birth", user_birth);
+		} else
+			model.addAttribute("user_birth", "");
 		return "mypage/mypage_main";
 	}
 	
@@ -255,26 +278,45 @@ public class MkhController {
 		System.out.println("userInfoDTO.getUser_id()->"+userInfoDTO.getUser_id());
 		System.out.println("userInfoDTO.getUser_pw()->"+userInfoDTO.getUser_pw());
 		
+		// user_birth
+		if(userInfoDTO.getUser_birth() != null) {
+			System.out.println("생일있음");
+			Date birth = userInfoDTO.getUser_birth();
+			SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd");
+			String user_birth = sd.format(birth);
+			model.addAttribute("user_birth", user_birth);
+		} else
+			model.addAttribute("user_birth", "");
+		
 		// 주소값 slice
 		System.out.println("userInfoDTO.getUser_address()->"+userInfoDTO.getUser_address());
 		String address = userInfoDTO.getUser_address();
 		System.out.println("address -> " + address);
-		
-		String[] addressList = address.split("~");
-		
-		String sample6_postcode = addressList[0];
-		String sample6_address = addressList[1];
-		String addressdetail = addressList[2];
+		//if(!(address == null)) 
+		log.info("{}",address != null); 
+		if(address != null && !address.isEmpty() ) {			//	address != null
+			String[] addressList = address.split("~");
+			
+			String sample6_postcode = addressList[0];
+			String sample6_address = addressList[1];
+			if(addressList.length < 4) {
+				String detailAddress = addressList[2];
+				if(detailAddress.contains("(")) {
+					String[] addressdetailList = detailAddress.split("\\(");
+					String sample6_detailAddress = addressdetailList[0];
+					String sample6_extraAddress = "(" + addressdetailList[1];
 
-		String[] addressdetailList = addressdetail.split("\\(");
-		
-		String sample6_detailAddress = addressdetailList[0];
-		String sample6_extraAddress = "(" + addressdetailList[1];
+					model.addAttribute("detailAddress", sample6_detailAddress);
+					model.addAttribute("extraAddress", sample6_extraAddress);
+				} else {
+					model.addAttribute("detailAddress", detailAddress);
+				}
+			}
 
-		model.addAttribute("postcode", sample6_postcode);
-		model.addAttribute("address", sample6_address);
-		model.addAttribute("detailAddress", sample6_detailAddress);
-		model.addAttribute("extraAddress", sample6_extraAddress);
+			model.addAttribute("postcode", sample6_postcode);
+			model.addAttribute("address", sample6_address);
+		} else 
+			userInfoDTO.setUser_address("");
 		
 		// 반 목록 출력
 		List<ClassRoom> classList = mkhService.createdClass();
@@ -286,7 +328,7 @@ public class MkhController {
 		// 수정 페이지에서 받은 값들
 		System.out.println("user_id->"+userInfo.getUser_id());
 		System.out.println("user_pw->"+userInfo.getUser_pw());
-		
+			
 		if(!userInfo.getUser_id().equals(userInfoDTO.getUser_id()) || 
 		   !userInfo.getUser_pw().equals(userInfoDTO.getUser_pw())) {
 			System.out.println("아이디와 비밀번호 재확인 인증 실패");
@@ -308,15 +350,17 @@ public class MkhController {
 	}
 	
 	// 수정페이지 이미지첨부 + update
-	@RequestMapping(value = "mypage_update_result")
+	@PostMapping(value = "mypage_update_result")
 	public String mypageUpdateResult (@ModelAttribute("userInfo") @Valid UserInfo userInfo
 									, BindingResult bindingResult
 									, HttpServletRequest request
 									, Model model
+									, String sample6_postcode	  , String sample6_address
+								    , String sample6_detailAddress, String sample6_extraAddress
 									, @RequestParam(value = "file1", required = false)MultipartFile file1) throws IOException {
 		System.out.println("MkhController mypageUpdateResult Start..");
 //		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
-
+		
 		if(bindingResult.hasErrors()) {
 			System.out.println("validation 에러 발생");
 			// 에러 발생해도 반 목록 출력
@@ -325,29 +369,46 @@ public class MkhController {
 			
 			return "mypage/mypage_update";
 		}
+		
+		// 주소
+		if(sample6_postcode.isEmpty() || sample6_address.isEmpty()) {
+			System.out.println("주소값 NULL");
+			userInfo.setUser_address("");
+		} else {
+			String user_address = sample6_postcode +"~"+ sample6_address +"~"+ sample6_detailAddress + sample6_extraAddress;
+			System.out.println("user_address->"+ user_address);
+			userInfo.setUser_address(user_address);
+		}
+		
+		// 생일
+//		if(userInfo.getUser_birth() != null) {
+//			Date date = userInfo.getUser_birth();
+//			System.out.println("userInfo.getUser_birth()->"+date);
+//			userInfo.setUser_birth(date);
+//		}
+		
+		if(file1.getSize() > 0) {
+			System.out.println("mypageUpdateResult userInfo.getUser_id()->"+userInfo.getUser_id());
+			String attach_path = "upload";	// 파일경로
+			String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");		// 저장 위치 주소 지정 (webapp 아래 폴더)
+			
+			System.out.println("File Upload Post Start");
+			
+			log.info("originalName : " + file1.getOriginalFilename());		// 원본 파일명
+			log.info("size : " + file1.getSize());							// 파일 사이즈
+			log.info("contextType : " + file1.getContentType());			// 파일 타입
+			log.info("uploadPath : " + uploadPath);							// 파일 저장되는 주소
+			
+			String savedName = uploadFile(file1.getOriginalFilename(), file1.getBytes(), uploadPath);	// 저장되는 파일명
+			log.info("Return savedName : " + savedName);
+			
+			// userInfo에 파일명과 파일경로 세팅
+			userInfo.setAttach_name(savedName);
+			userInfo.setAttach_path(attach_path);
+		}
+		
 
-		System.out.println("mypageUpdateResult userInfo.getUser_id()->"+userInfo.getUser_id());
-		String attach_path = "upload";	// 파일경로
-		String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");		// 저장 위치 주소 지정 (webapp 아래 폴더)
-		
-		System.out.println("File Upload Post Start");
-		
-		log.info("originalName : " + file1.getOriginalFilename());		// 원본 파일명
-		log.info("size : " + file1.getSize());							// 파일 사이즈
-		log.info("contextType : " + file1.getContentType());			// 파일 타입
-		log.info("uploadPath : " + uploadPath);							// 파일 저장되는 주소
-		
-		String savedName = uploadFile(file1.getOriginalFilename(), file1.getBytes(), uploadPath);	// 저장되는 파일명
-		log.info("Return savedName : " + savedName);
-		
-		// userInfo에 파일명과 파일경로 세팅
-		userInfo.setAttach_name(savedName);
-		userInfo.setAttach_path(attach_path);
-		
-		System.out.println("userInfo->"+userInfo);
-		
 		int result = mkhService.updateUser(userInfo);
-
 		System.out.println("result->"+result);
 		if(result == 1) {
 			System.out.println("수정성공");
@@ -399,6 +460,10 @@ public class MkhController {
 		System.out.println("userEnv.userEnv.getUser_id->"+userEnv.getUser_id());
 		System.out.println("userEnv.getEnv_alarm_comm()->"+userEnv.getEnv_alarm_comm());
 		System.out.println("userEnv.userEnv.getEnv_alarm_meeting()->"+userEnv.getEnv_alarm_meeting());
+		
+		if(userEnv.getEnv_alarm_mine() == null) {
+			userEnv.setEnv_alarm_mine("Y");
+		}
 		
 		int result = mkhService.updateEnv(userEnv);
 		

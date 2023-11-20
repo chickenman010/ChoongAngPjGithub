@@ -165,7 +165,7 @@
                         <h2 class="fw-normal">${userInfoDto.user_name }</h2>
                         <h5 class="fw-normal">ID : ${userInfoDto.user_id }</h5>
                         <p>핸드폰 번호 : ${userInfoDto.user_number }
-				        <p>생년월일 : ${userInfoDto.user_birth }
+				        <p>생년월일 : ${user_birth }
 			        	<p>소속 : 중앙  ${classRoom.class_area }반 ${classRoom.class_room_num }호
 			        	<p>기간 : ${classRoom.class_start_date } ~ ${classRoom.class_end_date }
 			        	<p>담당 강사 : ${classRoom.class_master } 
@@ -178,16 +178,16 @@
                         
                         	댓글알림  : YES<input type="radio" name="env_alarm_comm" value="Y"  ${userEnv.env_alarm_comm == 'Y' ? 'checked' : ''}>  		 
 			    			NO <input type="radio" name="env_alarm_comm" value="N"  ${userEnv.env_alarm_comm == 'N' ? 'checked' : ''} ><p>
-			    	답글알림  : YES<input type="radio" name="env_alarm_reply" value="Y" ${userEnv.env_alarm_reply == 'Y' ? 'checked' : ''}>    	 
+			    			답글알림  : YES<input type="radio" name="env_alarm_reply" value="Y" ${userEnv.env_alarm_reply == 'Y' ? 'checked' : ''}>    	 
 			    			NO <input type="radio" name="env_alarm_reply" value="N" ${userEnv.env_alarm_reply == 'N' ? 'checked' : ''}><p>
-			    	<c:if test="${userInfoDto.user_auth == 'manager'}">
-				    	프로젝트 생성 승인알림  : YES<input type="radio" name="env_alarm_mine" value="Y" ${userEnv.env_alarm_mine == 'Y' ? 'checked' : ''}> 
-				    					 NO <input type="radio" name="env_alarm_mine" value="N" ${userEnv.env_alarm_mine == 'N' ? 'checked' : ''}><p>
-			    	</c:if>
-			    	회의일정알림  : YES<input type="radio" name="env_alarm_meeting" value="Y" ${userEnv.env_alarm_meeting == 'Y' ? 'checked' : ''}>    
-			    			   NO <input type="radio" name="env_alarm_meeting" value="N" ${userEnv.env_alarm_meeting == 'N' ? 'checked' : ''}><p>
-			    	채팅이용  : YES<input type="radio" name="env_chat" value="Y" ${userEnv.env_chat == 'Y' ? 'checked' : ''}>    			 
-			    			NO <input type="radio" name="env_chat" value="N" ${userEnv.env_chat == 'N' ? 'checked' : ''}><p>
+					    						<c:if test="${userInfoDto.user_auth == 'manager'}">
+						         프로젝트 생성 승인알림  : YES<input type="radio" name="env_alarm_mine" value="Y" ${userEnv.env_alarm_mine == 'Y' ? 'checked' : ''}> 
+						    					 NO <input type="radio" name="env_alarm_mine" value="N" ${userEnv.env_alarm_mine == 'N' ? 'checked' : ''}><p>
+			    								</c:if>
+					                  회의일정알림  : YES<input type="radio" name="env_alarm_meeting" value="Y" ${userEnv.env_alarm_meeting == 'Y' ? 'checked' : ''}>    
+					    			   NO <input type="radio" name="env_alarm_meeting" value="N" ${userEnv.env_alarm_meeting == 'N' ? 'checked' : ''}><p>
+					                  채팅이용  : YES<input type="radio" name="env_chat" value="Y" ${userEnv.env_chat == 'Y' ? 'checked' : ''}>    			 
+					    			NO <input type="radio" name="env_chat" value="N" ${userEnv.env_chat == 'N' ? 'checked' : ''}><p>
 <!-- 			                       게시글에 댓글이 달릴 경우 알림을 받을 수 있습니다.
 						게시글에 답글이 달릴 경우 알림을 받을 수 있습니다.
 						프로젝트 생성 승인이 된 경우 경우 알림을 받을 수 있습니다.

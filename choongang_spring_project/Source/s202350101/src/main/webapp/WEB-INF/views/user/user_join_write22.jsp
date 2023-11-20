@@ -41,6 +41,129 @@
 	    padding: 5px;
 	    display: flex;
 	}
+	
+	
+	/* second */
+	* {
+	  margin: 0px;
+	  padding: 0px;
+	  text-decoration: none;
+	  font-family:sans-serif;
+
+	}
+	
+	body {
+	  background-image:#34495e;
+	}
+	
+	.joinForm {
+	  position:absolute;
+	  width:400px;
+	  height:400px;
+	  padding: 30px, 20px;
+	  background-color:#FFFFFF;
+	  text-align:center;
+	  top:40%;
+	  left:50%;
+	  transform: translate(-50%,-50%);
+	  border-radius: 15px;
+	}
+	
+	.joinForm h2 {
+	  text-align: center;
+	  margin: 30px;
+	}
+	
+	.textForm {
+	  border-bottom: 2px solid #adadad;
+	  margin: 30px;
+	  margin-bottom: 15px;
+	  
+	  padding: 10px 10px;
+	}
+	
+	
+	.id {
+	  width: 100%;
+	  border:none;
+	  outline:none;
+	  color: #636e72;
+	  font-size:16px;
+	  height:25px;
+	  background: none;
+	}
+	
+	.pw {
+	  width: 100%;
+	  border:none;
+	  outline:none;
+	  color: #636e72;
+	  font-size:16px;
+	  height:25px;
+	  background: none;
+	}
+	
+	.name {
+	  width: 100%;
+	  border:none;
+	  outline:none;
+	  color: #636e72;
+	  font-size:16px;
+	  height:25px;
+	  background: none;
+	}
+	
+	.email {
+	  width: 100%;
+	  border:none;
+	  outline:none;
+	  color: #636e72;
+	  font-size:16px;
+	  height:25px;
+	  background: none;
+	}
+	
+	.nickname {
+	  width: 100%;
+	  border:none;
+	  outline:none;
+	  color: #636e72;
+	  font-size:16px;
+	  height:25px;
+	  background: none;
+	}
+	
+	.cellphoneNo {
+	  width: 100%;
+	  border:none;
+	  outline:none;
+	  color: #636e72;
+	  font-size:16px;
+	  height:25px;
+	  background: none;
+	}
+	
+	.btn {
+	  position:relative;
+	  left:40%;
+	  transform: translateX(-50%);
+	  margin-bottom: 40px;
+	  width:80%;
+	  height:40px;
+	  background: linear-gradient(125deg,#81ecec,#6c5ce7,#81ecec);
+	  background-position: left;
+	  background-size: 200%;
+	  color:white;
+	  font-weight: bold;
+	  border:none;
+	  cursor:pointer;
+	  transition: 0.4s;
+	  display:inline;
+	}
+	
+	.btn:hover {
+	  background-position: right;
+	}
 
 </style>
 
@@ -254,140 +377,52 @@
 </script>
 </head>
 <body>
-
-	<div class="login-wrapper">
-        <h2>ChoongAng</h2>
-        
-        <form:form action="write_user_info" method="post" 
-                   name="frm" 
-                   id="login-form" 
-                   modelAttribute="userInfo"
-                   onsubmit="return write_user_info()">
-        	<table>
-        	
-			<tr>
-				<th>아이디 :</th>
-				<td><input type="text" id="user_id" name="user_id" value="${userInfo.user_id }">
-					<small style="color: red"><form:errors path="user_id"/></small>
-					
-					<input type="button" value="중복확인(ajax)" required="required" onclick="return id_confirm()">
-					<small style="color: red"><div id="msg"></div></small>
-				</td>
-			</tr>
-			<tr>
-				<th>
-					<label for="userpass">비밀번호</label>
-				</th>
-				<td>
-					<input id="userpass" type="password" name="user_pw" value="${userInfo.user_pw }" autocomplete="off"><p>
-					<small style="color: red"><form:errors path="user_pw"/></small><p>
-				</td>
-			</tr>
-			<tr>
-				<th>
-					<label for="userpasschk">비밀번호 확인</label>
-				</th>
-				<td>
-					<input id="userpasschk" type="password" name="user_pw2" value="${userInfo.user_pw }" placeholder="동일하게 입력해주세요." autocomplete="off"/>
-					
-					<span class="point successPwChk"></span>
-					<input type="hidden" id="pwDoubleChk"/>
-				</td>
-			</tr>
-				
-			<tr>
-				<th>소속</th>
-				<td>
-					<select name="class_id">
-						<c:forEach var="classList" items="${classList}">
-							<option value="${classList.class_id }">${classList.class_area }점 ${classList.class_room_num }반   ${classList.class_start_date } ~ ${classList.class_end_date }</option>
-						</c:forEach>
-					</select><p>
-				</td>
-			</tr>
-			<tr>
-				<th>이름 :</th>
-				<td>
-					<input type="text" name="user_name" value="${userInfo.user_name}">
-				</td>
-			</tr>
-           	<tr>
-           		<th>성별 :</th>
-           		<td>
-           			남 <input type="radio" name="user_gender" value="M" ${userInfo.user_gender == 'M' ? 'checked' : ''}>
-           			여 <input type="radio" name="user_gender" value="F" ${userInfo.user_gender == 'F' ? 'checked' : ''}>
-           		</td>
-           	</tr>
-          	<tr>
-          		<th>전화번호 : </th>
-          		<td>
-          			<input type="tel" name="user_number" placeholder="010-xxxx-xxxx" value="${userInfo.user_number}">
-          			<small style="color: red"><form:errors path="user_number"/></small> 
-          		</td>
-          	</tr>
-          	
-            <tr>
-            	<th>이메일 : </th>
-            	<td>
-            		<div id="mail_input">
-	            		<input type="email" name="user_email" id="user_email" placeholder="ID@Email.com" value="${userInfo.user_email}">
-		            	<button class="timerButton" type="button" onclick="return send_save_mail()">이메일 인증</button>
-	            		<!-- <input class="timerButton" type="button" value="이메일 인증" onclick="return send_save_mail()"> -->
-            		</div>
-            		
-            		<div id="mail_number" name="mail_number" style="display: none">
-					    <input type="text" name="number" id="number" placeholder="인증번호 입력">
-					    <small style="color: red"><div class="time"></div></small>
-					    <button class="confirmBtn" type="button" onclick="confirm_authNumber()">확인</button>
-			    		<small style="color: red"><form:errors path="user_email"/></small>
-			    		<input type="hidden" id="Confirm" value="">
-			    	</div>
-            		<small style="color: red"><div id="msg2"></div></small>
-            	</td>
-            </tr>
-            <tr>
-            	<th>주소 : </th>
-            	<td>
-            		<input type="text" name="sample6_postcode" id="sample6_postcode" placeholder="우편번호">
-					<input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"><br>
-					<input type="text" name="sample6_address" id="sample6_address" placeholder="주소"><br>
-					<input type="text" name="sample6_detailAddress" id="sample6_detailAddress" placeholder="상세주소">
-					<input type="text" name="sample6_extraAddress" id="sample6_extraAddress" placeholder="참고항목">
-					
-            		<input type="hidden" name="user_address" value="${userInfo.user_address}"><p>
-            	</td>
-            </tr>
-          	<tr>
-          		<th>생년월일test : </th>
-          		<td>
-          			<input type="date" name="user_birth" value="${userInfo.user_birth}"><p>
-          		</td>
-          	</tr>
-          	<tr>
-          	<th>생년월일 : </th>
-          	<td>
-          		<div class="info" id="info__birth">
-				    <select class="box" id="birth-year">
-					    <option disabled selected>출생 연도</option>
-					</select>
-					    <select class="box" id="birth-month">
-					    <option disabled selected>월</option>
-				    </select>
-					    <select class="box" id="birth-day">
-					    <option disabled selected>일</option>
-				    </select>
-				</div><p>
-			</td>
-			
-        	<tr>
-        		<td>
-        			<input type="submit" value="가입하기"  style="float: center">
-        		</td>
-        	</tr>
-
-  			</table>
-  		</form:form>
-        
-    </div>
+	<%-- <form action="doJoin" method="POST" class="joinForm" onsubmit="DoJoinForm__submit(this); return false;"> --%>
+    <form:form action="write_user_info" method="post" 
+               name="frm" 
+               class="joinForm"
+               modelAttribute="userInfo"
+               onsubmit="return write_user_info()">
+    
+                                                                                               
+	    <h2>ChoongAng</h2>
+	    	
+		    <div class="textForm">
+		    	<input name="user_id" id="user_id" type="text" class="id" placeholder="아이디" value="${userInfo.user_id }">
+		    	<input type="button" value="중복확인(ajax)" required="required" onclick="return id_confirm()">
+		    </div>
+			    <small style="color: red"><div id="msg"></div></small>
+			   	<small style="color: red"><form:errors path="user_id"/></small>		    
+		    <div class="textForm">
+		    	<input name="user_pw" id="userpass" type="password" class="pw" placeholder="비밀번호" value="${userInfo.user_pw }" autocomplete="off">
+		    </div>
+		    <div class="textForm">
+		    	<input name="user_pw2" id="userpasschk" type="password" class="pw" placeholder="비밀번호 확인" value="${userInfo.user_pw }" autocomplete="off">
+		    </div>
+			    <span class="point successPwChk"></span>
+				<input type="hidden" id="pwDoubleChk"/>
+		    <div class="textForm">
+		    	<input name="user_name" type="password" class="name" placeholder="이름" value="${userInfo.user_name}" >
+		    </div>
+		        소속 
+		    <select name="class_id">
+				<c:forEach var="classList" items="${classList}">
+					<option value="${classList.class_id }">${classList.class_area }점 ${classList.class_room_num }반   ${classList.class_start_date } ~ ${classList.class_end_date }</option>
+				</c:forEach>
+			</select><p>
+			성별
+			남 <input type="radio" name="user_gender" value="M" ${userInfo.user_gender == 'M' ? 'checked' : ''}>
+           	여 <input type="radio" name="user_gender" value="F" ${userInfo.user_gender == 'F' ? 'checked' : ''}>
+		    <div class="textForm">
+		    	<input name="email" type="text" class="email" placeholder="이메일">
+		    </div>
+		    <div class="textForm">
+		    	<input name="nickname" type="text" class="nickname" placeholder="닉네임">
+		    </div>
+		    <div class="textForm">
+		    	<input name="cellphoneNo" type="number" class="cellphoneNo" placeholder="전화번호">
+		    </div>
+	    <input type="submit" class="btn" value="J O I N"/>
+    </form:form>
 </body>
 </html>

@@ -37,7 +37,7 @@ public class SampleInterceptor implements HandlerInterceptor {
 							 HttpServletResponse response, 
 							 Object handler
 							 ) throws Exception {
-		System.out.println("pre handle....................................");
+//		System.out.println("pre handle....................................");
 		// 세션이 있으면 만들지마 (로그인할때 이미 만듬)
 		System.out.println();
 		HttpSession session = request.getSession(false);
