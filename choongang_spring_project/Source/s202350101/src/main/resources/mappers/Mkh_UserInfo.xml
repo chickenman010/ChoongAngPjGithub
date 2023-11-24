@@ -46,32 +46,25 @@
 		Set    user_pw = #{user_pw}
 		where  user_id = #{user_id}
 	</update>
-	
-	<update id="updateUserInfo" parameterType="UserInfo">
-    <![CDATA[
+	            
+	<update id="userInfoUpdate" parameterType="UserInfo">
         UPDATE user_info
         SET
-            class_id   = #{class_id},
-            project_id = #{project_id},
-            user_pw    = #{user_pw},
-            user_name  = #{user_name},
-            <if test="user_gender != null">
-                user_gender = #{user_gender},
-            </if>
-            user_number = #{user_number},
-            <if test="user_birth != null">
-                user_birth  = #{user_birth, jdbcType=DATE},
-            </if>
-            user_address = #{user_address},
-            user_email   = #{user_email}
-            <if test="attach_name != null">
-                , attach_name  = #{attach_name, jdbcType=VARCHAR},
-            </if>
-            <if test="attach_path != null">
-                , attach_path  = #{attach_path, jdbcType=VARCHAR},
-            </if>
+	            class_id   = #{class_id}
+				<choose>
+					<when test="project_id == 0">,project_id = NULL</when>
+					<otherwise>,project_id = #{project_id}</otherwise>
+				</choose>
+	            ,user_pw    = #{user_pw}
+	            ,user_name  = #{user_name}
+		        ,user_gender = #{user_gender, jdbcType=VARCHAR}
+ 	            ,user_number = #{user_number}
+	            ,user_birth  = #{user_birth, jdbcType=DATE}
+	            ,user_address = #{user_address}
+	            ,user_email   = #{user_email}
+	            ,attach_name  = #{attach_name, jdbcType=VARCHAR}
+	            ,attach_path  = #{attach_path, jdbcType=VARCHAR}
         WHERE user_id = #{user_id}
-    ]]>
 	</update>
 
 	

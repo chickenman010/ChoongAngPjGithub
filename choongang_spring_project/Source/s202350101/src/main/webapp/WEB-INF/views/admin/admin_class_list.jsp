@@ -79,7 +79,7 @@
 			    </ol>
 			</nav>
 			<div class="container-fluid">
-				<div style="margin-top:20px;height:45px">
+				<div style="margin-top:15px;height:45px">
 					<span class="apptitle">관리자 설정</span>
 				</div>
 			</div>
@@ -99,15 +99,18 @@
 				</div>
 
                 <table class="table" style="margin-top:5px;margin-bottom:5px">
-                    <thead>
-                    <tr class="table-warning">
+                    <thead class="table-light">
+                    <tr>
                         <th>학원 위치</th>
                         <th>반 번호</th>
                         <th>담당 강사</th>
                         <th>강의 이름</th>
                         <th>시작 날짜</th>
                         <th>종료 날짜</th>
+                        <th>삭제</th>
                     </tr>
+                    </thead>
+                    <tbody>
                     <c:forEach items="${CRList}" var="list">
                         <tr>
                             <td>${list.class_area}</td>
@@ -115,11 +118,12 @@
                             <td>${list.class_master}</td>
                             <td>${list.class_name}</td>
 <%--                            <td><fmt:formatDate value="${list.class_start_date}" pattern="yy/MM/dd"/></td>--%>
-                            <td>${list.class_start_date}</td>
-                            <td>${list.class_end_date}</td>
+                            <td>${list.startDate}</td>
+                            <td>${list.endDate}</td>
+                            <td><a href="/admin_del_class?class_id=${list.class_id}">삭제</a> </td>
                         </tr>
                     </c:forEach>
-                    </thead>
+                    </tbody>
                 </table>
             </div>
             <!------------------------------ //개발자 소스 입력 END ------------------------------->

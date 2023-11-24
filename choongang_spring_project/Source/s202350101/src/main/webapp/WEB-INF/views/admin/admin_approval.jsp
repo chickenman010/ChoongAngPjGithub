@@ -152,7 +152,7 @@
 			    </ol>
 			</nav>
 			<div class="container-fluid">
-				<div style="margin-top:20px;height:45px">
+				<div style="margin-top:15px;height:45px">
 					<span class="apptitle">관리자 설정</span>
 				</div>
 			</div>
@@ -175,14 +175,14 @@
 					<table style="margin-bottom:5px">
                     	<tr>
                     		<td>
-			                    <button class="btn btn-primary" onclick="app_ok();"  type="button">생성 승인</button>
-			                    <button class="btn btn-primary" onclick="app_del();"  type="button">프로젝트 삭제</button>
+			                    <button class="btn btn-dark btn-sm" onclick="app_ok();"  type="button">생성 승인</button>
+			                    <button class="btn btn-danger btn-sm" onclick="app_del();"  type="button">프로젝트 삭제</button>
 			                </td>
 	                	</tr>
                     </table>
                     
                     <table class="table">
-                        <thead>
+						<thead class="table-light">
                         <tr>
                         	<th>프로젝트 번호</th>
                             <th>프로젝트 이름</th>

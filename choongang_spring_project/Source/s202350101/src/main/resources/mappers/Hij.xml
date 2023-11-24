@@ -43,7 +43,7 @@
 	
 	<!-- 멤버목록 가져오기 -->
  	<select id="ijAppOkGetUser" parameterType="HijRequestPrjDto" resultType="PrjMemList">
-		SELECT * FROM prj_mem_list WHERE project_id=#{project_id} 
+		SELECT * FROM prj_mem_list WHERE project_id=#{project_id}
 	</select>
 
 	<!-- user_info에 project_id 해당 id로 넣어줌 -->
@@ -105,7 +105,7 @@
 		WHERE class_id = (SELECT class_id 
 	                 	  FROM user_info
 	                  	  WHERE User_id =#{User_id})	    
-	    ORDER BY user_id
+	    ORDER BY user_name
 	</select>
 
 	<!-- 프로젝트 생성 -->
@@ -113,13 +113,13 @@
 		INSERT INTO prj_info (project_id, project_name, project_startdate, project_enddate,
 							  project_manager_id, project_intro, project_approve,
 							  project_status, project_create_date)
-		VALUES (project_step_seq.nextval, #{project_name}, #{project_startdate}, #{project_enddate}, 
+		VALUES (project_id_seq.nextval, #{project_name}, #{project_startdate}, #{project_enddate}, 
 				#{project_manager_id}, #{project_intro}, #{project_approve}, #{project_status}, sysdate)
 	</insert>
 
 	<!-- prj_mem_list에 팀원 추가 -->
 	<insert id="ijMemCreate" parameterType="PrjInfo">
-		INSERT INTO prj_mem_list (project_id, user_id) VALUES (project_step_seq.currval, #{member_user_id})
+		INSERT INTO prj_mem_list (project_id, user_id) VALUES (project_id_seq.currval, #{member_user_id})
 	</insert>
 	
 
@@ -131,6 +131,7 @@
 		FROM user_info u, prj_info p
 		WHERE u.project_id = p.project_id
 		AND p.project_id =#{project_id}
+		ORDER BY u.user_name
 	</select>
 
 	<!-- 프로젝트 조회  -->

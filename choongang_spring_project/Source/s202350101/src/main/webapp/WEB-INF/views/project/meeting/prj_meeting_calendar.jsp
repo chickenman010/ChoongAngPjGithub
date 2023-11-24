@@ -9,9 +9,14 @@
 
 <!--CSS START -->
 <style type="text/css">
+	#category_title {
+		position: absolute;
+	}
+
 	div #calendar {
 		width: 80%;
-		margin-top: 30px;
+		margin-top: 50px;
+		padding-left: 15px;
 	}
 	
 	#center {
@@ -19,11 +24,11 @@
 	}
 	
 	#meetingList {
-		padding: 30px;
+		padding: 50px 30px 30px 30px;
 	}
 	
 	#meeting {
-		width: 80%;
+		width: 100%;
 		padding: 20px;
 		text-align: left;
 		padding-top: 20px;
@@ -39,13 +44,13 @@
 	}
 	
 	.list_date {
-		padding-top: 20px;
-		font-size: 14pt;
+		padding-top: 15px;
+		font-size: 11pt;
 		border-bottom: solid gray 1px;
 	}
 	
 	.list_title {
-		font-size: 15pt;
+		font-size: 13pt;
 	}
 	
 	.list_title a {
@@ -68,6 +73,45 @@
 	input.form-control.form-control-sm.uploadFile {
     	width: 80%;
 	}
+	
+	#mtPage {
+		display: flex;
+    	justify-content: center;
+	}
+	
+	:root {
+		/* --fc-button-text-color: black;
+		--fc-button-bg-color: white;
+		--fc-button-hover-bg-color: rgba(13, 110, 253, 0.1);
+		--fc-button-active-bg-color: white; */
+	}
+
+	.fc .fc-daygrid-day-frame {
+	    position: relative;
+	    height: 100px;
+	}
+	
+	.fc .fc-col-header-cell-cushion {
+	    text-decoration: none;
+	    color: black;
+	}
+	
+	.fc .fc-daygrid-day-number {
+	    text-decoration: none;
+	    color: black;
+	}
+	.fc-day {
+		height: 20px;
+	}
+	
+    tr[role="row"] {
+		height: 20px;
+    }
+    
+    .fc .fc-daygrid-day-top {
+    	display: flex;
+    	flex-direction: row;
+    }
 </style>
 
 
@@ -106,6 +150,7 @@
 		});
 	});
 	
+	// 회의록 페이징 작업
 	function meetpaging(currentPage){
     	
     	var project_id = ${project_id};
@@ -199,6 +244,8 @@
 		var calendar = new FullCalendar.Calendar(calendarEl, {
 			initialView : 'dayGridMonth',
 			selectable : true,
+			locale : "ko",
+			height : 815,
 			events : meetingEvents.concat(meetingDateEvents),
 
 			dateClick : function(info) {
@@ -221,8 +268,6 @@
 				meetingListButton: {
 				    text: '회의록',
 				    click: function () {
-
-				    				    	
 				    	var project_id = ${project_id};
 				        var sendurl = "prj_meeting_report_list_ajax/?project_id=" + project_id + "&currentPage=" + 1; // project_id를 적절히 정의해야 합니다.
 				        console.log("location.href = 'prj_meeting_report_list?project_id=" + project_id + "&currentPage=" + 1 + "'");
@@ -249,7 +294,7 @@
 				                    console.log("MTList: " + MTList.meeting_title);
 				                    console.log("MTList: " + MTList.meeting_date);
 
-				                    var authOptionBox = $('<div><p class="list_date">' + MTList.meeting_date + '</p><p class="list_title"><a href="prj_meeting_report_read/?meeting_id=' + MTList.meeting_id + '&project_id=' + MTList.project_id + '">' + MTList.meeting_title + '</a></p></div>');
+				                    var authOptionBox = $('<div><p class="list_date">' + MTList.meeting_date + '</p><p class="list_title"><a href="prj_meeting_report_read?meeting_id=' + MTList.meeting_id + '&project_id=' + MTList.project_id + '">' + MTList.meeting_title + '</a></p></div>');
 
 				                    meetingList.append(authOptionBox);
 				                });
@@ -338,6 +383,8 @@
 			    				$.each(firList, function(index, meetingList) {
 			    					if (meetingList.meetuser_id == prjMemList.user_id) {
 			    						result += 1;
+			    						console.log("meetingList.meetuser_id : "+meetingList.meetuser_id );
+			    						console.log("prjMemList.user_id : "+prjMemList.user_id);
 			    					}
 			    				});
 			    				
@@ -549,7 +596,6 @@
 	    formData.append('meeting_title', meeting_title);
 	    formData.append('meeting_date', meeting_date);
 	    formData.append('meeting_place', meeting_place);
-	    formData.append('meetuser_id', meetuser_id);
 	    formData.append('meeting_category', meeting_category);
 	    formData.append('file1', file1); // 파일 업로드
 	    formData.append('meeting_content', meeting_content);
@@ -558,22 +604,23 @@
 
 		console.log('file1');
         
-		var delbox = '';        //  삭제 버튼에 체크된 게시글
+		var checkuser = '';        //  삭제 버튼에 체크된 게시글
         document.querySelectorAll("input[name=meetuser_id]:checked").forEach(function (checkbox) {
             //  체크된 게시글 id값들 리스트에 저장.
             
             var bf_noInput = checkbox.value;
             if (bf_noInput) {
                 var bf_no = bf_noInput + ',';
-                delbox += bf_no ;
+                checkuser += bf_no ;
             }
         });
         
-        delbox = delbox.slice(0,-1);
-        meetuser_id = delbox;
+        checkuser = checkuser.slice(0,-1);
+        meetuser_id = checkuser;
         
-        console.log("delbox");
-        console.log(delbox);
+        console.log("checkuser");
+        console.log(checkuser);
+	    formData.append('meetuser_id', checkuser);
 		
 //		var sendurl = "/prj_meeting_date_update/?meeting_id=" + meeting_id + "&project_id=" + project_id;
 		
@@ -610,6 +657,28 @@
 			<!-- 본문 -->
 			<main id="center" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 				<!------------------------------ //개발자 소스 입력 START ------------------------------->
+				<div id="category_title">
+					<svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+					  <symbol id="house-door-fill" viewBox="0 0 16 16">
+					    <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5z"></path>
+					  </symbol>
+					</svg>		
+					<nav aria-label="breadcrumb" style="padding-top:5px;padding-left: calc(var(--bs-gutter-x) * 0.5);">
+					    <ol class="breadcrumb breadcrumb-chevron p-1">
+					      <li class="breadcrumb-item">
+					        <a class="link-body-emphasis" href="/main">
+					          <svg class="bi" width="16" height="16"><use xlink:href="#house-door-fill"></use></svg>
+					          <span class="visually-hidden">Home</span>
+					        </a>
+					      </li>
+					      <li class="breadcrumb-item">
+					        <a class="link-body-emphasis fw-semibold text-decoration-none" href="/dashboard">프로젝트</a>
+					      </li>
+					      <li class="breadcrumb-item active" aria-current="page">회의록</li>
+					    </ol>
+					</nav>
+				</div>
+				
 				<!-- fullcalendar 추가 -->
 				<div id='calendar'></div>
 
@@ -647,8 +716,7 @@
 											<option value="월간 회의">월간 회의</option>
 											<option value="내부 회의">내부 회의</option>
 											<option value="회의">회의</option>
-										</se
-										lect><br>
+										</select><br>
 										
 										<label for="taskId" class="col-form-label">첨부파일</label>
 										<input type="file" class="form-control" name="file1">
@@ -726,7 +794,7 @@
 							<div id="meeting">
 
 							</div>
-							<div id="mtPage" class="pagination">
+							<div id="mtPage" class="pagination pagination-sm">
 							
 							</div>
 						</div>

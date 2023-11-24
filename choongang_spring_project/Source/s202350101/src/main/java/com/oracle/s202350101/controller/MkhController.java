@@ -25,6 +25,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -100,6 +101,7 @@ public class MkhController {
 			return "forward:/user_login";
 		} else {
 			System.out.println("user_login_check userInfo exists");
+			session.setMaxInactiveInterval(3600); //세션아웃 (1시간)
 			session.setAttribute("userInfo", userInfoDTO);
 			System.out.println("session.getAttribute(userInfo)->"+session.getAttribute("userInfo"));
 			return "redirect:/main";
@@ -277,7 +279,7 @@ public class MkhController {
 		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
 		System.out.println("userInfoDTO.getUser_id()->"+userInfoDTO.getUser_id());
 		System.out.println("userInfoDTO.getUser_pw()->"+userInfoDTO.getUser_pw());
-		
+		System.out.println("userInfoDTO.getUser_birth()->"+userInfoDTO.getUser_birth());
 		// user_birth
 		if(userInfoDTO.getUser_birth() != null) {
 			System.out.println("생일있음");
@@ -333,14 +335,16 @@ public class MkhController {
 		   !userInfo.getUser_pw().equals(userInfoDTO.getUser_pw())) {
 			System.out.println("아이디와 비밀번호 재확인 인증 실패");
 			model.addAttribute("msg", "ID와 PW를 다시 확인해주세요.");
-			return "forward:/mypage_check_pw";
+			//return "forward:/mypage_check_pw";
+			return "forward:/mypage_main"; //비밀번호 재확인 modal창 모드
 		} else {
 			// 재확인 인증 성공시 로직으로 검증
 			userInfoDTO = mkhService.userLoginCheck(userInfo);
 			if(userInfoDTO == null) {
 				System.out.println("인증 실패");
 				model.addAttribute("msg", "ID와 PW를 다시 확인해주세요.");
-				return "forward:/mypage_check_pw";
+				//return "forward:/mypage_check_pw";
+				return "forward:/mypage_main"; //비밀번호 재확인 modal창 모드
 			} else {
 				System.out.println("인증 성공");
 				session.setAttribute("userInfoDTO", userInfoDTO);
@@ -359,7 +363,7 @@ public class MkhController {
 								    , String sample6_detailAddress, String sample6_extraAddress
 									, @RequestParam(value = "file1", required = false)MultipartFile file1) throws IOException {
 		System.out.println("MkhController mypageUpdateResult Start..");
-//		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
+		UserInfo userInfoDTO = (UserInfo) request.getSession().getAttribute("userInfo");
 		
 		if(bindingResult.hasErrors()) {
 			System.out.println("validation 에러 발생");
@@ -367,6 +371,7 @@ public class MkhController {
 			List<ClassRoom> classList = mkhService.createdClass();
 			model.addAttribute("classList", classList);
 			
+			model.addAttribute("msg", "fail");
 			return "mypage/mypage_update";
 		}
 		
@@ -387,7 +392,9 @@ public class MkhController {
 //			userInfo.setUser_birth(date);
 //		}
 		
+		// 이미지 첨부
 		if(file1.getSize() > 0) {
+			System.out.println("파일이 있다...!");
 			System.out.println("mypageUpdateResult userInfo.getUser_id()->"+userInfo.getUser_id());
 			String attach_path = "upload";	// 파일경로
 			String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");		// 저장 위치 주소 지정 (webapp 아래 폴더)
@@ -405,11 +412,21 @@ public class MkhController {
 			// userInfo에 파일명과 파일경로 세팅
 			userInfo.setAttach_name(savedName);
 			userInfo.setAttach_path(attach_path);
+		} else {
+			System.out.println("파일이 변경이 없다면");
+			System.out.println("userInfo.getAttach_name()->" + userInfoDTO.getAttach_name());
+			System.out.println("userInfo.getAttach_path()->" + userInfoDTO.getAttach_path());
+			String attach_name = userInfoDTO.getAttach_name();
+			String attach_path = userInfoDTO.getAttach_path();
+
+			userInfo.setAttach_name(attach_name);
+			userInfo.setAttach_path(attach_path);
 		}
 		
 
 		int result = mkhService.updateUser(userInfo);
 		System.out.println("result->"+result);
+		
 		if(result == 1) {
 			System.out.println("수정성공");
 			// 이미지 update가 성공하면 세션정보 최신화
@@ -417,10 +434,12 @@ public class MkhController {
 			UserInfo us = uis.findbyuserId(userInfo);
 			// 세션정보 최신화
 			request.getSession().setAttribute("userInfo", us);
-			return "redirect:/mypage_main";
+			model.addAttribute("msg", "success");
+			return "forward:/mypage_main"; //msg전달 redirect->forward
 		} else {
 			System.out.println("수정실패");
-			return "redirect:/mypage_update";
+			model.addAttribute("msg", "fail");
+			return "forward:/mypage_update"; //msg전달 redirect->forward
 		}
 	}
 	
@@ -713,7 +732,8 @@ public class MkhController {
 	}
 	
 	// 비밀번호 업데이트
-	@RequestMapping(value = "user_find_pw_update")
+	@PostMapping(value = "user_find_pw_update")
+	@ResponseBody
 	public String userFindPwUpdate(String user_pw, String user_id) {
 		System.out.println("MkhController userFindPwNewUpdate Start..");
 		System.out.println("user_id ->"+user_id);
@@ -726,8 +746,12 @@ public class MkhController {
 		int result = mkhService.updatePw(map);
 		System.out.println("result->"+result);
 	
-		return "redirect:/user_login";
-	
+		//return "redirect:/user_login";
+		if(result > 0) {
+			return "success"; //ajax호출한 곳에서 분기처리 user_login
+		}else {
+			return "fail";
+		}
 	}
 	
 

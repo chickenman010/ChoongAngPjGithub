@@ -82,15 +82,11 @@
 			      <li class="breadcrumb-item active" aria-current="page">내가 쓴 게시글</li>
 			    </ol>
 			</nav>
-			<div class="container-fluid">
-				<div style="margin-top:20px;height:45px">
-					<span class="apptitle">내가 쓴 게시글</span>
-				</div>
-			</div>
 			
-	  		<div id="test">
-                <table width="100%" style="margin-top:20px;height:45px">
+	  		<div class="container-fluid">
+                <table width="100%" style="height:45px">
 					<tr>
+						<td style="vertical-align:top"><span class="apptitle">내가 쓴 게시글</span></td>
 						<td align="right">
 							<form action="mypost_board_list">
 								<table>
@@ -103,7 +99,15 @@
 											</select>
 										</td>
 										<td><input type="text" class="form-control me-2" style="font-size:0.8rem" name="keyword" placeholder="검색어를 입력하세요" required="required"></td>
-										<td><button type="submit" class="btn btn-primary btn-sm">검색</button></td>
+										<td>
+											<button type="submit" class="btn btn-dark btn-sm">검색</button>
+											<button type="button" class="btn btn-outline-secondary btn-sm" onclick="goto('mypost_board_list')" style="cursor:pointer">
+							         			<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+													<path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"></path>
+													<path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"></path>
+												</svg>
+											</button>
+										</td>
 									</tr>
 								</table>
 							</form>	
@@ -125,24 +129,26 @@
 				</table>
 
                 <table class="table">
-                    <thead>
-                    <tr class="table-warning">
-                        <td>게시판</td>
-						<td>제목</td>
-						<td>작성자</td>
-						<td>작성일</td>
-						<td>조회수</td>
-						<td>추천수</td>
+                    <thead class="table-light">
+                    <tr>
+                        <th>게시판</th>
+						<th>제목</th>
+						<th>작성자</th>
+						<th>작성일</th>
+						<th>조회수</th>
+						<th>추천수</th>
                     </tr>
+                    </thead>
+                    <tbody>
                     <c:forEach var="sAll" items="${selectAll }">
                     	<c:choose>
 							<c:when test="${sAll.app_id == 1}">
 								<c:if test="${sAll.bd_category == '공지'}">
 									<tr>
 										<td>${sAll.bd_category }</td>
-										<td><a href="javascript:popup('board_content?doc_no=${sAll.doc_no }')">${sAll.subject }</a></td>
-										<td>${sAll.user_id }</td>
-										<td>${sAll.create_date }</td>
+										<td><a href="javascript:popup('board_notify_read?doc_no=${sAll.doc_no }')">${sAll.subject }</a></td>
+										<td>${sAll.user_name }</td>
+										<td><fmt:formatDate value="${sAll.create_date}" type="date" pattern="yyyy-MM-dd"/></td>
 										<td>${sAll.bd_count }</td>
 										<td>${sAll.good_count }</td>
 									</tr>
@@ -150,9 +156,9 @@
 								<c:if test="${sAll.bd_category == '자유'}">
 									<tr>
 										<td>${sAll.bd_category }</td>
-										<td><a href="javascript:popup('ree_content?doc_no=${sAll.doc_no }')">${sAll.subject }</a></td>
-										<td>${sAll.user_id }</td>
-										<td>${sAll.create_date }</td>
+										<td><a href="javascript:popup('board_free_read?doc_no=${sAll.doc_no }')">${sAll.subject }</a></td>
+										<td>${sAll.user_name }</td>
+										<td><fmt:formatDate value="${sAll.create_date}" type="date" pattern="yyyy-MM-dd"/></td>
 										<td>${sAll.bd_count }</td>
 										<td>${sAll.good_count }</td>
 									</tr>
@@ -160,9 +166,9 @@
 								<c:if test="${sAll.bd_category == '이벤트'}">
 									<tr>
 										<td>${sAll.bd_category }</td>
-										<td><a href="javascript:popup('event_content?doc_no=${sAll.doc_no }')">${sAll.subject }</a></td>
-										<td>${sAll.user_id }</td>
-										<td>${sAll.create_date }</td>
+										<td><a href="javascript:popup('board_event_read?doc_no=${sAll.doc_no }')">${sAll.subject }</a></td>
+										<td>${sAll.user_name }</td>
+										<td><fmt:formatDate value="${sAll.create_date}" type="date" pattern="yyyy-MM-dd"/></td>
 										<td>${sAll.bd_count }</td>
 										<td>${sAll.good_count }</td>
 									</tr>
@@ -171,10 +177,9 @@
 							<c:when test="${sAll.app_id == 2}">
 								<tr>
 									<td>${sAll.app_name }</td>
-									<td><a href="javascript:popup('bdQnaContent?doc_no=${sAll.doc_no }')">${sAll.subject }</a></td>
-									
-									<td>${sAll.user_id }</td>
-									<td>${sAll.create_date }</td>
+									<td><a href="javascript:popup('board_qna_read?doc_no=${sAll.doc_no }')">${sAll.subject }</a></td>
+									<td>${sAll.user_name }</td>
+									<td><fmt:formatDate value="${sAll.create_date}" type="date" pattern="yyyy-MM-dd"/></td>
 									<td>${sAll.bd_count }</td>
 									<td>${sAll.good_count }</td>
 								</tr>
@@ -183,8 +188,8 @@
 								<tr>
 									<td>${sAll.app_name }</td>
 									<td><a href="javascript:popup('prj_board_data_read?doc_no=${sAll.doc_no}&project_id=${sAll.project_id}')">${sAll.subject }</a></td>
-									<td>${sAll.user_id }</td>
-									<td>${sAll.create_date }</td>
+									<td>${sAll.user_name }</td>
+									<td><fmt:formatDate value="${sAll.create_date}" type="date" pattern="yyyy-MM-dd"/></td>
 									<td>${sAll.bd_count }</td>
 									<td>${sAll.good_count }</td>
 								</tr>
@@ -193,8 +198,8 @@
 								<tr>
 									<td>${sAll.app_name }</td>
 									<td><a href="javascript:popup('prj_board_report_read?doc_no=${sAll.doc_no }&project_id=${sAll.project_id}')">${sAll.subject }</a></td>
-									<td>${sAll.user_id }</td>
-									<td>${sAll.create_date }</td>
+									<td>${sAll.user_name }</td>
+									<td><fmt:formatDate value="${sAll.create_date}" type="date" pattern="yyyy-MM-dd"/></td>
 									<td>${sAll.bd_count }</td>
 									<td>${sAll.good_count }</td>
 								</tr>
@@ -202,7 +207,7 @@
 						</c:choose>
 					</c:forEach>
                 
-                    </thead>
+                    </tbody>
                 </table>
             </div>
 	  		

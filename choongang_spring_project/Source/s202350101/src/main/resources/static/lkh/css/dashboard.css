@@ -20,7 +20,7 @@
     margin: 1%;
     display: flex;
     flex-direction: row; /* 수평으로 배치 */
-    border: 1px solid #0b5ed7;
+    border: 0px solid #0b5ed7;
     border-radius: 10px;
 }
 .chart_1 > div ,.chart_2 > div{
@@ -49,7 +49,7 @@
     display: flex;
     justify-content: center;
     width: 60%;
-    border: 2px solid black;
+    border: 1px solid black;
     border-radius: 10px;
     flex-grow: 1; /* 내부 요소에 따라 유동적으로 크기 조절 */
 }
@@ -65,7 +65,7 @@
 .project_step_subject {
 
         background-color:rgba(75, 192, 192, 0.2);
-    border: 2px solid black;
+    border: 1px solid black;
     border-radius: 10px;
     text-align: center;
     margin: 5%;
@@ -101,8 +101,12 @@
     width: 170px;
     text-align: center;
     border-radius: 10px;
-
+    transition: transform 0.3s ease;
 }
+.cur_task:hover{
+    transform: scale(1.2); /* hover 상태일 때 크기를 1.2배로 확대 */
+}
+
 .current_name{
     border: 2px solid black;
     display: block;
@@ -110,9 +114,4 @@
     padding: 5px;
     background-color: rgba(75, 192, 192, 0.2);
     border-radius: 0 0 10px 10px;
-}
-a {
-    color:black;
-    text-decoration: none;
-    font-weight: bold;
 }

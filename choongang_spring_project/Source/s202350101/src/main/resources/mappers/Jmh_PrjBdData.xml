@@ -36,18 +36,18 @@
 					(SELECT Count(*) FROM BD_DATA_COMT WHERE doc_no=p.doc_no AND project_id=p.project_id) comment_count
 			FROM PRJ_BD_DATA p, USER_INFO u 
 			WHERE p.user_id = u.user_id			
-			ORDER BY doc_group DESC, doc_step
+			ORDER BY p.doc_group DESC, p.doc_step
 		)
 		WHERE project_id = #{project_id} 
 		AND 
 		<choose>
-			<when test="search == 's_subject'">
+			<when test="search == '1_subject'">
 				 subject like '%' || #{keyword} || '%'
 			</when>
-			<when test="search == 's_user_name'">
+			<when test="search == '2_user_name'">
 				 user_name like '%' || #{keyword} || '%'
 			</when>
-			<when test="search == 's_category'">
+			<when test="search == '3_bd_category'">
 				 bd_category_name like '%' || #{keyword} || '%'
 			</when>
 			<otherwise>
@@ -73,7 +73,7 @@
 					  FROM PRJ_BD_DATA p, USER_INFO u 
 					  WHERE p.user_id = u.user_id 
 					  AND p.project_id = #{project_id} 
-					  ORDER BY doc_group DESC, doc_step) a
+					  ORDER BY p.doc_group DESC, p.doc_step) a
 		)
 		WHERE rn BETWEEN #{start} AND #{end}
 	</select>
@@ -96,7 +96,7 @@
 					  WHERE p.user_id = u.user_id 
 					  AND p.project_id = #{project_id} 
 					  AND p.doc_group = #{doc_group}
-					  ORDER BY doc_group DESC, doc_step) a
+					  ORDER BY p.doc_group DESC, p.doc_step) a
 		)
 		WHERE rn BETWEEN #{start} AND #{end}
 	</select>
@@ -117,18 +117,18 @@
 							(SELECT Count(*) FROM BD_DATA_COMT WHERE doc_no=p.doc_no AND project_id=p.project_id) comment_count
 					  FROM PRJ_BD_DATA p, USER_INFO u 
 					  WHERE p.user_id = u.user_id 
-					  ORDER BY doc_group DESC, doc_step) a
+					  ORDER BY p.doc_group DESC, p.doc_step) a
 			WHERE
 			a.project_id = #{project_id} 
 			AND 
 			<choose>
-				<when test="search == 's_subject'">
+				<when test="search == '1_subject'">
 					 a.subject like '%' || #{keyword} || '%'
 				</when>
-				<when test="search == 's_user_name'">
+				<when test="search == '2_user_name'">
 					 a.user_name like '%' || #{keyword} || '%'
 				</when>
-				<when test="search == 's_category'">
+				<when test="search == '3_bd_category'">
 					 a.bd_category_name like '%' || #{keyword} || '%'
 				</when>
 				<otherwise>
@@ -145,6 +145,7 @@
 		SELECT * 
 		FROM CODE 
 		WHERE UPPER(table_name)=#{table_name} AND UPPER(field_name)=#{field_name}
+		ORDER BY table_name, field_name, cate_code
 	</select>
 	
 	<!-- 문서 등록 -->

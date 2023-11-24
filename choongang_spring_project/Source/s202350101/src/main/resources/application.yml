@@ -11,8 +11,8 @@ spring:
       
   datasource:
     driver-class-name: oracle.jdbc.driver.OracleDriver
-    url: jdbc:oracle:thin:@localhost:1521/xe
-    username: s202350101_mkh
+    url: jdbc:oracle:thin:@172.30.1.41:1521/xe
+    username: s202350101
     password: tiger
 
 # JPA Setting
@@ -23,18 +23,18 @@ spring:
       ddl-auto: update
 
   
-# view Resolver
+  # view Resolver
   mvc:
     view:
       prefix: /WEB-INF/views/
       suffix: .jsp
 
-#gmail transfer      
+  #gmail transfer      
   mail:
     host: smtp.gmail.com
     port: 587
-    username: cristalmoon112@gmail.com
-    password: fqvw peaq rwvt yvhj
+    username: jinijuniwa@gmail.com
+    password: vctdpmxycqugxznr
     properties:
       mail:
         smtp:
@@ -49,4 +49,5 @@ mybatis:
   
 logging.level:
   org.hibernate.SQL: debug  # logger를 통해 하이버네이트 실행 SQL
+  
   
