@@ -112,6 +112,9 @@
     	display: flex;
     	flex-direction: row;
     }
+    .fc-event-title {
+    	cursor:pointer;
+    }
 </style>
 
 
@@ -447,7 +450,7 @@
 							var inputstr = '';
 							
 			    			if (attach_name != null) {
-			    				filestr += 	'<a href="/' + attach_path + '/' + attach_name + '" target="_blank">' + attach_name +
+			    				filestr += 	'<a href="/upload/' + attach_path + '" target="_blank">' + attach_name +
 			    							'</a>&nbsp;&nbsp;<img src="/common/images/btn_icon_delete2.png" onclick="deleteFlagAttach()" style="cursor:pointer">';
 			    				filestr +=	'<input type="hidden" name="attach_name" id="attach_name" value="' + attach_name + '">';
 			    				filestr +=	'<input type="hidden" name="attach_path" id="attach_path" value="' + attach_path + '">';
@@ -672,7 +675,7 @@
 					        </a>
 					      </li>
 					      <li class="breadcrumb-item">
-					        <a class="link-body-emphasis fw-semibold text-decoration-none" href="/dashboard">프로젝트</a>
+					        <a class="link-body-emphasis fw-semibold text-decoration-none" href="prj_home">프로젝트</a>
 					      </li>
 					      <li class="breadcrumb-item active" aria-current="page">회의록</li>
 					    </ol>

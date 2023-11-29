@@ -199,8 +199,6 @@
                         }
                         project_step_chart.append(newDiv);
                     });
-
-
                 }
             });
         });
@@ -229,7 +227,7 @@
 				        </a>
 				      </li>
 				      <li class="breadcrumb-item">
-				        <a class="link-body-emphasis fw-semibold text-decoration-none" href="">프로젝트</a>
+				        <a class="link-body-emphasis fw-semibold text-decoration-none" href="prj_home">프로젝트</a>
 				      </li>
 				      <li class="breadcrumb-item active" aria-current="page">작업 보드</li>
 				    </ol>
@@ -269,12 +267,8 @@
                    </div>
 
                    <div class ="current_task">
-
-
                        <div class="current_name">현재 작업중인 작업</div>
                    </div>
-
-
 				</div>
 			</main>
 

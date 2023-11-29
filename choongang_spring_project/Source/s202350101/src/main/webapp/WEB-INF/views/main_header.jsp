@@ -500,6 +500,7 @@ $(function(){
 			<div class="d-flex" role="search" style="margin-left:10px">        
 				<input id="search" class="form-control me-2" type="search" placeholder="통합검색" aria-label="Search" name="keyword">
 				<button class="btn btn-dark" type="submit" onclick="searchAll()">Search</button>
+				<input type="hidden" name="searchall_project_id" value="${userInfo.project_id}"> 
 			</div>
 		</div>
 	</div>
@@ -547,7 +548,7 @@ $(function(){
     	<table width="100%" id="chat_top">
     		<tr>
     			<td align="left" width="130">
-			    	<img class="uploadFile" style=" width: 30px; height: 30px; border-radius: 50%;" alt="UpLoad File" 
+			    	<img class="uploadFile" style=" width: 32px; height: 32px; border-radius: 50%;" alt="UpLoad File" 
 			    	src="${pageContext.request.contextPath}/${userInfo.attach_path }/${userInfo.attach_name}">
 			    	<span style="margin-left:10px;color:#ffffff">${userInfo.user_name}</span>
     			</td>
@@ -566,7 +567,7 @@ $(function(){
             <c:forEach items="${chatUIList}" var="chat_user">
                 <div id="chat_student_list">
                     <div id="chat_st_left">
-                        <img class="uploadFile" style=" width: 30px; height: 30px; border-radius: 50%;" alt="UpLoad File" src="${pageContext.request.contextPath}/${chat_user.attach_path }/${chat_user.attach_name}">
+                        <img class="uploadFile" style=" width: 32px; height: 32px; border-radius: 50%;" alt="UpLoad File" src="${pageContext.request.contextPath}/${chat_user.attach_path }/${chat_user.attach_name}">
                     </div>
                     <div id="chat_st_center">
                         <p>${chat_user.user_name}</p>
@@ -595,7 +596,7 @@ $(function(){
                     </c:otherwise>
                     </c:choose>
                     <div id="chat_ch_left">
-                        <img class="uploadFile" style=" width: 30px; height: 30px; border-radius: 50%;" src="${pageContext.request.contextPath}/${chatRoom.attach_path }/${chatRoom.attach_name}">
+                        <img class="uploadFile" style=" width: 32px; height: 32px; border-radius: 50%;" src="${pageContext.request.contextPath}/${chatRoom.attach_path }/${chatRoom.attach_name}">
                     </div>
                     <div id="chat_ch_center">
 
